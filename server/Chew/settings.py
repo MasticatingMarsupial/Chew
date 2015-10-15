@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'Chew.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'chew',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'NAME': 'chew', # create db on local machine
+        'USER': '', # create login on local machine
+        'PASSWORD': '', # create pw on local machine
+        'HOST': '127.0.0.1', # local machine
         'PORT': '5432'
     }
 }
