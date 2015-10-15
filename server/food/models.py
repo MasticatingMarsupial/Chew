@@ -3,37 +3,38 @@ from django.db import models
 class User(models.Model):
   name = models.CharField(max_length=30)
 
-class Review(models.Model):
-  text = models.CharField(max_length=255)
-  user = model.ForeignKey(User_id) # id only
-  foodRating = models.IntegerField()
-  reviewRating = models.IntegerField()
-  food = model.ForeignKey(Food_id) # id only 
+class Cuisine(models.Model):
+  name = models.CharField(max_length=255)
 
-class Image(model.Model):
-  food = model.ForeignKey(Food_id) # id only
-  image = model.CharField(max_length=255)
-  review = model.ForeignKey(Review)
+class Restaurant(models.Model):
+  name = models.CharField(max_length=255)
+  location = models.CharField(max_length=255)
+  cuisine = models.ForeignKey(Cuisine) # id only
 
 class Food(models.Model):
-  name = model.CharField(max_length=255)
-  cuisine = model.ForeignKey(Cuisine_id) # id only
-  restaurant = model.ForeignKey(Restaurant)
-  price = model.IntegerField()
-  avgRating = model.IntegerField()
-  numRating = model.IntegerField()
+  name = models.CharField(max_length=255)
+  cuisine = models.ForeignKey(Cuisine) # id only
+  restaurant = models.ForeignKey(Restaurant)
+  price = models.IntegerField()
+  avgRating = models.IntegerField()
+  numRating = models.IntegerField()
 
-class Restaurant(model.Model):
-  name = model.CharField(max_length=255)
-  location = model.CharField(max_length=255)
-  cuisine = model.ForeignKey(Cuisine_id) # id only
+class Review(models.Model):
+  text = models.CharField(max_length=255)
+  user = models.ForeignKey(User) # id only
+  foodRating = models.IntegerField()
+  reviewRating = models.IntegerField()
+  food = models.ForeignKey(Food) # id only 
 
-class Cuisine(model.Model):
-  name = model.CharField(max_length=255)
+class Image(models.Model):
+  food = models.ForeignKey(Food) # id only
+  image = models.CharField(max_length=255)
+  review = models.ForeignKey(Review)
 
-class FoodTag(model.Model):
-  food = model.ForeignKey(Food_id) # id only
-  tag = model.ForeignKey(Tag_id) # id only
+class Tag(models.Model):
+  name = models.CharField(max_length=255)
 
-class Tag(model.Model):
-  name = model.CharField(max_length=255)
+class FoodTag(models.Model):
+  food = models.ForeignKey(Food) # id only
+  tag = models.ForeignKey(Tag) # id only
+
