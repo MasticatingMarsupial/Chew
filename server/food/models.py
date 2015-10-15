@@ -29,7 +29,7 @@ class Review(models.Model):
 class Image(models.Model):
   food = models.ForeignKey(Food) # id only
   image = models.CharField(max_length=255)
-  review = models.ForeignKey(Review)
+  review = models.ForeignKey(Review, blank=True, null=True)
 
 class Tag(models.Model):
   name = models.CharField(max_length=255)
