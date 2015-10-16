@@ -20,5 +20,4 @@ import food.urls
 
 urlpatterns = [
     url(r'^', include('food.urls')),
-    url(r'^admin/', include(admin.site.urls)),
 ]

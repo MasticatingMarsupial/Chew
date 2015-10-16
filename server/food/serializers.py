@@ -6,15 +6,15 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Restaurant
-    fields = {'name', 'location', 'cuisine'}
+    fields = ['name', 'location', 'cuisine']
 
 class FoodSerializer(serializers.ModelSerializer):
   cuisine = serializers.SlugRelatedField(read_only=True, slug_field='name')
-  restaurant = RestaurantSerializer(read_only=false)
+  restaurant = RestaurantSerializer(read_only=False)
 
   class Meta:
     model = Food
-    fields = {'name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating'}
+    fields = ['name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating']
 
   def create(self, validated_data):
     restaurant_data = validated_data.pop('restaurant')
