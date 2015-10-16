@@ -7,7 +7,10 @@ var {
   View,
   ListView,
   TouchableHighlight,
+  TouchableNativeFeedback,
   Text,
+  Image,
+  Platform,
 } = React;
 
 var FoodDetailView = require('./FoodDetailView');
@@ -15,15 +18,24 @@ var SearchBar = require('react-native-search-bar');
 
 var FoodSearchResultView = React.createClass({
   getInitialState: function () {
-    var ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
     return {
-      dataSource: ds.cloneWithRows(mockData)
+      dataSource: new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    }),
+
     };
   },
   componentDidMount: function () {
     // Get home page stuff from DB
+    this.fetchData();
+  },
+
+  fetchData: function () {
+    //Initially using mocked Data
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(mockData)
+    })
+
   },
   searchString: function (string) {
     // Executes query to DB for possible foods by string
@@ -44,17 +56,11 @@ var FoodSearchResultView = React.createClass({
   renderRow: function (rowData, sectionId, rowId) {
     console.log(rowData);
     return (
-      <TouchableHighlight
+      <FoodCell
+        food={rowData}
         onPress={() => this.selectFood(rowId)}
-      >
-        <View 
-          style={styles.row}
-        >
-          <Text>
-            Hellow
-          </Text>
-        </View>
-      </TouchableHighlight>
+      />
+        
     )
   },
   render: function () {
@@ -69,12 +75,46 @@ var FoodSearchResultView = React.createClass({
           dataSource={this.state.dataSource}
           renderRow={this.renderRow}
           automaticallyAdjustContentInsets={false}
-          style={styles.listView}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps={false}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     );
   }
 });
+
+var FoodCell = React.createClass({
+  render: function () {
+    var TouchableElement = TouchableHighlight;
+    if (Platform.OS === 'android') {
+      TouchableElement = TouchableNativeFeedback;
+    }
+    return (
+      <View>
+        <Image
+        source={{uri: this.props.food.image[0]}}
+        style={styles.cellImage}> 
+          <TouchableElement style={styles.touchable}
+          onPress={this.props.onSelect}
+          onShowUnderlay={this.props.onHighlight}
+          onHideUnderlay={this.props.onUnhighlight}
+          
+          >
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>{this.props.food.name}</Text>
+              <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
+              <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
+              <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
+            </View>
+          </TouchableElement>
+        </Image>
+      </View>
+      
+    );
+  }
+});
+
 
 var styles = StyleSheet.create({
   container: {
@@ -85,13 +125,31 @@ var styles = StyleSheet.create({
     marginTop: 64,
     height: 44,
   },
-  listView: {
-  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
     padding: 10,
     backgroundColor: '#F6F6F6',
+  },
+  textContainer: {
+    flex: 1,
+  },
+  title: {
+    flex: 1,
+    fontSize: 32,
+    fontWeight: '500',
+    marginBottom: 2,
+    textAlign: 'center',
+  },
+  text: {
+    color: '#F0F8FF',
+  },
+  cellImage: {
+    backgroundColor: '#dddddd',
+    height: 200,
+    marginBottom: 1,
+  },
+  touchable: {
   },
 });
 
