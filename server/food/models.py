@@ -11,6 +11,9 @@ class Restaurant(models.Model):
   location = models.CharField(max_length=255)
   cuisine = models.ForeignKey(Cuisine) # id only
 
+  class Meta:
+    unique_together = ('name', 'location')
+
 class Food(models.Model):
   name = models.CharField(max_length=255)
   cuisine = models.ForeignKey(Cuisine) # id only
