@@ -4,7 +4,7 @@ class User(models.Model):
   name = models.CharField(max_length=30)
 
 class Cuisine(models.Model):
-  name = models.CharField(max_length=255)
+  name = models.CharField(max_length=255, unique=True)
 
 class Restaurant(models.Model):
   name = models.CharField(max_length=255)
@@ -16,20 +16,20 @@ class Food(models.Model):
   cuisine = models.ForeignKey(Cuisine) # id only
   restaurant = models.ForeignKey(Restaurant)
   price = models.IntegerField()
-  avgRating = models.IntegerField()
-  numRating = models.IntegerField()
+  avgRating = models.IntegerField(default=0)
+  numRating = models.IntegerField(default=0)
 
 class Review(models.Model):
   text = models.CharField(max_length=255)
   user = models.ForeignKey(User) # id only
   foodRating = models.IntegerField()
-  reviewRating = models.IntegerField()
+  reviewRating = models.IntegerField(null=True)
   food = models.ForeignKey(Food) # id only 
 
 class Image(models.Model):
   food = models.ForeignKey(Food) # id only
   image = models.CharField(max_length=255)
-  review = models.ForeignKey(Review, blank=True, null=True)
+  review = models.ForeignKey(Review, null=True)
 
 class Tag(models.Model):
   name = models.CharField(max_length=255)
