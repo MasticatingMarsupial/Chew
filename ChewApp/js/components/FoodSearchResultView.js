@@ -90,33 +90,37 @@ var FoodCell = React.createClass({
   render: function () {
     var TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
+      console.log("Android Touch Elements")
       TouchableElement = TouchableNativeFeedback;
     }
+    //REFACTOR: the below return is an ugly hack for iOS, and the css for text container should be fixed
+    //This needs to be done when we worry about the UI more
+    //MAYBE TOUCHABLEOPACITY OR TOUCHABLEHIGHLIGHT COULD SOLVE THIS?
     return (
       <View>
-          <TouchableElement style={styles.touchable}
+        <TouchableElement 
           onPress={this.props.onPress}
           onShowUnderlay={this.props.onHighlight}
-          onHideUnderlay={this.props.onUnhighlight}
-            
-          >
-        <Image
-        source={{uri: this.props.food.image[0]}}
-        style={styles.cellImage}> 
-            <View style={styles.textContainer}>
+          onHideUnderlay={this.props.onUnhighlight}  
+        >
+          <View style={styles.row}>{}
+            <Image
+              source={{uri: this.props.food.image[0]}}
+              style={styles.cellImage}> 
+            </Image>
+            <View style={styles.textContainerHACK}>
               <Text style={styles.title}>{this.props.food.name}</Text>
               <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
               <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
               <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
             </View>
-        </Image>
-          </TouchableElement>
+        </View>
+      </TouchableElement>
       </View>
       
     );
   }
 });
-
 
 var styles = StyleSheet.create({
   container: {
@@ -128,10 +132,13 @@ var styles = StyleSheet.create({
     height: 44,
   },
   row: {
-    flexDirection: 'row',
+    flex:1,
     justifyContent: 'center',
-    padding: 10,
-    backgroundColor: '#F6F6F6',
+  },
+  textContainerHACK: {
+    flex: 1,
+    marginTop: -200, 
+    marginBottom: 110,
   },
   textContainer: {
     flex: 1,
@@ -150,8 +157,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#dddddd',
     height: 200,
     marginBottom: 1,
-  },
-  touchable: {
   },
 });
 
