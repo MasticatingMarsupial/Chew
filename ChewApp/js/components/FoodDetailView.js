@@ -5,13 +5,14 @@ var React = require('react-native');
 var {
   StyleSheet,
   View,
+  ScrollView,
+  Image,
   Text,
 } = React;
 
-var FoodDetailView = require('./FoodDetailView');
-var SearchBar = require('react-native-search-bar');
+var {Icon,} = require('react-native-icons');
 
-var FoodSearchResultView = React.createClass({
+var FoodDetailView = React.createClass({
   getInitialState: function () {
     console.log("WOOH, this is where we are", this)
     return {
@@ -25,31 +26,48 @@ var FoodSearchResultView = React.createClass({
     // Executes query to DB for possible foods by string
     // Refreshes the list of foods by changing the list of foods
   },
-  selectFood: function (food) {
-    this.props.navigator.push({
-        title: 'Food Detail',
-        component: FoodDetailView,
-        // Need to pass food to next view
-        // passProps: {food},
-      });
-  },
   render: function () {
+    var images = [];
+    for (var i = 0; i < this.props.food.image.length; i++) {
+      images.push(
+        <View style={styles.slide}>
+          <Image
+            source={{uri: this.props.food.image[i]}}
+            style={styles.image} />
+        </View>
+      );
+    }
     return (
-      <View style={styles.container}>
-        <SearchBar 
-          placeholder='Find your food'
-          // onSearchButtonPress={this.searchString}
-          style={styles.searchBar} />
-        <Text style={styles.welcome}>
-          Welcome to Chew!
-        </Text>
-        <Text style={styles.instructions}>
-          We'll help you find the food you crave
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+      <View
+        automaticallyAdjustContentInsets={false} 
+        style={styles.container}
+      >
+        <ScrollView
+          style={styles.scrollView}
+        >
+          <View style={styles.topRowContainer}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.name}>
+                {this.props.food.name}
+              </Text>
+              <Text style={styles.restaurant}>
+                @{this.props.food.restaurant}
+              </Text>
+            </View>
+            <View style={styles.likeContainer}>
+              <Icon
+                name='foundation|heart'
+                size={40}
+                color='red'
+                style={styles.heart}
+              />
+              <Text style={styles.likeCounts}>
+                254
+              </Text>
+            </View>
+          </View>
+
+        </ScrollView>
       </View>
     );
   }
@@ -60,20 +78,54 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  searchBar: {
-    marginTop: 64,
-    height: 44,
+  scrollView: {
+    backgroundColor: 'gray',
+    height: 300,
   },
-  welcome: {
+  topRowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  titleContainer: {
+    flexDirection: 'column',
+  },
+  name: {
+    fontSize: 30,
+    textAlign: 'left',
+    marginTop: 10,
+    marginLeft: 15,
+  },
+  restaurant: {
     fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
+    textAlign: 'left',
     color: '#333333',
-    marginBottom: 5,
+    marginTop: 5,
+    marginLeft: 15,
+  },
+  likeContainer: {
+    flexDirection: 'row',
+    marginTop: 20,
+    marginRight: 15,
+  },
+  heart: {
+    height:40,
+    width:40,
+  },
+  likeCounts: {
+    fontSize: 35,
+    textAlign: 'right'
+  },
+  wrapper: {
+    flex: 1,
+  },
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  image: {
+    flex: 1,
   },
 });
 
-module.exports = FoodSearchResultView;
+module.exports = FoodDetailView;
