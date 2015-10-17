@@ -5,7 +5,7 @@ class User(models.Model):
 
 class Tag(models.Model):
   name = models.CharField(max_length=255, unique=True)
-  
+
 class Cuisine(models.Model):
   name = models.CharField(max_length=255, unique=True)
 
@@ -13,9 +13,6 @@ class Restaurant(models.Model):
   name = models.CharField(max_length=255)
   location = models.CharField(max_length=255)
   cuisine = models.ForeignKey(Cuisine) 
-
-  class Meta:
-    unique_together = ('name', 'location')
 
 class Food(models.Model):
   name = models.CharField(max_length=255)
@@ -25,12 +22,9 @@ class Food(models.Model):
   avgRating = models.IntegerField(default=0)
   numRating = models.IntegerField(default=0)
   tags = models.ManyToManyField(Tag)
-
-  class Meta:
-    unique_together = ('name', 'restaurant')
     
 class Review(models.Model):
-  text = models.CharField(max_length=255)
+  text = models.CharField(max_length=255, null=True)
   user = models.ForeignKey(User) 
   foodRating = models.IntegerField()
   reviewRating = models.IntegerField(null=True)

@@ -42,6 +42,12 @@ npm install
 bower install
 ```
 
+From within the server directory:
+
+```sh
+pip3 install -r requirements.txt
+```
+
 ### Roadmap
 
 View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
