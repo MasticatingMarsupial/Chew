@@ -111,10 +111,9 @@ var FoodCell = React.createClass({
               <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
             </View>
             </Image>
-        </View>
-      </TouchableElement>
+          </View>
+        </TouchableElement>
       </View>
-      
     );
   }
 });
