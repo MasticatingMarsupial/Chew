@@ -12,14 +12,14 @@ class Cuisine(models.Model):
 class Restaurant(models.Model):
   name = models.CharField(max_length=255)
   location = models.CharField(max_length=255)
-  cuisine = models.ForeignKey(Cuisine) # id only
+  cuisine = models.ForeignKey(Cuisine) 
 
   class Meta:
     unique_together = ('name', 'location')
 
 class Food(models.Model):
   name = models.CharField(max_length=255)
-  cuisine = models.ForeignKey(Cuisine) # id only
+  cuisine = models.ForeignKey(Cuisine) 
   restaurant = models.ForeignKey(Restaurant)
   price = models.IntegerField()
   avgRating = models.IntegerField(default=0)
@@ -31,13 +31,13 @@ class Food(models.Model):
     
 class Review(models.Model):
   text = models.CharField(max_length=255)
-  user = models.ForeignKey(User) # id only
+  user = models.ForeignKey(User) 
   foodRating = models.IntegerField()
   reviewRating = models.IntegerField(null=True)
-  food = models.ForeignKey(Food) # id only 
+  food = models.ForeignKey(Food) 
 
 class Image(models.Model):
-  food = models.ForeignKey(Food) # id only
+  food = models.ForeignKey(Food) 
   image = models.CharField(max_length=255, unique=True)
   review = models.ForeignKey(Review, null=True)
 
