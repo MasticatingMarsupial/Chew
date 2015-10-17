@@ -22,9 +22,9 @@ class Food(models.Model):
   avgRating = models.IntegerField(default=0)
   numRating = models.IntegerField(default=0)
   tags = models.ManyToManyField(Tag)
-    
+
 class Review(models.Model):
-  text = models.CharField(max_length=255, null=True)
+  text = models.CharField(max_length=2000, null=True)
   user = models.ForeignKey(User) 
   foodRating = models.IntegerField()
   reviewRating = models.IntegerField(null=True)
@@ -34,4 +34,5 @@ class Image(models.Model):
   food = models.ForeignKey(Food) 
   image = models.CharField(max_length=255, unique=True)
   review = models.ForeignKey(Review, null=True)
+  votes = models.IntegerField(default=0)
 
