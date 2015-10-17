@@ -10,7 +10,11 @@ var {
   Text,
 } = React;
 
+var Dimensions = require('Dimensions');
 var {Icon,} = require('react-native-icons');
+var Carousel = require('react-native-looped-carousel');
+
+var {width, height} = Dimensions.get('window');
 
 var FoodDetailView = React.createClass({
   getInitialState: function () {
@@ -66,7 +70,9 @@ var FoodDetailView = React.createClass({
               </Text>
             </View>
           </View>
-
+          <Carousel autoplay={false} style={styles.carousel}>
+            {images}
+          </Carousel>
         </ScrollView>
       </View>
     );
@@ -115,8 +121,11 @@ var styles = StyleSheet.create({
     fontSize: 35,
     textAlign: 'right'
   },
-  wrapper: {
+  carousel: {
     flex: 1,
+    marginTop: 10,
+    width:width,
+    height: width,
   },
   slide: {
     flex: 1,
