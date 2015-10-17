@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from food.models import User, Cuisine, Restaurant, Food, Review, Image, Tag, FoodTag
+from food.models import User, Cuisine, Restaurant, Food, Review, Image, Tag
 
 class RestaurantSerializer(serializers.ModelSerializer):
   cuisine = serializers.SlugRelatedField(read_only=True, slug_field='name')
