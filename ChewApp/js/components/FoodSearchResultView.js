@@ -93,6 +93,9 @@ var FoodCell = React.createClass({
       console.log("Android Touch Elements")
       TouchableElement = TouchableNativeFeedback;
     }
+    //REFACTOR: the below return is an ugly hack for iOS, and the css for text container should be fixed
+    //This needs to be done when we worry about the UI more
+    //MAYBE TOUCHABLEOPACITY OR TOUCHABLEHIGHLIGHT COULD SOLVE THIS?
     return (
       <View>
         <TouchableElement 
@@ -104,12 +107,12 @@ var FoodCell = React.createClass({
             <Image
               source={{uri: this.props.food.image[0]}}
               style={styles.cellImage}> 
-            <View style={styles.textContainer}>
-              <Text style={styles.title}>{this.props.food.name}</Text>
-              <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
-              <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
-              <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
-            </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.title}>{this.props.food.name}</Text>
+                <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
+                <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
+                <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
+              </View>
             </Image>
         </View>
       </TouchableElement>
