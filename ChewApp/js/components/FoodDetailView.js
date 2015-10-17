@@ -13,6 +13,7 @@ var SearchBar = require('react-native-search-bar');
 
 var FoodSearchResultView = React.createClass({
   getInitialState: function () {
+    console.log("WOOH, this is where we are", this)
     return {
 
     };
