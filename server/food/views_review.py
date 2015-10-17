@@ -29,6 +29,7 @@ class ReviewDetail(APIView):
   def get(self, request, pk, format=None):
     review = self.get_object(pk)
     serializer = ReviewSerializer(review)
+    print(serializer.data)
     return Response(serializer.data)
 
   def put(self, request, pk, format=None):
@@ -44,9 +45,17 @@ class ReviewDetail(APIView):
     review.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+class ReviewGroups(APIView):
+  def get_object(self, food_pk):
+    try:
+      Review.objects.filter(food_pk=food_pk).all()
+    except Review.DoesNotExist:
+      raise Http404
 
-
-
+  def get(self, request, food_pk, format=None):
+    review = Review.objects.filter(food_id=food_pk)
+    serializer = ReviewSerializer(review, many=True)
+    return Response(serializer.data)
 
 ####################### Generic class based views
 # from food.models import Food, Review, Image
