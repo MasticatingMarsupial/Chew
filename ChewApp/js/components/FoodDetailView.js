@@ -8,6 +8,7 @@ var {
   ScrollView,
   Image,
   Text,
+  TouchableHighlight,
 } = React;
 
 var Dimensions = require('Dimensions');
@@ -26,9 +27,11 @@ var FoodDetailView = React.createClass({
   componentDidMount: function () {
     // Get home page stuff from DB
   },
-  searchString: function (string) {
-    // Executes query to DB for possible foods by string
-    // Refreshes the list of foods by changing the list of foods
+  pressLikeButton: function () {
+    console.log('Like button pressed');
+  },
+  pressHeartButton: function () {
+    console.log('Heart button pressed');
   },
   render: function () {
     var images = [];
@@ -37,7 +40,27 @@ var FoodDetailView = React.createClass({
         <View style={styles.slide}>
           <Image
             source={{uri: this.props.food.image[i]}}
-            style={styles.image} />
+            resizeMode={Image.resizeMode.cover}
+            style={styles.image}
+          >
+            <View style={styles.heartContainer}>
+              <TouchableHighlight
+                activeOpacity={0.20}
+                onPress={this.pressHeartButton}
+                style={styles.heartButton}
+              >
+                <Icon
+                  name='fontawesome|heart-o'
+                  size={40}
+                  color='red'
+                  style={styles.heart}
+                />
+              </TouchableHighlight>
+              <Text style={styles.heartCounts}>
+                123
+              </Text>
+            </View>
+          </Image>
         </View>
       );
     }
@@ -59,12 +82,18 @@ var FoodDetailView = React.createClass({
               </Text>
             </View>
             <View style={styles.likeContainer}>
-              <Icon
-                name='foundation|heart'
-                size={40}
-                color='red'
-                style={styles.heart}
-              />
+              <TouchableHighlight
+                activeOpacity={0.20}
+                onPress={this.pressLikeButton}
+                style={styles.likeButton}
+              >
+                <Icon
+                  name='fontawesome|thumbs-o-up'
+                  size={40}
+                  color='black'
+                  style={styles.like}
+                />
+              </TouchableHighlight>
               <Text style={styles.likeCounts}>
                 254
               </Text>
@@ -113,18 +142,23 @@ var styles = StyleSheet.create({
     marginTop: 20,
     marginRight: 15,
   },
-  heart: {
+  likeButton: {
+    height:40,
+    width:40,
+  },
+  like: {
     height:40,
     width:40,
   },
   likeCounts: {
     fontSize: 35,
-    textAlign: 'right'
+    textAlign: 'right',
+    marginLeft: 5,
   },
   carousel: {
     flex: 1,
     marginTop: 10,
-    width:width,
+    width: width,
     height: width,
   },
   slide: {
@@ -134,6 +168,21 @@ var styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+  },
+  heartContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 15,
+    marginRight: 15,
+  },
+  heart: {
+    height:40,
+    width:40,
+  },
+  heartCounts: {
+    fontSize: 35,
+    textAlign: 'right',
+    marginLeft: 5,
   },
 });
 
