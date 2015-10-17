@@ -24,7 +24,7 @@ class Food(models.Model):
   tags = models.ManyToManyField(Tag)
     
 class Review(models.Model):
-  text = models.CharField(max_length=255)
+  text = models.CharField(max_length=255, null=True)
   user = models.ForeignKey(User) 
   foodRating = models.IntegerField()
   reviewRating = models.IntegerField(null=True)
