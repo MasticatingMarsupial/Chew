@@ -1,37 +1,45 @@
 from rest_framework import serializers
 from food.models import User, Cuisine, Restaurant, Food, Review, Image, Tag
 
+class CreateableSlugRelatedField(serializers.SlugRelatedField):
+  def to_internal_value(self, data):
+    try:
+      return self.get_queryset().get_or_create(**{self.slug_field: data})[0]
+    except ObjectDoesNotExist:
+      self.fail('does_not_exist', slug_name=self.slug_field, value=smart_text(data))
+    except (TypeError, ValueError):
+      self.fail('invalid')
+
 class RestaurantSerializer(serializers.ModelSerializer):
-  cuisine = serializers.SlugRelatedField(read_only=True, slug_field='name')
+  cuisine = CreateableSlugRelatedField(slug_field='name', queryset=Cuisine.objects.all())
 
   class Meta:
     model = Restaurant
     fields = ['name', 'location', 'cuisine']
 
 class FoodSerializer(serializers.ModelSerializer):
-  cuisine = serializers.SlugRelatedField(read_only=True, slug_field='name')
+  cuisine = CreateableSlugRelatedField(slug_field='name', queryset=Cuisine.objects.all())
   restaurant = RestaurantSerializer(read_only=False)
+  tags = CreateableSlugRelatedField(many=True, slug_field='name', queryset=Tag.objects.all())
 
   class Meta:
     model = Food
-    fields = ['name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating']
+    fields = ['name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating', 'tags']
 
   def create(self, validated_data):
     restaurant_data = validated_data.pop('restaurant')
-    restaurant_cuisine_data = restaurant_data.pop('cuisine')
-    restaurant_cuisine = Cuisine.objects.get_or_create(name=restaurant_cuisine_data)
-    restaurant = Restaurant.objects.get_or_create(cuisine=restaurant_cuisine, **restaurant_data)
-    cuisine_data = validated_data.pop('cuisine')
-    cuisine = Cuisine.objects.get_or_create(name=cuisine_data)
-    food = Food.objects.objects.get_or_create(cuisine=cuisine, restaurant=restaurant, **validated_data)
+    restaurant, created = Restaurant.objects.get_or_create(**restaurant_data)
+    tags_data = validated_data.pop('tags')
+    food = Food.objects.create(restaurant=restaurant, **validated_data)
+    for tag in tags_data:
+      food.tags.add(tag)
     return food
 
   def update(self, validated_data):
     restaurant_data = validated_data.pop('restaurant')
-    restaurant_cuisine_data = restaurant_data.pop('cuisine')
-    restaurant_cuisine = Cuisine.objects.get_or_create(name=restaurant_cuisine_data)
-    restaurant = Restaurant.objects.get_or_create(cuisine=restaurant_cuisine, **restaurant_data)
-    cuisine_data = validated_data.pop('cuisine')
-    cuisine = Cuisine.objects.get_or_create(name=cuisine_data)
-    food = Food.objects.objects.update_or_create(cuisine=cuisine, restaurant=restaurant, **validated_data)
+    restaurant = Restaurant.objects.get_or_create(**restaurant_data)
+    tags_data = validated_data.pop('tags')
+    food = Food.objects.update_or_create(restaurant=restaurant, **validated_data)
+    for tag in tags_data:
+      food.tags.add(tag)
     return food
