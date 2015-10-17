@@ -27,6 +27,16 @@ var FoodDetailView = React.createClass({
     // Refreshes the list of foods by changing the list of foods
   },
   render: function () {
+    var images = [];
+    for (var i = 0; i < this.props.food.image.length; i++) {
+      images.push(
+        <View style={styles.slide}>
+          <Image
+            source={{uri: this.props.food.image[i]}}
+            style={styles.image} />
+        </View>
+      );
+    }
     return (
       <View
         automaticallyAdjustContentInsets={false} 
@@ -56,6 +66,7 @@ var FoodDetailView = React.createClass({
               </Text>
             </View>
           </View>
+
         </ScrollView>
       </View>
     );
@@ -103,6 +114,17 @@ var styles = StyleSheet.create({
   likeCounts: {
     fontSize: 35,
     textAlign: 'right'
+  },
+  wrapper: {
+    flex: 1,
+  },
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  image: {
+    flex: 1,
   },
 });
 
