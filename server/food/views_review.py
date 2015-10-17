@@ -47,7 +47,7 @@ class ReviewDetail(APIView):
 
 class ReviewGroups(APIView):
   def get_object(self, food_pk):
-    try:
+  try:
       Review.objects.filter(food_pk=food_pk).all()
     except Review.DoesNotExist:
       raise Http404
