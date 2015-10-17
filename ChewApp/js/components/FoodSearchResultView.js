@@ -44,21 +44,23 @@ var FoodSearchResultView = React.createClass({
     //   dataSource: this.state.dataSource.cloneWithRows(newData)
     // });
   },
-  selectFood: function (rowId) {
+  selectFood: function (rowId, food) {
     console.log('Food pressed!');
+    console.log(food);
+    //This needs a conditional to make the app cross platform
     this.props.navigator.push({
-        title: 'Food Detail',
+        title: food.name,
         component: FoodDetailView,
-        // Need to pass food to next view
-        // passProps: {food},
+        passProps: {food},
       });
   },
   renderRow: function (rowData, sectionId, rowId) {
-    console.log(rowData);
+    console.log(arguments);
+    
     return (
       <FoodCell
         food={rowData}
-        onPress={() => this.selectFood(rowId)}
+        onPress={() => this.selectFood(rowId, rowData)}
       />
         
     )
@@ -92,23 +94,23 @@ var FoodCell = React.createClass({
     }
     return (
       <View>
+          <TouchableElement style={styles.touchable}
+          onPress={this.props.onPress}
+          onShowUnderlay={this.props.onHighlight}
+          onHideUnderlay={this.props.onUnhighlight}
+            
+          >
         <Image
         source={{uri: this.props.food.image[0]}}
         style={styles.cellImage}> 
-          <TouchableElement style={styles.touchable}
-          onPress={this.props.onSelect}
-          onShowUnderlay={this.props.onHighlight}
-          onHideUnderlay={this.props.onUnhighlight}
-          
-          >
             <View style={styles.textContainer}>
               <Text style={styles.title}>{this.props.food.name}</Text>
               <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
               <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
               <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
             </View>
-          </TouchableElement>
         </Image>
+          </TouchableElement>
       </View>
       
     );
