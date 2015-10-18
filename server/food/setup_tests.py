@@ -41,8 +41,8 @@ food3 = Food(**{
   'name': 'Amazing Hot Dog',
   'cuisine': cuisine,
   'restaurant': restaurant,
-  'price': 5.75,
-  'avgRating': 4.5,
+  'price': 6.75,
+  'avgRating': 4.65,
   'numRating': 10
 })
 food3.save()
@@ -53,7 +53,7 @@ user.save()
 review = Review(**{
   'text': 'Wow this was amazing. My mouth can\'t stop salivating from the thought of this hot dog.  The texture of the bun was exquisite and very on point with the crispiness of the outside.  The toppings worked perfectly in sync to combine together for an amazing flavor.  And the sausage, OMG LOL ^^.\n\nOverall I give this hot dog 4.5 stars and I would definitely come back again.',
   'user': user,
-  'foodRating': 90,
+  'foodRating': 4.5,
   'reviewRating': 0,
   'food': food
 })
