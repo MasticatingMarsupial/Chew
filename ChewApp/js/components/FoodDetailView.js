@@ -14,6 +14,7 @@ var {
 var Dimensions = require('Dimensions');
 var {Icon,} = require('react-native-icons');
 var Carousel = require('react-native-looped-carousel');
+var Button = require('react-native-button');
 
 var {width, height} = Dimensions.get('window');
 
@@ -44,7 +45,7 @@ var FoodDetailView = React.createClass({
             style={styles.image}
           >
             <View style={styles.heartContainer}>
-              <TouchableHighlight
+              <Button
                 activeOpacity={0.20}
                 onPress={this.pressHeartButton}
                 style={styles.heartButton}
@@ -55,7 +56,7 @@ var FoodDetailView = React.createClass({
                   color='red'
                   style={styles.heart}
                 />
-              </TouchableHighlight>
+              </Button>
               <Text style={styles.heartCounts}>
                 123
               </Text>
@@ -82,7 +83,7 @@ var FoodDetailView = React.createClass({
               </Text>
             </View>
             <View style={styles.likeContainer}>
-              <TouchableHighlight
+              <Button
                 activeOpacity={0.20}
                 onPress={this.pressLikeButton}
                 style={styles.likeButton}
@@ -93,7 +94,7 @@ var FoodDetailView = React.createClass({
                   color='black'
                   style={styles.like}
                 />
-              </TouchableHighlight>
+              </Button>
               <Text style={styles.likeCounts}>
                 254
               </Text>
@@ -174,6 +175,10 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: 15,
     marginRight: 15,
+  },
+  heartButton: {
+    height:40,
+    width:40,
   },
   heart: {
     height:40,
