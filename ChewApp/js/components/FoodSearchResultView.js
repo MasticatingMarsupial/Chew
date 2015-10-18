@@ -15,6 +15,9 @@ var {
 
 var FoodDetailView = require('./FoodDetailView');
 var SearchBar = require('react-native-search-bar');
+if (Platform.OS === 'android'){
+  SearchBar = require('./SearchBar');
+}
 
 var FoodSearchResultView = React.createClass({
   getInitialState: function () {
@@ -38,11 +41,16 @@ var FoodSearchResultView = React.createClass({
 
   },
   searchString: function (string) {
+    console.log('trying to search');
     // Executes query to DB for possible foods by string
     // Refreshes the list of foods by changing the list of foods
     // this.setState({
     //   dataSource: this.state.dataSource.cloneWithRows(newData)
     // });
+  },
+  onSearchChange: function (event: Object) { 
+    console.log('search change', event);
+    var filter = event.nativeEvent.text.toLowerCase();
   },
   selectFood: function (rowId, food) {
     console.log('Food pressed!');
@@ -71,6 +79,7 @@ var FoodSearchResultView = React.createClass({
         <SearchBar 
           placeholder='Find your food'
           onSearchButtonPress={this.searchString}
+          onSearchChange={() => this.onSearchChange()}
           style={styles.searchBar} 
         />
         <ListView
@@ -104,12 +113,12 @@ var FoodCell = React.createClass({
             <Image
               source={{uri: this.props.food.image[0]}}
               style={styles.cellImage}> 
-              <View style={styles.textContainer}>
-                <Text style={styles.title}>{this.props.food.name}</Text>
-                <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
-                <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
-                <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
-              </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>{this.props.food.name}</Text>
+              <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
+              <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
+              <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
+            </View>
             </Image>
           </View>
         </TouchableElement>

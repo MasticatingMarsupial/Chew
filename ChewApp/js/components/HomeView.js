@@ -4,12 +4,16 @@ var React = require('react-native');
 
 var {
   StyleSheet,
+  Platform,
   View,
   Text,
 } = React;
 
 var FoodSearchResultView = require('./FoodSearchResultView');
 var SearchBar = require('react-native-search-bar');
+if (Platform.OS === 'android'){
+  SearchBar = require('./SearchBar');
+}
 
 var HomeView = React.createClass({
   getInitialState: function () {
@@ -22,14 +26,24 @@ var HomeView = React.createClass({
   },
   searchString: function (string) {
     // Executes query to DB for possible foods by string
-    this.props.navigator.push({
-      title: 'Food Search Result',
+    if (Platform.OS === 'ios'){
+      this.props.navigator.push({
+      title: 'Results',
       component: FoodSearchResultView,
       // Need to pass search text
       // passProps: {foods},
-    });
+      });
+    } else { 
+      this.props.navigator.push({
+        title: 'Results',
+        name: 'results',
+        // Need to pass search text
+        // food: {food},
+      });
+    }
   },
   render: function () {
+    console.log('rendering homepage for ' + Platform.OS)
     return (
       <View style={styles.container}>
         <SearchBar 
