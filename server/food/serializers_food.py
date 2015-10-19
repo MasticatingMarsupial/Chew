@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from food.models import User, Cuisine, Restaurant, Food, Review, Image, Tag
+from food.serializers_image import ImageSerializer
 
 class CreateableSlugRelatedField(serializers.SlugRelatedField):
   def to_internal_value(self, data):
@@ -21,10 +22,11 @@ class FoodSerializer(serializers.ModelSerializer):
   cuisine = CreateableSlugRelatedField(slug_field='name', queryset=Cuisine.objects.all())
   restaurant = RestaurantSerializer(read_only=False)
   tags = CreateableSlugRelatedField(many=True, slug_field='name', queryset=Tag.objects.all())
+  preview_image = ImageSerializer(read_only=True)
 
   class Meta:
     model = Food
-    fields = ['name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating', 'tags']
+    fields = ['name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating', 'tags', 'preview_image']
 
   def create(self, validated_data):
     restaurant_data = validated_data.pop('restaurant')
