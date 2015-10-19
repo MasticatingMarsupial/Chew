@@ -99,14 +99,14 @@ i1 = Image.objects.create(
   review_id=1)
 
 i1 = Image.objects.create(
-  food_id=1,
+  food_id=2,
   image="http://www.seriouseats.com/images/20081209-hot-dog.jpg",
-  review_id=1)
+  review_id=2)
 
 i1 = Image.objects.create(
-  food_id=1,
+  food_id=3,
   image='http://www.apinchofginger.com/uploads/6/0/3/9/6039210/2338231_orig.jpg',
-  review_id=1)
+  review_id=3)
 
 
 
