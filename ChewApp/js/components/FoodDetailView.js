@@ -15,6 +15,7 @@ var Dimensions = require('Dimensions');
 var {Icon,} = require('react-native-icons');
 var Carousel = require('react-native-looped-carousel');
 var Button = require('react-native-button');
+var StarRating = require('./StarRating');
 
 var {width, height} = Dimensions.get('window');
 
@@ -34,11 +35,15 @@ var FoodDetailView = React.createClass({
   pressHeartButton: function () {
     console.log('Heart button pressed');
   },
+  selectedStar: function (rating) {
+    console.log(rating);
+    console.log('Rated ' + rating + ' stars!');
+  },
   render: function () {
     var images = [];
     for (var i = 0; i < this.props.food.image.length; i++) {
       images.push(
-        <View style={styles.slide}>
+        <View key={i + 1} style={styles.slide}>
           <Image
             source={{uri: this.props.food.image[i]}}
             resizeMode={Image.resizeMode.cover}
@@ -103,6 +108,16 @@ var FoodDetailView = React.createClass({
           <Carousel autoplay={false} style={styles.carousel}>
             {images}
           </Carousel>
+          <View style={styles.ratingContainer}>
+            <View style={styles.starsContainer}>
+              <StarRating maxStars={5} rating={3.5} selectedStar={this.selectedStar} disabled={true} />
+            </View>
+            <View>
+              <Text style={styles.ratingCount}>
+                {314} ratings
+              </Text>
+            </View>
+          </View>
         </ScrollView>
       </View>
     );
@@ -188,6 +203,19 @@ var styles = StyleSheet.create({
     fontSize: 35,
     textAlign: 'right',
     marginLeft: 5,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  starsContainer: {
+    marginLeft: 15,
+  },
+  ratingCount: {
+    fontSize: 30,
+    textAlign: 'right',
+    marginRight: 15,
   },
 });
 
