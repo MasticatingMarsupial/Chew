@@ -26,7 +26,7 @@ restaurant2.save()
 food2 = Food(**{
   'name': 'American Style Hot Dog',
   'cuisine': cuisine,
-  'restaurant': restaurant,
+  'restaurant': restaurant2,
   'price': 5.25,
   'avgRating': 4,
   'numRating': 1000
@@ -38,9 +38,9 @@ food2.tags.add(tag2)
 restaurant3 = Restaurant(name='Dog Eat Dog World', location='944 Market Street, San Francisco, CA 94103', cuisine=cuisine)
 restaurant3.save()
 food3 = Food(**{
-  'name': 'Amazing Hot Dog',
+  'name': 'Loaded Hot Dog',
   'cuisine': cuisine,
-  'restaurant': restaurant,
+  'restaurant': restaurant3,
   'price': 6.75,
   'avgRating': 4.65,
   'numRating': 10
