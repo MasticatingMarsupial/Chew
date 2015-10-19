@@ -19,6 +19,9 @@ if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
 }
 
+//TODO: Update to production URL's when ready
+var API_URL = 'http://localhost:8000/api/'
+
 var FoodSearchResultView = React.createClass({
   getInitialState: function () {
     return {
@@ -29,26 +32,27 @@ var FoodSearchResultView = React.createClass({
     };
   },
   componentDidMount: function () {
-    // Get home page stuff from DB
-    this.fetchData();
+    // Call the search with the search term from the homepage
+    console.log(this.props.food);
+    //NOTE: This may break on android?
+    this.searchString(this.props.food);
   },
-
-  fetchData: function () {
-    //Initially using mocked Data
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(mockData)
-    })
-
-  },
-  searchString: function (string) {
+  searchString: function (query) {
     console.log('trying to search');
-    // Executes query to DB for possible foods by string
-    // Refreshes the list of foods by changing the list of foods
-    // this.setState({
-    //   dataSource: this.state.dataSource.cloneWithRows(newData)
-    // });
+    //build the URL for the search
+    var url =  API_URL + 'search/' + query
+    //Fetches the data from the server with the passed search terms
+    fetch(url)
+      .then((res) => res.json())
+      .catch((err) => console.error("Fetching query failed: " + err))
+      .then((responseData) => {
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(responseData),
+        });
+      })
+      .done();
   },
-  onSearchChange: function (event: Object) { 
+  onSearchChange: function (event) { 
     console.log('search change', event);
     var filter = event.nativeEvent.text.toLowerCase();
   },
@@ -62,9 +66,7 @@ var FoodSearchResultView = React.createClass({
         passProps: {food},
       });
   },
-  renderRow: function (rowData, sectionId, rowId) {
-    console.log(arguments);
-    
+  renderRow: function (rowData, sectionId, rowId) {    
     return (
       <FoodCell
         food={rowData}
@@ -74,6 +76,18 @@ var FoodSearchResultView = React.createClass({
     )
   },
   render: function () {
+    var content = this.state.dataSource.getRowCount() === 0 ?
+      <NoFood/>
+      :
+      <ListView
+        dataSource={this.state.dataSource}
+        renderRow={this.renderRow}
+        automaticallyAdjustContentInsets={false}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps={false}
+        showsVerticalScrollIndicator={false}
+      />;
+      
     return (
       <View style={styles.container}>
         <SearchBar 
@@ -82,14 +96,7 @@ var FoodSearchResultView = React.createClass({
           onSearchChange={() => this.onSearchChange()}
           style={styles.searchBar} 
         />
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this.renderRow}
-          automaticallyAdjustContentInsets={false}
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps={false}
-          showsVerticalScrollIndicator={false}
-        />
+        {content}
       </View>
     );
   }
@@ -111,7 +118,7 @@ var FoodCell = React.createClass({
         >
           <View style={styles.row}>{}
             <Image
-              source={{uri: this.props.food.image[0]}}
+              source={{uri: this.props.food.preview_image.image}}
               style={styles.cellImage}> 
             <View style={styles.textContainer}>
               <Text style={styles.title}>{this.props.food.name}</Text>
@@ -127,10 +134,27 @@ var FoodCell = React.createClass({
   }
 });
 
+var NoFood = React.createClass({
+  render: function() { 
+    return (
+      <View style={[styles.container, styles.centerText]}>
+        <Text style={styles.noFoodText}>Sorry, we can't find that food.</Text>
+      </View>
+      );
+  }
+})
+
 var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  centerText: {
+    alignItems: 'center',
+  },
+  noFoodText: {
+    marginTop: 80,
+    color: '#888888',
   },
   searchBar: {
     marginTop: 64,
