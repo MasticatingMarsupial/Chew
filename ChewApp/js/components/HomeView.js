@@ -24,21 +24,21 @@ var HomeView = React.createClass({
   componentDidMount: function () {
     // Get home page stuff from DB
   },
-  searchString: function (string) {
+  searchString: function (food) {
     // Executes query to DB for possible foods by string
     if (Platform.OS === 'ios'){
       this.props.navigator.push({
       title: 'Results',
       component: FoodSearchResultView,
       // Need to pass search text
-      // passProps: {foods},
+      passProps: {food},
       });
     } else { 
       this.props.navigator.push({
         title: 'Results',
         name: 'results',
         // Need to pass search text
-        // food: {food},
+        food: {food},
       });
     }
   },
