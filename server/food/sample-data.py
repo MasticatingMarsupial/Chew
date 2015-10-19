@@ -26,6 +26,15 @@ r2 = Restaurant.objects.create(
   location='Los Angeles, CA',
   cuisine_id=1)
 
+# Tags
+
+t1 = Tag.objects.create(
+  name='hot dog')
+t2 = Tag.objects.create(
+  name='hotdog')
+t3 = Tag.objects.create(
+  name='dog')
+
 # Foods
 
 f1 = Food.objects.create(
@@ -35,6 +44,7 @@ f1 = Food.objects.create(
   numRating=1,
   cuisine_id=1,
   restaurant_id=1)
+f1.tags.add(t1, t2, t3)
 
 f2 = Food.objects.create(
   name='Dirty Dog',
@@ -43,6 +53,7 @@ f2 = Food.objects.create(
   numRating=2,
   cuisine_id=1,
   restaurant_id=2)
+f2.tags.add(t3)
 
 f3 = Food.objects.create(
   name='Breakfast Dog',
@@ -51,6 +62,7 @@ f3 = Food.objects.create(
   numRating=1,
   cuisine_id=1,
   restaurant_id=2)
+f3.tags.add(t1, t2)
 
 # User
 u1 = User.objects.create(
@@ -95,6 +107,7 @@ i1 = Image.objects.create(
   food_id=1,
   image='http://www.apinchofginger.com/uploads/6/0/3/9/6039210/2338231_orig.jpg',
   review_id=1)
+
 
 
 
