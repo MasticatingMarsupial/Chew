@@ -26,7 +26,7 @@ class FoodSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Food
-    fields = ['name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating', 'tags', 'preview_image']
+    fields = ['id', 'name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating', 'tags', 'preview_image']
 
   def create(self, validated_data):
     restaurant_data = validated_data.pop('restaurant')
