@@ -9,7 +9,7 @@ from food.serializers_food import FoodSerializer
 class Search(APIView):
   def get(self, request, search_term, format=None):
     tags = Tag.objects.filter(name__icontains=search_term)
-    foods = Food.objects.filter(Q(name__icontains=search_term) or Q(tags__in=tags)).all()
+    foods = Food.objects.filter(Q(name__icontains=search_term) | Q(tags__in=tags)).all().distinct()
     if not foods:
       data = []
     else:
