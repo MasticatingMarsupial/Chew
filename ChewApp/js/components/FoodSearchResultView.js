@@ -20,7 +20,7 @@ if (Platform.OS === 'android'){
 }
 
 //TODO: Update to production URL's when ready
-var API_URL = 'http://localhost:8000/api/'
+var API_URL = 'http://chewmast.herokuapp.com/api/'
 
 var FoodSearchResultView = React.createClass({
   getInitialState: function () {
@@ -60,11 +60,19 @@ var FoodSearchResultView = React.createClass({
     console.log('Food pressed!');
     console.log(food);
     //This needs a conditional to make the app cross platform
-    this.props.navigator.push({
+    if(Platform.OS === 'ios'){
+      this.props.navigator.push({
         title: food.name,
         component: FoodDetailView,
         passProps: {food},
       });
+    } else {
+      this.props.navigator.push({
+        title: food.name,
+        name: 'food',
+        food: food,
+      })
+    }
   },
   renderRow: function (rowData, sectionId, rowId) {    
     return (

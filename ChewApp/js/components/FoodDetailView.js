@@ -54,6 +54,7 @@ var FoodDetailView = React.createClass({
     console.log('Rated ' + rating + ' stars!');
   },
   render: function () {
+    console.log(this.props);
     var images = [];
     for (var i = 0; i < this.state.images.length; i++) {
       images.push(
