@@ -17,7 +17,9 @@ var FoodDetailView = require('./FoodDetailView');
 var SearchBar = require('react-native-search-bar');
 if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
+  var dismissKeyboard = require('dismissKeyboard');
 }
+
 
 //TODO: Update to production URL's when ready
 var API_URL = 'http://chewmast.herokuapp.com/api/'
@@ -34,13 +36,23 @@ var FoodSearchResultView = React.createClass({
   componentDidMount: function () {
     // Call the search with the search term from the homepage
     console.log(this.props.food);
-    //NOTE: This may break on android?
-    this.searchString(this.props.food);
+    //This needs an empty string case
+    if(this.props.food !== undefined){
+      this.searchString(this.props.food);
+    } else { 
+      console.log("EMPTY SEARCH INPUTTED");
+    }
   },
   searchString: function (query) {
     console.log('trying to search');
     //build the URL for the search
-    var url =  API_URL + 'search/' + query
+    if(!query){
+      console.log("EMPTY SEARCH INPUTTED")
+      return;
+    }
+
+    var url =  API_URL + 'search/' + encodeURIComponent(query)
+
     console.log(url);
     //Fetches the data from the server with the passed search terms
     fetch(url)
@@ -57,6 +69,9 @@ var FoodSearchResultView = React.createClass({
   onSearchChange: function (event) { 
     console.log('search change', event);
     var filter = event.nativeEvent.text.toLowerCase();
+    if(Platform.OS === 'android'){
+      dismissKeyboard();
+    }
   },
   selectFood: function (rowId, food) {
     console.log('Food pressed!');
@@ -134,7 +149,7 @@ var FoodCell = React.createClass({
               <Text style={styles.title}>{this.props.food.name}</Text>
               <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
               <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
-              <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
+              <Text style={styles.text}>Resturant: {this.props.food.restaurant.name}</Text>
             </View>
             </Image>
           </View>

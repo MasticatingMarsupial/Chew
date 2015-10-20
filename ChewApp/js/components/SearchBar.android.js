@@ -14,8 +14,9 @@ var dismissKeyboard = require('dismissKeyboard');
 
 
 var SearchBar = React.createClass({
-  onSearchButtonPress: function(event: Object) {
+  onSubmitEditing: function(event: Object) {
     var filter = event.nativeEvent.text.toLowerCase();
+    console.log(event.nativeEvent);
     dismissKeyboard();
     this.setState({
       name: filter,
@@ -33,7 +34,7 @@ var SearchBar = React.createClass({
             onPress={() => this.refs.input && this.refs.input.focus()}>
           <View>
             <Image
-              source={{uri: 'https://u2p-android.googlecode.com/svn/U2P/bin/res/drawable-xhdpi/action_search.png'}}
+              source={require('image!android_search_white')}
               style={styles.icon}
             />
           </View>
@@ -42,8 +43,8 @@ var SearchBar = React.createClass({
           ref="input"
           autoCapitalize="none"
           autoCorrect={false}
-          autoFocus={true}
-          onChange={this.onSearchButtonPress}
+          autoFocus={false}
+          onSubmitEditing={this.onSubmitEditing}
           placeholder="Search for a type of food..."
           placeholderTextColor="rgba(255, 255, 255, 0.5)"
           onFocus={this.props.onFocus}
