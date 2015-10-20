@@ -4,6 +4,7 @@ var React = require('react-native');
 
 var {
   StyleSheet,
+  Platform,
   View,
   ScrollView,
   Image,
@@ -54,7 +55,6 @@ var FoodDetailView = React.createClass({
     console.log('Rated ' + rating + ' stars!');
   },
   render: function () {
-    console.log(this.props);
     var images = [];
     for (var i = 0; i < this.state.images.length; i++) {
       images.push(
@@ -85,6 +85,24 @@ var FoodDetailView = React.createClass({
         </View>
       );
     }
+
+    var title = Platform.OS === 'ios' ?
+     <View style={styles.titleContainer}>
+       <Text style={styles.name}>
+         {this.props.food.name}
+       </Text>
+       <Text style={styles.restaurant}>
+         @{this.props.food.restaurant.name}
+       </Text>
+     </View>
+     :
+     <View style={styles.titleContainer}>
+       <Text style={styles.restaurant}>
+         @{this.props.food.restaurant.name}
+       </Text>
+     </View>
+
+
     return (
       <View
         automaticallyAdjustContentInsets={false} 
@@ -94,14 +112,7 @@ var FoodDetailView = React.createClass({
           style={styles.scrollView}
         >
           <View style={styles.topRowContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.name}>
-                {this.props.food.name}
-              </Text>
-              <Text style={styles.restaurant}>
-                @{this.props.food.restaurant.name}
-              </Text>
-            </View>
+            {title}
             <View style={styles.likeContainer}>
               <Button
                 activeOpacity={0.20}
@@ -125,7 +136,7 @@ var FoodDetailView = React.createClass({
           </Carousel>
           <View style={styles.ratingContainer}>
             <View style={styles.starsContainer}>
-              <StarRating maxStars={5} rating={this.props.food.avgRating} selectedStar={this.selectedStar} disabled={true} />
+              <StarRating maxStars={5} rating={parseInt(this.props.food.avgRating)} selectedStar={this.selectedStar} disabled={true} />
             </View>
             <View>
               <Text style={styles.ratingCount}>
