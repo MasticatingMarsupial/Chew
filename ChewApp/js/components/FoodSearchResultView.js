@@ -41,11 +41,13 @@ var FoodSearchResultView = React.createClass({
     console.log('trying to search');
     //build the URL for the search
     var url =  API_URL + 'search/' + query
+    console.log(url);
     //Fetches the data from the server with the passed search terms
     fetch(url)
       .then((res) => res.json())
       .catch((err) => console.error("Fetching query failed: " + err))
       .then((responseData) => {
+        console.log('response data:', responseData);
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(responseData),
         });
