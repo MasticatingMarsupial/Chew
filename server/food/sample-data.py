@@ -33,7 +33,7 @@ t1 = Tag.objects.create(
 t2 = Tag.objects.create(
   name='hotdog')
 t3 = Tag.objects.create(
-  name='dog')
+  name='tasty')
 
 # Foods
 
