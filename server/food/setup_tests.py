@@ -61,7 +61,7 @@ review.save()
 
 image1 = Image(**{
   'food': food,
-  'image': 'http://lorempixel.com/200/200/food/1.jpg',
+  'image': 'http://lorempixel.com/200/200/food/1/jpg',
   'review': review,
   'votes': 100
 })
@@ -69,28 +69,28 @@ image1.save()
 
 image2 = Image(**{
   'food': food,
-  'image': 'http://lorempixel.com/200/200/food/2.jpg',
+  'image': 'http://lorempixel.com/200/200/food/2/jpg',
   'votes': 10
 }) 
 image2.save()
 
 image3 = Image(**{
   'food': food,
-  'image': 'http://lorempixel.com/200/200/food/3.jpg',
+  'image': 'http://lorempixel.com/200/200/food/3/jpg',
   'votes': 1
 }) 
 image3.save()
 
 image4 = Image(**{
   'food': food2,
-  'image': 'http://lorempixel.com/200/200/food/4.jpg',
+  'image': 'http://lorempixel.com/200/200/food/4/jpg',
   'votes': 1234
 }) 
 image4.save()
 
 image5 = Image(**{
   'food': food3,
-  'image': 'http://lorempixel.com/200/200/food/5.jpg',
+  'image': 'http://lorempixel.com/200/200/food/5/jpg',
   'votes': 500
 }) 
 image5.save()
