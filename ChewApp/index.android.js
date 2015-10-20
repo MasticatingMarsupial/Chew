@@ -46,22 +46,18 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
     console.log('rerouting to results');
     return (
       <View style={{flex: 1}}>
-        <ToolbarAndroid
-          actions={[]}
-          navIcon={require('image!android_back_white')}
-          onIconClicked={navigationOperations.pop}
-          style={styles.toolbar}
-          titleColor="white"
-          title='Cool title' />
         <FoodSearchResultView
           style={{flex: 1}}
           navigator={navigationOperations}
+          food={route.food.food}
           
         />
       </View>
     );
   }
   else if (route.name === 'food') {
+    console.log('rerouting to detail view')
+    console.log(route.food);
     return (
       <View style={{flex: 1}}>
         <ToolbarAndroid
@@ -70,10 +66,11 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
           onIconClicked={navigationOperations.pop}
           style={styles.toolbar}
           titleColor="white"
-          title='Cool title' />
+          title={route.food.name} />
         <FoodDetailView
           style={styles.navigator}
           navigator={navigationOperations}
+          food={route.food}
         />
       </View>
     );
@@ -95,7 +92,6 @@ var ChewApp = React.createClass({
       <Navigator
         style={styles.navigator}
         initialRoute={initialRoute}
-        configureScene={() => Navigator.SceneConfigs.FadeAndroid}
         renderScene={RouteMapper}
         />
     );
@@ -111,6 +107,10 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  toolbar: {
+    backgroundColor: '#F44336',
+    height: 56,
   },
   welcome: {
     fontSize: 20,
