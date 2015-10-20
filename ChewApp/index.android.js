@@ -17,7 +17,8 @@ var {
 
 var HomeView = require('./js/components/HomeView');
 var SearchBar = require('./js/components/SearchBar');
-var FoodSearchResult = require('./js/components/FoodSearchResultView');
+var FoodSearchResultView = require('./js/components/FoodSearchResultView');
+var FoodDetailView = require('./js/components/FoodDetailView');
 
 //Keeps track of which page we are on
 var _navigator;
@@ -47,7 +48,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
       <View style={{flex: 1}}>
         <ToolbarAndroid
           actions={[]}
-          navIcon={{uri: 'https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_arrow_back_48px-128.png'}}
+          navIcon={require('image!android_back_white')}
           onIconClicked={navigationOperations.pop}
           style={styles.toolbar}
           titleColor="white"
@@ -59,6 +60,30 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
         />
       </View>
     );
+  }
+  else if (route.name === 'food') {
+    return (
+      <View style={{flex: 1}}>
+        <ToolbarAndroid
+          actions={[]}
+          navIcon={require('image!android_back_white')}
+          onIconClicked={navigationOperations.pop}
+          style={styles.toolbar}
+          titleColor="white"
+          title='Cool title' />
+        <FoodDetailView
+          style={styles.navigator}
+          navigator={navigationOperations}
+        />
+      </View>
+    );
+  }
+  else {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.welcome}>Sorry, an error occured.</Text>
+      </View>
+      );
   }
 };
 
