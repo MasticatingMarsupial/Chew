@@ -28,19 +28,16 @@ var FoodDetailView = React.createClass({
     };
   },
   componentDidMount: function () {
-    // Get home page stuff from DB
-    // this.setState({
-    //   images: ["http://www.jamesaltucher.com/wp-content/uploads/2013/03/HOT-DOG.jpg", "http://www.seriouseats.com/images/20081209-hot-dog.jpg"]
-    // })
     // this.fetchImages(this.props.food.id);
-    this.fetchImages(1);
+    this.fetchImages(this.props.food.id);
   },
   fetchImages: function (query) {
+    console.log('API Query:', API_URL + 'images/foods/'+ query);
     fetch(API_URL + 'images/foods/'+ query)
       .then((res) => res.json())
       .catch((err) => console.error("Fetching query failed: " + err))
       .then((responseData) => {
-        console.log('Got response', responseData);
+        console.log('Fetched images', responseData);
         this.setState({
           images: responseData
         });
@@ -54,7 +51,6 @@ var FoodDetailView = React.createClass({
     console.log('Heart button pressed');
   },
   selectedStar: function (rating) {
-    console.log(rating);
     console.log('Rated ' + rating + ' stars!');
   },
   render: function () {
@@ -63,7 +59,7 @@ var FoodDetailView = React.createClass({
       images.push(
         <View key={i + 1} style={styles.slide}>
           <Image
-            source={{uri: "http://www.jamesaltucher.com/wp-content/uploads/2013/03/HOT-DOG.jpg"}}
+            source={{uri: this.state.images[i].image}}
             resizeMode={Image.resizeMode.cover}
             style={styles.image}
           >
