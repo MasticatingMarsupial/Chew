@@ -19,15 +19,33 @@ var StarRating = require('./StarRating');
 
 var {width, height} = Dimensions.get('window');
 
+var API_URL = 'http://chewmast.herokuapp.com/api/';
+
 var FoodDetailView = React.createClass({
   getInitialState: function () {
-    console.log("WOOH, this is where we are", this)
     return {
-
+      images: []
     };
   },
   componentDidMount: function () {
     // Get home page stuff from DB
+    // this.setState({
+    //   images: ["http://www.jamesaltucher.com/wp-content/uploads/2013/03/HOT-DOG.jpg", "http://www.seriouseats.com/images/20081209-hot-dog.jpg"]
+    // })
+    // this.fetchImages(this.props.food.id);
+    this.fetchImages(1);
+  },
+  fetchImages: function (query) {
+    fetch(API_URL + 'images/foods/'+ query)
+      .then((res) => res.json())
+      .catch((err) => console.error("Fetching query failed: " + err))
+      .then((responseData) => {
+        console.log('Got response', responseData);
+        this.setState({
+          images: responseData
+        });
+      })
+      .done();
   },
   pressLikeButton: function () {
     console.log('Like button pressed');
@@ -41,11 +59,11 @@ var FoodDetailView = React.createClass({
   },
   render: function () {
     var images = [];
-    for (var i = 0; i < this.props.food.image.length; i++) {
+    for (var i = 0; i < this.state.images.length; i++) {
       images.push(
         <View key={i + 1} style={styles.slide}>
           <Image
-            source={{uri: this.props.food.image[i]}}
+            source={{uri: "http://www.jamesaltucher.com/wp-content/uploads/2013/03/HOT-DOG.jpg"}}
             resizeMode={Image.resizeMode.cover}
             style={styles.image}
           >
@@ -63,7 +81,7 @@ var FoodDetailView = React.createClass({
                 />
               </Button>
               <Text style={styles.heartCounts}>
-                123
+                {this.state.images[i].votes}
               </Text>
             </View>
           </Image>
@@ -84,7 +102,7 @@ var FoodDetailView = React.createClass({
                 {this.props.food.name}
               </Text>
               <Text style={styles.restaurant}>
-                @{this.props.food.restaurant}
+                @{this.props.food.restaurant.name}
               </Text>
             </View>
             <View style={styles.likeContainer}>
@@ -110,11 +128,11 @@ var FoodDetailView = React.createClass({
           </Carousel>
           <View style={styles.ratingContainer}>
             <View style={styles.starsContainer}>
-              <StarRating maxStars={5} rating={3.5} selectedStar={this.selectedStar} disabled={true} />
+              <StarRating maxStars={5} rating={this.props.food.avgRating} selectedStar={this.selectedStar} disabled={true} />
             </View>
             <View>
               <Text style={styles.ratingCount}>
-                {314} ratings
+                {this.props.food.numRating} ratings
               </Text>
             </View>
           </View>

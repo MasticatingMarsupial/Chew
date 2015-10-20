@@ -52,16 +52,14 @@ var FoodSearchResultView = React.createClass({
       })
       .done();
   },
-  onSearchButtonPress: function (event) { 
+  onSearchChange: function (event) { 
     console.log('search change', event);
     var filter = event.nativeEvent.text.toLowerCase();
-
   },
   selectFood: function (rowId, food) {
     console.log('Food pressed!');
     console.log(food);
     //This needs a conditional to make the app cross platform
-    food.image = ["http://www.jamesaltucher.com/wp-content/uploads/2013/03/HOT-DOG.jpg"];
     this.props.navigator.push({
         title: food.name,
         component: FoodDetailView,
@@ -95,7 +93,7 @@ var FoodSearchResultView = React.createClass({
         <SearchBar 
           placeholder='Find your food'
           onSearchButtonPress={this.searchString}
-          onSearchChange={this.onSearchChange}
+          onSearchChange={() => this.onSearchChange()}
           style={styles.searchBar} 
         />
         {content}
@@ -111,7 +109,6 @@ var FoodCell = React.createClass({
       console.log("Android Touch Elements")
       TouchableElement = TouchableNativeFeedback;
     }
-    console.log(this.props.food);
     return (
       <View>
         <TouchableElement 
@@ -127,7 +124,7 @@ var FoodCell = React.createClass({
               <Text style={styles.title}>{this.props.food.name}</Text>
               <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
               <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
-              <Text style={styles.text}>Resturant: {this.props.food.restaurant.name}</Text>
+              <Text style={styles.text}>Resturant: {this.props.food.restaurant}</Text>
             </View>
             </Image>
           </View>
@@ -188,31 +185,31 @@ var styles = StyleSheet.create({
   },
 });
 
-// var mockData = [
-//  {
-//    id: 1,
-//    name: "Hotdog",
-//    rating: 3,
-//    numRatings: 134,
-//    restaurant: "Jim's Dogs",
-//    image: ["http://www.jamesaltucher.com/wp-content/uploads/2013/03/HOT-DOG.jpg", "http://www.seriouseats.com/images/20081209-hot-dog.jpg"]
-//  },
-//  {
-//    id: 425,
-//    name:  "Dirty Dog",
-//    rating: 4,
-//    numRatings: 25,
-//    restaurant: "Hotdog Stand",
-//    image: ["http://www.seriouseats.com/images/20081209-hot-dog.jpg", "http://www.seriouseats.com/images/20081209-hot-dog.jpg"]
-//  },
-//  {
-//    id: 422,
-//    name:  "Breakfast Dog",
-//    rating: 5,
-//    numRatings: 245,
-//    restaurant: "Hotdog Stand",
-//    image: ["http://www.apinchofginger.com/uploads/6/0/3/9/6039210/2338231_orig.jpg", "http://www.seriouseats.com/images/20081209-hot-dog.jpg"]
-//  }
-// ]
+var mockData = [
+ {
+   id: 1,
+   name: "Hotdog",
+   rating: 3,
+   numRatings: 134,
+   restaurant: "Jim's Dogs",
+   image: ["http://www.jamesaltucher.com/wp-content/uploads/2013/03/HOT-DOG.jpg", "http://www.seriouseats.com/images/20081209-hot-dog.jpg"]
+ },
+ {
+   id: 425,
+   name:  "Dirty Dog",
+   rating: 4,
+   numRatings: 25,
+   restaurant: "Hotdog Stand",
+   image: ["http://www.seriouseats.com/images/20081209-hot-dog.jpg", "http://www.seriouseats.com/images/20081209-hot-dog.jpg"]
+ },
+ {
+   id: 422,
+   name:  "Breakfast Dog",
+   rating: 5,
+   numRatings: 245,
+   restaurant: "Hotdog Stand",
+   image: ["http://www.apinchofginger.com/uploads/6/0/3/9/6039210/2338231_orig.jpg", "http://www.seriouseats.com/images/20081209-hot-dog.jpg"]
+ }
+]
 
 module.exports = FoodSearchResultView;
