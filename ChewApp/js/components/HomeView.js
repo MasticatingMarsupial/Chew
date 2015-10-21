@@ -57,10 +57,6 @@ var HomeView = React.createClass({
         <Text style={styles.instructions}>
           We'll help you find the food you crave
         </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
       </View>
     );
   }
