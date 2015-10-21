@@ -8,8 +8,12 @@ from food.serializers_food import FoodSerializer
 
 class Search(APIView):
   def get(self, request, search_term, format=None):
-    tags = Tag.objects.filter(name__icontains=search_term)
-    foods = Food.objects.filter(Q(name__icontains=search_term) | Q(tags__in=tags)).all().distinct()
+    terms = search_term.split(' ')
+    q_objects = Q()
+    for term in terms:
+      tags = Tag.objects.filter(name__icontains=tag)
+      q_objects |= Q(name__icontains=term) | Q(tags__in=tags)
+    foods = Food.objects.filter(q_objects).all().distinct()
     if not foods:
       data = []
     else:
