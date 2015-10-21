@@ -18,6 +18,7 @@ var StarRating = React.createClass({
     rating: React.PropTypes.number,
     selectedStar: React.PropTypes.func,
     style: View.propTypes.style,
+    starSize: React.PropTypes.number,
   },
   getDefaultProps: function() {
     return {
@@ -53,13 +54,19 @@ var StarRating = React.createClass({
           disabled={this.props.disabled}
           key={i + 1}
           onPress={this.pressStarButton.bind(this, (i + 1))}
-          style={styles.starButton}
+          style={{
+            height: this.props.starSize,
+            width: this.props.starSize,
+          }}
         >
           <Icon
             name={starIcon}
-            size={35}
+            size={this.props.starSize}
             color='yellow'
-            style={styles.star}
+            style={{
+              height: this.props.starSize,
+              width: this.props.starSize,
+            }}
           />
         </Button>
       );
@@ -77,15 +84,10 @@ var styles = StyleSheet.create({
   starRatingContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: 180,
   },
   starButton: {
-    height:35,
-    width:35,
   },
   star: {
-    height:35,
-    width:35,
   },
 });
 

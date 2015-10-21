@@ -10,6 +10,7 @@ var {
   Image,
   Text,
   TouchableHighlight,
+  ListView,
 } = React;
 
 var Dimensions = require('Dimensions');
@@ -24,13 +25,17 @@ var API_URL = 'http://chewmast.herokuapp.com/api/';
 
 var FoodDetailView = React.createClass({
   getInitialState: function () {
+    var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      images: []
+      dataSource: dataSource,
+      images: [],
+      reviewsDataSource: dataSource.cloneWithRows([])
     };
   },
   componentDidMount: function () {
     // this.fetchImages(this.props.food.id);
     this.fetchImages(this.props.food.id);
+    this.fetchReviews(this.props.food.id);
   },
   fetchImages: function (query) {
     console.log('API Query:', API_URL + 'images/foods/'+ query);
@@ -45,6 +50,19 @@ var FoodDetailView = React.createClass({
       })
       .done();
   },
+  fetchReviews: function (query) {
+    console.log('API Query:', API_URL + 'reviews/foods/'+ query);
+    fetch(API_URL + 'reviews/foods/'+ query)
+      .then((res) => res.json())
+      .catch((err) => console.error("Fetching query failed: " + err))
+      .then((responseData) => {
+        console.log('Fetched reviews', responseData);
+        this.setState({
+          reviewsDataSource: this.state.dataSource.cloneWithRows(responseData)
+        });
+      })
+      .done();
+  },
   pressLikeButton: function () {
     console.log('Like button pressed');
   },
@@ -53,6 +71,21 @@ var FoodDetailView = React.createClass({
   },
   selectedStar: function (rating) {
     console.log('Rated ' + rating + ' stars!');
+  },
+  renderRow: function (rowData) {
+    return (
+      <View style={styles.reviewContainer}>
+        <View style={styles.reviewTopContainer}>
+          <Text style={styles.username}>Name</Text>
+          <View style={styles.reviewStarContainer}>
+            <StarRating maxStars={5} rating={parseFloat(rowData.foodRating)} disabled={true} styles={styles.reviewStarRating} starSize={15}/>
+          </View>
+        </View>
+        <View style={styles.reviewTextContainer}>
+          <Text style={styles.reviewText}>{rowData.text}</Text>
+        </View>
+      </View>
+    );
   },
   render: function () {
     var images = [];
@@ -136,7 +169,7 @@ var FoodDetailView = React.createClass({
           </Carousel>
           <View style={styles.ratingContainer}>
             <View style={styles.starsContainer}>
-              <StarRating maxStars={5} rating={parseInt(this.props.food.avgRating)} selectedStar={this.selectedStar} disabled={true} />
+              <StarRating maxStars={5} rating={parseFloat(this.props.food.avgRating)} disabled={true} styles={styles.starRating} starSize={35}/>
             </View>
             <View>
               <Text style={styles.ratingCount}>
@@ -144,6 +177,11 @@ var FoodDetailView = React.createClass({
               </Text>
             </View>
           </View>
+          <ListView
+            dataSource={this.state.reviewsDataSource}
+            renderRow={this.renderRow}
+            style={styles.reviewList}
+          />
         </ScrollView>
       </View>
     );
@@ -238,11 +276,43 @@ var styles = StyleSheet.create({
   starsContainer: {
     marginLeft: 15,
   },
+  starRating: {
+
+  },
   ratingCount: {
     fontSize: 30,
     textAlign: 'right',
     marginRight: 15,
   },
+  reviewList: {
+    marginTop: 10,
+  },
+  reviewContainer: {
+    flexDirection: 'column',
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 5,
+  },
+  reviewTopContainer: {
+    flexDirection: 'row',
+  },
+  username: {
+    fontSize: 20,
+  },
+  reviewStarContainer: {
+    marginTop: 5,
+    marginLeft: 10,
+  },
+  reviewStarRating: {
+
+  },
+  reviewTextContainer: {
+
+  },
+  reviewText: {
+    fontSize: 15,
+  },
+
 });
 
 module.exports = FoodDetailView;
