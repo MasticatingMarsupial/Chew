@@ -40,10 +40,8 @@ var StarRating = React.createClass({
   },
   render: function () {
     var starsLeft = this.state.rating;
-    console.log('Initial stars left', starsLeft);
     var starButtons = [];
     for (var i = 0; i < this.state.maxStars; i++) {
-      console.log('Stars left', starsLeft);
       var starIcon = 'fontawesome|star-o';
       if (starsLeft >= 1) {
         starIcon = 'fontawesome|star';
