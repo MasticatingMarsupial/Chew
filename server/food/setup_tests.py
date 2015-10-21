@@ -58,6 +58,46 @@ review = Review(**{
   'food': food
 })
 review.save()
+review2 = Review(**{
+  'text': 'The hot dog at first sight seemed on the skinnier side, but thats only because they make their own sausages and its all homemade goodness. The proof was in the taste! Tasted great and the surrounding batter wasn\'t too thick so the sausage wasn\'t lost at all. Would order a regular sausage or the fried chicken sandwich next time though.',
+  'user': user,
+  'foodRating': 5.0,
+  'reviewRating': 0,
+  'food': food
+})
+review2.save()
+review3 = Review(**{
+  'text': 'red wine poached cherries, house Dijon. I\'ve had wild boar meat elsewhere and recall it tasting like richer pork meat. The ground meat was mixed with the cherries for a sweet element. Overall, it was okay. I\'m not sure if I\'d order it again, I\'m interested in other things to try. Recommended.',
+  'user': user,
+  'foodRating': 4.5,
+  'reviewRating': 0,
+  'food': food
+})
+review3.save()
+review4 = Review(**{
+  'text': 'Visited here on a Sunday afternoon around 1:30 and there was still a line.  Good sign.  I ordered the Maple Pork dog and my wife ordered the Basil Chicken dog with the parmesan french fries.  Both dogs were really good.  Very flavorful franks with some nice accompanying condiments and enjoyable buns.  Okay fries, but I am not a big fry person.  The blueberry-cilantro drink was a little weird, but my wife enjoyed it.',
+  'user': user,
+  'foodRating': 4.1,
+  'reviewRating': 0,
+  'food': food
+})
+review4.save()
+review5 = Review(**{
+  'text': 'I ordered the smoked kielbasa - slightly overpriced in my opinion but it was definitely a filling meal. The sausage was very salty but was great with the piperade and dijon mustard. My sister ordered the fried chicken sandwich, which is supposed to be really good here. She liked it but started thinking the ginger flavor was too overwhelming after she was about halfway done with the sandwich.',
+  'user': user,
+  'foodRating': 4.3,
+  'reviewRating': 0,
+  'food': food2
+})
+review5.save()
+review6 = Review(**{
+  'text': 'Stopped by this place to grab some late breakfast and got excited to see a maple pork sausage. Overall it was okay. Came with a bit of arugula and some brown mustard. The coffee on the other hand was not pleasant. It had an odd flavor and was weak. Like when a novice uses a French press. Also the sausage didn\'t come with anything, you can add fries or onion rings for an extra 2-4 bucks.',
+  'user': user,
+  'foodRating': 5.0,
+  'reviewRating': 0,
+  'food': food3
+})
+review6.save()
 
 image1 = Image(**{
   'food': food,
