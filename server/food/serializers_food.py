@@ -14,10 +14,12 @@ class CreateableSlugRelatedField(serializers.SlugRelatedField):
 class AddressSerializer(serializers.ModelSerializer):
 
   class Meta:
+    model = Address
     fields = ['street_address', 'city', 'state', 'zipcode']
 
 class RestaurantSerializer(serializers.ModelSerializer):
   cuisine = CreateableSlugRelatedField(slug_field='name', queryset=Cuisine.objects.all())
+  address = AddressSerializer(read_only=False)
 
   class Meta:
     model = Restaurant
