@@ -10,6 +10,8 @@ var {
   TouchableNativeFeedback,
   Text,
   Image,
+  ProgressBarAndroid,
+  ActivityIndicatorIOS,
   Platform,
 } = React;
 
@@ -60,11 +62,13 @@ var FoodSearchResultView = React.createClass({
       .catch((err) => console.error("Fetching query failed: " + err))
       .then((responseData) => {
         console.log('response data:', responseData);
+
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(responseData),
         });
       })
-      .done();
+      .done(
+        console.log('Finished writing to array'));
   },
   onSearchChange: function (event) { 
     console.log('search change', event);
@@ -116,7 +120,7 @@ var FoodSearchResultView = React.createClass({
     return (
       <View style={styles.container}>
         <SearchBar 
-          placeholder='Find your food'
+          placeholder='Pick-a-Chew'
           onSearchButtonPress={this.searchString}
           onSearchChange={() => this.onSearchChange()}
           style={styles.searchBar} 
@@ -131,7 +135,6 @@ var FoodCell = React.createClass({
   render: function () {
     var TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
-      console.log("Android Touch Elements")
       TouchableElement = TouchableNativeFeedback;
     }
     return (
@@ -145,13 +148,12 @@ var FoodCell = React.createClass({
             <Image
               source={{uri: this.props.food.preview_image.image}}
               style={styles.cellImage}> 
+            </Image>
             <View style={styles.textContainer}>
               <Text style={styles.title}>{this.props.food.name}</Text>
-              <Text style={styles.text}>Rating: {this.props.food.rating} stars</Text>
-              <Text style={styles.text}># of Reviews: {this.props.food.numRatings}</Text>
+              <Text style={styles.text}>Rating: {this.props.food.rating}</Text>
               <Text style={styles.text}>Resturant: {this.props.food.restaurant.name}</Text>
             </View>
-            </Image>
           </View>
         </TouchableElement>
       </View>
@@ -161,9 +163,24 @@ var FoodCell = React.createClass({
 
 var NoFood = React.createClass({
   render: function() { 
+    var spinner = Platform.OS === 'ios' ?
+      <ActivityIndicatorIOS
+          animating={this.props.isLoading}
+          style={styles.spinner}
+        />
+      :
+        <ProgressBarAndroid
+          styleAttr="Large"
+          style={styles.spinner}
+        />
+      
     return (
       <View style={[styles.container, styles.centerText]}>
-        <Text style={styles.noFoodText}>Sorry, we can't find that food.</Text>
+        
+        <Text style={styles.noFoodText}>
+          Fetching your options
+        </Text>
+        {spinner}
       </View>
       );
   }
@@ -184,29 +201,41 @@ var styles = StyleSheet.create({
   searchBar: {
     marginTop: 64,
     height: 44,
+    color: 'blue',
   },
   row: {
     flex:1,
     justifyContent: 'center',
+    backgroundColor: 'black',
   },
   textContainer: {
     flex: 1,
     backgroundColor: 'transparent',
+    opacity: 1,
+    top: -150,
+    marginBottom: -80,
   },
   title: {
-    flex: 1,
     fontSize: 32,
     fontWeight: '500',
     marginBottom: 2,
     textAlign: 'center',
+    color: 'white',
+    opacity: 1,
   },
   text: {
-    color: '#F0F8FF',
+    textAlign: 'center',
+    color: 'white',
   },
   cellImage: {
-    backgroundColor: '#dddddd',
-    height: 200,
-    marginBottom: 1,
+    opacity: 0.6,
+    height: 225,
+    
+  },
+  spinner: {
+    width: 100,
+    height: 100,
+    alignItems: 'center',
   },
 });
 

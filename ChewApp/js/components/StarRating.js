@@ -62,7 +62,7 @@ var StarRating = React.createClass({
           <Icon
             name={starIcon}
             size={this.props.starSize}
-            color='yellow'
+            color='black'
             style={{
               height: this.props.starSize,
               width: this.props.starSize,

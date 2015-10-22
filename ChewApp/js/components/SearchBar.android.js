@@ -25,7 +25,7 @@ var SearchBar = React.createClass({
       
   },
   render: function() {
-    console.log('Android SearchBar is rendering', this);
+    console.log('Android SearchBar is rendering', this.props);
     var loadingView = <View style={styles.spinner} />;
     return (
       <View style={styles.searchBar}>
@@ -45,8 +45,8 @@ var SearchBar = React.createClass({
           autoCorrect={false}
           autoFocus={false}
           onSubmitEditing={this.onSubmitEditing}
-          placeholder="Search for a type of food..."
-          placeholderTextColor="rgba(255, 255, 255, 0.5)"
+          placeholder="Pick-a-Chew"
+          placeholderTextColor="rgba(255, 255, 255, 0.75)"
           onFocus={this.props.onFocus}
           style={styles.searchBarInput}
         />
@@ -60,7 +60,7 @@ var styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F44336',
+    backgroundColor: 'red',
     height: 56,
   },
   searchBarInput: {
@@ -70,7 +70,7 @@ var styles = StyleSheet.create({
     color: 'white',
     height: 50,
     padding: 0,
-    backgroundColor: 'transparent'
+    backgroundColor: 'red'
   },
   spinner: {
     width: 30,
