@@ -1,5 +1,5 @@
 # Test cases to populate your database with.  Run from python3 manage.py shell
-from food.models import Food, Restaurant, Cuisine, Tag, Review, User, Image
+from food.models import Food, Restaurant, Cuisine, Tag, Review, User, Image, Address
 
 address1 = Address.objects.create(street_address='405 Mason St', city='San Francisco', state='CA', zipcode=94102, latitude=37.7873663, longitude=-122.4096625)
 address2 = Address.objects.create(street_address='103 Irving St', city='San Francisco', state='CA', zipcode=9412, latitude=37.7637365, longitude=-122.4778788)
