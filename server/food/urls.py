@@ -8,6 +8,6 @@ urlpatterns = [
   url(r'^api/reviews/$', views_review.ReviewList.as_view()),
   url(r'^api/reviews/(?P<pk>[0-9]+)/$', views_review.ReviewDetail.as_view()),
   url(r'^api/reviews/foods/(?P<food_pk>[0-9]+)/$', views_review.ReviewGroups.as_view()),
-  url(r'^api/search/(?P<search_term>\w+)/$', views_search.Search.as_view()),
+  url(r'^api/search/(?P<search_term>.+)/$', views_search.Search.as_view()),
   url(r'^api/images/foods/(?P<food_pk>\w+)/$', views_image.ImageGroups.as_view()),
 ]

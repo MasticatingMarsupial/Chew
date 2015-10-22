@@ -1,9 +1,13 @@
 # Test cases to populate your database with.  Run from python3 manage.py shell
 from food.models import Food, Restaurant, Cuisine, Tag, Review, User, Image
 
+address1 = Address.objects.create(street_address='405 Mason St', city='San Francisco', state='CA', zipcode=94102, latitude=37.7873663, longitude=-122.4096625)
+address2 = Address.objects.create(street_address='103 Irving St', city='San Francisco', state='CA', zipcode=9412, latitude=37.7637365, longitude=-122.4778788)
+address3 = Address.objects.create(street_address='4416 18th St', city='San Francisco', state='CA', zipcode=94114, latitude=37.7608255, longitude=-122.4408786)
+
 cuisine = Cuisine(name='American')
 cuisine.save()
-restaurant = Restaurant(name='Hot Dog City', location='123 Anywhere Street, San Francisco, CA 94103', cuisine=cuisine)
+restaurant = Restaurant(name='Hot Dog City', address=address1, cuisine=cuisine)
 restaurant.save()
 food = Food(**{
   'name': 'Amazing Hot Dog',
@@ -21,7 +25,7 @@ tag2.save();
 food.tags.add(tag1)
 food.tags.add(tag2)
 
-restaurant2 = Restaurant(name='Give Me Dogs', location='123 American Street, San Francisco, CA 94105', cuisine=cuisine)
+restaurant2 = Restaurant(name='Give Me Dogs', address=address2, cuisine=cuisine)
 restaurant2.save()
 food2 = Food(**{
   'name': 'American Style Hot Dog',
@@ -35,7 +39,7 @@ food2.save()
 food2.tags.add(tag1)
 food2.tags.add(tag2)
 
-restaurant3 = Restaurant(name='Dog Eat Dog World', location='944 Market Street, San Francisco, CA 94103', cuisine=cuisine)
+restaurant3 = Restaurant(name='Dog Eat Dog World', address=address3, cuisine=cuisine)
 restaurant3.save()
 food3 = Food(**{
   'name': 'Loaded Hot Dog',
@@ -99,6 +103,12 @@ review6 = Review(**{
 })
 review6.save()
 
+image0 = Image.objects.create(**{
+  'id': 1, 
+  'image': 'http://theworldsbestever.s3.amazonaws.com/blog/wp-content/uploads/2014/08/polar-bear-grizzly.jpg',
+  'votes': 0
+})
+
 image1 = Image(**{
   'food': food,
   'image': 'http://lorempixel.com/200/200/food/1/jpg',
@@ -137,7 +147,7 @@ image5.save()
 
 
 # This is oops I messed up code to clean out all your tables. Uncomment to use
-# from food.models import Food, Restaurant, Cuisine, Tag, Review, User, Image
+# from food.models import Food, Restaurant, Cuisine, Tag, Review, User, Image, Address
 # User.objects.all().delete()
 # Tag.objects.all().delete()
 # Cuisine.objects.all().delete()
@@ -145,3 +155,4 @@ image5.save()
 # Food.objects.all().delete()
 # Review.objects.all().delete()
 # Image.objects.all().delete()
+# Address.objects.all().delete()
