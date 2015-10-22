@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from food.models import User, Cuisine, Restaurant, Food, Review, Image, Tag
+from food.models import User, Cuisine, Restaurant, Food, Review, Image, Tag, Address
 from food.serializers_image import ImageSerializer
 
 class CreateableSlugRelatedField(serializers.SlugRelatedField):
@@ -11,22 +11,28 @@ class CreateableSlugRelatedField(serializers.SlugRelatedField):
     except (TypeError, ValueError):
       self.fail('invalid')
 
+class AddressSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    fields = ['street_address', 'city', 'state', 'zipcode']
+
 class RestaurantSerializer(serializers.ModelSerializer):
   cuisine = CreateableSlugRelatedField(slug_field='name', queryset=Cuisine.objects.all())
 
   class Meta:
     model = Restaurant
-    fields = ['name', 'location', 'cuisine']
+    fields = ['name', 'address', 'cuisine']
 
 class FoodSerializer(serializers.ModelSerializer):
   cuisine = CreateableSlugRelatedField(slug_field='name', queryset=Cuisine.objects.all())
   restaurant = RestaurantSerializer(read_only=False)
   tags = CreateableSlugRelatedField(many=True, slug_field='name', queryset=Tag.objects.all())
   preview_image = ImageSerializer(read_only=True)
+  distance = serializers.DecimalField(read_only=True, max_digits=6, decimal_places=2)
 
   class Meta:
     model = Food
-    fields = ['id', 'name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating', 'tags', 'preview_image']
+    fields = ['id', 'name', 'cuisine', 'restaurant', 'price', 'avgRating', 'numRating', 'tags', 'preview_image', 'distance']
 
   def create(self, validated_data):
     restaurant_data = validated_data.pop('restaurant')

@@ -24,12 +24,16 @@ def get_distance_from_long_lat_in_miles(lat1, long1, lat2, long2):
 
 class Search(APIView):
   def get(self, request, search_term, format=None):
-    if request.query_params.coords is None and request.query_params.location is not None:
-      address_string = urllib.quote_plus(request.query_params.location)
-      google_r = requests.get('https://maps.googleapis.com/maps/api/geocode/json?', address=address_string, key=os.getenv('GOOGLE_MAPS_API_KEY'))
-      if google_r.status is 200 and google_r.json():
-        google_location = google_r.json()[0].geometry.location
-        request.query_params.coords = google.lat + ',' + google.lng
+    coords = request.query_params.get('coords')
+    location = request.query_params.get('location')
+    if coords is not None:
+      coords.split(',')
+      location_lat, location_lng = coords[0], coords[1]
+    if coords is None and location is not None:
+      google_r = requests.get('https://maps.googleapis.com/maps/api/geocode/json?', params={'address': location, 'key': os.getenv('GOOGLE_MAPS_API_KEY')})
+      if google_r.status_code is 200 and google_r.json():
+        google_location = google_r.json()['results'][0]['geometry']['location']
+        location_lat, location_lng = google_location['lat'], google_location['lng']
     terms = search_term.split(' ')
     q_objects = Q()
     for term in terms:
@@ -41,8 +45,10 @@ class Search(APIView):
     else:
       for food in foods:
         food.preview_image = Image.objects.filter(food=food).order_by('votes').first() or Image.objects.get(id=1)
-        coords_list = request.query_params.coords.split(',')
-        food.distance = get_distance_from_long_lat_in_miles(food.restaurant.latitude, food.restaurant.longitude, coords_list[0], coords_list[1])
+        if location_lat is not None and location_lng is not None:
+          food.distance = get_distance_from_long_lat_in_miles(float(food.restaurant.address.latitude), float(food.restaurant.address.longitude), float(location_lat), float(location_lng))
+      if location_lat is not None and location_lng is not None:
+        foods = sorted(foods, key=lambda food: food.distance)
       data = FoodSerializer(foods, many=True).data
     return Response(data)
 
