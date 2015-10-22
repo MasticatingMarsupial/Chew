@@ -59,8 +59,11 @@ var FoodSearchResultView = React.createClass({
       console.log("EMPTY SEARCH INPUTTED")
       return;
     }
-
-    var url =  API_URL + 'search/' + encodeURIComponent(query) + '/?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
+    if(Platform.OS = 'android'){
+      var url =  API_URL + 'search/' + encodeURIComponent(query) + '/?coords=' + encodeURIComponent(51.50998) + ',' + encodeURIComponent(-0.1337);
+    } else {
+      var url =  API_URL + 'search/' + encodeURIComponent(query) + '/?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
+    }
 
     console.log('url', url);
     //Fetches the data from the server with the passed search terms
@@ -69,7 +72,7 @@ var FoodSearchResultView = React.createClass({
       .catch((err) => console.error("Fetching query failed: " + err))
       .then((responseData) => {
         console.log('response data:', responseData);
-
+        console.log(this.state.dataSource)
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(responseData),
         });
@@ -158,8 +161,8 @@ var FoodCell = React.createClass({
             </Image>
             <View style={styles.textContainer}>
               <Text style={styles.title}>{this.props.food.name}</Text>
-              <Text style={styles.text}>Rating: {this.props.food.rating}</Text>
-              <Text style={styles.text}>Resturant: {this.props.food.restaurant.name}</Text>
+              <Text style={styles.text}>Rating: {this.props.food.avgRating}</Text>
+              <Text style={styles.text}>Distance: {this.props.food.distance}</Text>
             </View>
           </View>
         </TouchableElement>
