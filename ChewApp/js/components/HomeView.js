@@ -18,11 +18,16 @@ if (Platform.OS === 'android'){
 var HomeView = React.createClass({
   getInitialState: function () {
     return {
-
+      position: 'unknown'
     };
   },
   componentDidMount: function () {
     // Get home page stuff from DB
+    navigator.geolocation.getCurrentPosition(
+      (position) => this.setState({position}),
+      (error) => alert(error.message),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
   },
   searchString: function (food) {
     // Executes query to DB for possible foods by string
