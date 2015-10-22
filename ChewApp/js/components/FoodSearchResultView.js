@@ -30,13 +30,20 @@ var FoodSearchResultView = React.createClass({
   getInitialState: function () {
     return {
       dataSource: new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    }),
-
+        rowHasChanged: (r1, r2) => r1 !== r2
+      }),
+      position: this.props.position,
     };
   },
   componentDidMount: function () {
     // Call the search with the search term from the homepage
+    if(Platform.OS === 'ios'){
+      navigator.geolocation.getCurrentPosition(
+        (position) => this.setState({position}),
+        (error) => alert(error.message),
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      );
+    }
     console.log(this.props.food);
     //This needs an empty string case
     if(this.props.food !== undefined){
@@ -53,9 +60,9 @@ var FoodSearchResultView = React.createClass({
       return;
     }
 
-    var url =  API_URL + 'search/' + encodeURIComponent(query)
+    var url =  API_URL + 'search/' + encodeURIComponent(query) + '/?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
 
-    console.log(url);
+    console.log('url', url);
     //Fetches the data from the server with the passed search terms
     fetch(url)
       .then((res) => res.json())

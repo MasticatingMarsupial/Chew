@@ -18,20 +18,35 @@ if (Platform.OS === 'android'){
 var HomeView = React.createClass({
   getInitialState: function () {
     return {
-
+      position: {
+        coords: {
+          latitude: 51.50998,
+          longitude: -0.1337
+        }
+      }
     };
   },
   componentDidMount: function () {
     // Get home page stuff from DB
+    if(Platform.OS === 'ios'){
+      navigator.geolocation.getCurrentPosition(
+        (position) => this.setState({position}),
+        (error) => alert(error.message),
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      );
+    }
   },
   searchString: function (food) {
     // Executes query to DB for possible foods by string
     if (Platform.OS === 'ios'){
       this.props.navigator.push({
-      title: 'Results',
-      component: FoodSearchResultView,
-      // Need to pass search text
-      passProps: {food},
+        title: 'Results',
+        component: FoodSearchResultView,
+        // Need to pass search text
+        passProps: {
+          food: food, 
+          position: this.state.position
+        },
       });
     } else { 
       this.props.navigator.push({
@@ -39,6 +54,7 @@ var HomeView = React.createClass({
         name: 'results',
         // Need to pass search text
         food: {food},
+        position: this.state.position,
       });
     }
   },
