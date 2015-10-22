@@ -10,6 +10,7 @@ var {
   Image,
   Text,
   TouchableHighlight,
+  TouchableNativeFeedback,
   ListView,
 } = React;
 
@@ -76,7 +77,7 @@ var FoodDetailView = React.createClass({
     return (
       <View style={styles.reviewContainer}>
         <View style={styles.reviewTopContainer}>
-          <Text style={styles.username}>Name</Text>
+          <Text style={styles.username}>{rowData.user.name}</Text>
           <View style={styles.reviewStarContainer}>
             <StarRating maxStars={5} rating={parseFloat(rowData.foodRating)} disabled={true} styles={styles.reviewStarRating} starSize={15}/>
           </View>
@@ -88,6 +89,11 @@ var FoodDetailView = React.createClass({
     );
   },
   render: function () {
+    var TouchableElement = TouchableHighlight;
+      if (Platform.OS === 'android') {
+        TouchableElement = TouchableNativeFeedback;
+      }
+
     var images = [];
     for (var i = 0; i < this.state.images.length; i++) {
       images.push(
@@ -117,7 +123,6 @@ var FoodDetailView = React.createClass({
         </View>
       );
     }
-
     return (
       <View
         automaticallyAdjustContentInsets={false} 
@@ -129,42 +134,51 @@ var FoodDetailView = React.createClass({
           <Carousel autoplay={false} style={styles.carousel}>
             {images}
           </Carousel>
-            <View style={styles.titleContainer}>
-              <Text style={styles.name}>
-                {this.props.food.name}
+
+          <View style={styles.titleContainer}>
+            <Text style={styles.name}>
+              {this.props.food.name}
+            </Text>
+            <Text style={styles.restaurant}>
+              {this.props.food.restaurant.name}
+            </Text>
+          </View>
+
+          <View style={styles.scoresContainer}>
+            <View style={styles.scoresElement}>
+              <Text style={styles.scoresElementText}>
+                {this.props.food.numRating}
               </Text>
-              <Text style={styles.restaurant}>
-                {this.props.food.restaurant.name}
+              <Text style={styles.scoresElementText}>
+                Votes
               </Text>
             </View>
-
-
-            <View style={styles.scoresContainer}>
-              <View style={styles.scoresElement}>
-                <Text style={styles.scoresElementText}>
-                  254
-                </Text>
-                <Text style={styles.scoresElementText}>
-                  Votes
-                </Text>
-              </View>
-              <View style={styles.scoresElement}>
-                <Text style={styles.scoresElementText}>
-                  {this.props.food.avgRating.toString()}
-                </Text>
-                <Text style={styles.scoresElementText}>
-                  Stars
-                </Text>
-              </View>
-              <View style={styles.scoresElement}>
-                <Text style={styles.scoresElementText}>
-                  {this.props.food.numRating}
-                </Text>
-                <Text style={styles.scoresElementText}>
-                  Ratings
-                </Text>
-              </View>
+            <View style={styles.scoresElement}>
+              <Text style={styles.scoresElementText}>
+                {this.props.food.avgRating.toString()}
+              </Text>
+              <Text style={styles.scoresElementText}>
+                Stars
+              </Text>
             </View>
+            <View style={styles.scoresElement}>
+              <Text style={styles.scoresElementText}>
+                {this.state.reviewsDataSource._cachedRowCount}
+              </Text>
+              <Text style={styles.scoresElementText}>
+                Reviews
+              </Text>
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableElement 
+              onPress={this.pressLikeButton}
+            >
+              <View style={styles.button}>
+                <Text style={styles.buttonText}> I Like This </Text>
+              </View>
+            </TouchableElement>
+          </View>
           <ListView
             dataSource={this.state.reviewsDataSource}
             renderRow={this.renderRow}
@@ -181,16 +195,11 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  scrollView: {
+  ScrollView: {
     height: 300,
-  },
-  topRowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
   },
   titleContainer: {
     flexDirection: 'column',
-    textAlign: 'center',
   },
   name: {
     fontSize: 30,
@@ -201,27 +210,8 @@ var styles = StyleSheet.create({
   restaurant: {
     fontSize: 20,
     textAlign: 'center',
-    color: 'black',
     marginTop: 5,
     marginLeft: 15,
-  },
-  likeContainer: {
-    flexDirection: 'row',
-    marginTop: 20,
-    marginRight: 15,
-  },
-  likeButton: {
-    height:40,
-    width:40,
-  },
-  like: {
-    height:40,
-    width:40,
-  },
-  likeCounts: {
-    fontSize: 35,
-    textAlign: 'right',
-    marginLeft: 5,
   },
   carousel: {
     flex: 1,
@@ -241,7 +231,6 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: 15,
     marginRight: 15,
-
   },
   heartButton: {
     height:40,
@@ -256,22 +245,6 @@ var styles = StyleSheet.create({
     textAlign: 'right',
     marginLeft: 5,
     color: 'white',
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  starsContainer: {
-    marginLeft: 15,
-  },
-  starRating: {
-
-  },
-  ratingCount: {
-    fontSize: 30,
-    textAlign: 'right',
-    marginRight: 15,
   },
   reviewList: {
     marginTop: 10,
@@ -313,7 +286,27 @@ var styles = StyleSheet.create({
   scoresElementText: {
     width: 120,
     textAlign: 'center',
-  }
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  button: {
+    borderWidth: 1,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop: 2,
+    paddingBottom: 2,
+    borderStyle: 'solid',
+    borderColor: '#808080',
+  },
+  buttonText: {
+    marginTop: 5,
+    marginBottom: 5,
+    fontSize: 16,
+  },
 
 });
 
