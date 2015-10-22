@@ -10,10 +10,18 @@ class Tag(models.Model):
 class Cuisine(models.Model):
   name = models.CharField(max_length=255, unique=True)
 
+class Address(models.Model):
+  street_address = models.CharField(max_length=100)
+  city = models.CharField(max_length=50)
+  state = models.CharField(max_length=50)
+  zipcode = models.CharField(max_length=20)
+  latitude = models.DecimalField(max_digits=9, decimal_places=7, validators=[MinValueValidator(-90), MaxValueValidator(90)])
+  longitude = models.DecimalField(max_digits=10, decimal_places=7, validators=[MinValueValidator(-180), MaxValueValidator(180)])
+
 class Restaurant(models.Model):
   name = models.CharField(max_length=255)
-  location = models.CharField(max_length=255)
-  cuisine = models.ForeignKey(Cuisine) 
+  address = models.ForeignKey(Address)
+  cuisine = models.ForeignKey(Cuisine)
 
 class Food(models.Model):
   name = models.CharField(max_length=255)
@@ -32,7 +40,7 @@ class Review(models.Model):
   food = models.ForeignKey(Food) 
 
 class Image(models.Model):
-  food = models.ForeignKey(Food) 
+  food = models.ForeignKey(Food, null=True) 
   image = models.CharField(max_length=255, unique=True)
   review = models.ForeignKey(Review, null=True)
   votes = models.IntegerField(default=0)
