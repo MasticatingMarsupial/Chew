@@ -94,7 +94,6 @@ var FoodDetailView = React.createClass({
         <View key={i + 1} style={styles.slide}>
           <Image
             source={{uri: this.state.images[i].image}}
-            resizeMode={Image.resizeMode.cover}
             style={styles.image}
           >
             <View style={styles.heartContainer}>
@@ -119,23 +118,6 @@ var FoodDetailView = React.createClass({
       );
     }
 
-    var title = Platform.OS === 'ios' ?
-     <View style={styles.titleContainer}>
-       <Text style={styles.name}>
-         {this.props.food.name}
-       </Text>
-       <Text style={styles.restaurant}>
-         @{this.props.food.restaurant.name}
-       </Text>
-     </View>
-     :
-     <View style={styles.titleContainer}>
-       <Text style={styles.restaurant}>
-         @{this.props.food.restaurant.name}
-       </Text>
-     </View>
-
-
     return (
       <View
         automaticallyAdjustContentInsets={false} 
@@ -144,39 +126,45 @@ var FoodDetailView = React.createClass({
         <ScrollView
           style={styles.scrollView}
         >
-          <View style={styles.topRowContainer}>
-            {title}
-            <View style={styles.likeContainer}>
-              <Button
-                activeOpacity={0.20}
-                onPress={this.pressLikeButton}
-                style={styles.likeButton}
-              >
-                <Icon
-                  name='fontawesome|thumbs-o-up'
-                  size={40}
-                  color='black'
-                  style={styles.like}
-                />
-              </Button>
-              <Text style={styles.likeCounts}>
-                254
-              </Text>
-            </View>
-          </View>
           <Carousel autoplay={false} style={styles.carousel}>
             {images}
           </Carousel>
-          <View style={styles.ratingContainer}>
-            <View style={styles.starsContainer}>
-              <StarRating maxStars={5} rating={parseFloat(this.props.food.avgRating)} disabled={true} styles={styles.starRating} starSize={35}/>
-            </View>
-            <View>
-              <Text style={styles.ratingCount}>
-                {this.props.food.numRating} ratings
+            <View style={styles.titleContainer}>
+              <Text style={styles.name}>
+                {this.props.food.name}
+              </Text>
+              <Text style={styles.restaurant}>
+                {this.props.food.restaurant.name}
               </Text>
             </View>
-          </View>
+
+
+            <View style={styles.scoresContainer}>
+              <View style={styles.scoresElement}>
+                <Text style={styles.scoresElementText}>
+                  254
+                </Text>
+                <Text style={styles.scoresElementText}>
+                  Votes
+                </Text>
+              </View>
+              <View style={styles.scoresElement}>
+                <Text style={styles.scoresElementText}>
+                  {this.props.food.avgRating.toString()}
+                </Text>
+                <Text style={styles.scoresElementText}>
+                  Stars
+                </Text>
+              </View>
+              <View style={styles.scoresElement}>
+                <Text style={styles.scoresElementText}>
+                  {this.props.food.numRating}
+                </Text>
+                <Text style={styles.scoresElementText}>
+                  Ratings
+                </Text>
+              </View>
+            </View>
           <ListView
             dataSource={this.state.reviewsDataSource}
             renderRow={this.renderRow}
@@ -194,7 +182,6 @@ var styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   scrollView: {
-    backgroundColor: 'gray',
     height: 300,
   },
   topRowContainer: {
@@ -203,17 +190,18 @@ var styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: 'column',
+    textAlign: 'center',
   },
   name: {
     fontSize: 30,
-    textAlign: 'left',
+    textAlign: 'center',
     marginTop: 10,
     marginLeft: 15,
   },
   restaurant: {
     fontSize: 20,
-    textAlign: 'left',
-    color: '#333333',
+    textAlign: 'center',
+    color: 'black',
     marginTop: 5,
     marginLeft: 15,
   },
@@ -237,7 +225,6 @@ var styles = StyleSheet.create({
   },
   carousel: {
     flex: 1,
-    marginTop: 10,
     width: width,
     height: width,
   },
@@ -254,6 +241,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: 15,
     marginRight: 15,
+
   },
   heartButton: {
     height:40,
@@ -267,6 +255,7 @@ var styles = StyleSheet.create({
     fontSize: 35,
     textAlign: 'right',
     marginLeft: 5,
+    color: 'white',
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -312,6 +301,19 @@ var styles = StyleSheet.create({
   reviewText: {
     fontSize: 15,
   },
+  scoresContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  scoresElement: {
+    flexDirection: 'column',
+    paddingTop: 15,
+    
+  },
+  scoresElementText: {
+    width: 120,
+    textAlign: 'center',
+  }
 
 });
 
