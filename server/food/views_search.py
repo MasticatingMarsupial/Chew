@@ -27,7 +27,7 @@ class Search(APIView):
     coords = request.query_params.get('coords')
     location = request.query_params.get('location')
     if coords is not None:
-      coords.split(',')
+      coords = coords.split(',')
       location_lat, location_lng = coords[0], coords[1]
     if coords is None and location is not None:
       google_r = requests.get('https://maps.googleapis.com/maps/api/geocode/json?', params={'address': location, 'key': os.getenv('GOOGLE_MAPS_API_KEY')})
