@@ -18,16 +18,23 @@ if (Platform.OS === 'android'){
 var HomeView = React.createClass({
   getInitialState: function () {
     return {
-      position: 'unknown'
+      position: {
+        coords: {
+          latitude: 51.50998,
+          longitude: -0.1337
+        }
+      }
     };
   },
   componentDidMount: function () {
     // Get home page stuff from DB
-    navigator.geolocation.getCurrentPosition(
-      (position) => this.setState({position}),
-      (error) => alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
+    if(Platform.OS === 'ios'){
+      navigator.geolocation.getCurrentPosition(
+        (position) => this.setState({position}),
+        (error) => alert(error.message),
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      );
+    }
   },
   searchString: function (food) {
     // Executes query to DB for possible foods by string
@@ -47,6 +54,7 @@ var HomeView = React.createClass({
         name: 'results',
         // Need to pass search text
         food: {food},
+        position: this.state.position,
       });
     }
   },
