@@ -1,8 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-
-class User(models.Model):
-  name = models.CharField(max_length=30, unique=True)
+from django.contrib.auth.models import User
 
 class Tag(models.Model):
   name = models.CharField(max_length=255, unique=True)
@@ -34,7 +32,7 @@ class Food(models.Model):
 
 class Review(models.Model):
   text = models.CharField(max_length=2000, null=True)
-  user = models.ForeignKey(User) 
+  owner = models.ForeignKey('auth.User', related_name='reviews')
   foodRating = models.DecimalField(max_digits=3, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
   reviewRating = models.IntegerField(null=True)
   food = models.ForeignKey(Food) 
@@ -44,4 +42,3 @@ class Image(models.Model):
   image = models.CharField(max_length=255, unique=True)
   review = models.ForeignKey(Review, null=True)
   votes = models.IntegerField(default=0)
-

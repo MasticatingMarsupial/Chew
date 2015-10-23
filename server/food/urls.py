@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from food import views_food, views_review, views_search, views_image
+from food import views_food, views_review, views_search, views_image, views_user
 
 urlpatterns = [
   url(r'^api/foods/$', views_food.FoodList.as_view()),
@@ -7,7 +7,10 @@ urlpatterns = [
   url(r'^api/foods/restaurants/(?P<restaurant_pk>[0-9]+)/$', views_food.FoodGroups.as_view()),
   url(r'^api/reviews/$', views_review.ReviewList.as_view()),
   url(r'^api/reviews/(?P<pk>[0-9]+)/$', views_review.ReviewDetail.as_view()),
-  url(r'^api/reviews/foods/(?P<food_pk>[0-9]+)/$', views_review.ReviewGroups.as_view()),
   url(r'^api/search/(?P<search_term>.+)/$', views_search.Search.as_view()),
   url(r'^api/images/foods/(?P<food_pk>\w+)/$', views_image.ImageGroups.as_view()),
+  url(r'^api/users/$', views_user.UserList.as_view()),
+  url(r'^api/users/(?P<pk>[0-9]+)/$', views_user.UserDetail.as_view()),
+  url(r'^api/signup/$', views_user.signup),
+  url(r'^api/login/$', views_user.login),
 ]
