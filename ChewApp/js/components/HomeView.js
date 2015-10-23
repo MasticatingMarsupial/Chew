@@ -18,12 +18,7 @@ if (Platform.OS === 'android'){
 var HomeView = React.createClass({
   getInitialState: function () {
     return {
-      position: {
-        coords: {
-          latitude: 51.50998,
-          longitude: -0.1337
-        }
-      }
+      position: 'unknown'
     };
   },
   componentDidMount: function () {
