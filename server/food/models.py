@@ -1,8 +1,9 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import User
 
-class User(models.Model):
-  name = models.CharField(max_length=30, unique=True)
+# class User(models.Model):
+  # name = models.CharField(max_length=30, unique=True)
 
 class Tag(models.Model):
   name = models.CharField(max_length=255, unique=True)
@@ -34,7 +35,8 @@ class Food(models.Model):
 
 class Review(models.Model):
   text = models.CharField(max_length=2000, null=True)
-  user = models.ForeignKey(User) 
+  # user = models.ForeignKey(User) 
+  owner = models.ForeignKey('auth.User', related_name='reviews')
   foodRating = models.DecimalField(max_digits=3, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
   reviewRating = models.IntegerField(null=True)
   food = models.ForeignKey(Food) 
@@ -45,3 +47,14 @@ class Image(models.Model):
   review = models.ForeignKey(Review, null=True)
   votes = models.IntegerField(default=0)
 
+# from food.models import *
+# from django.contrib.auth.models import User
+# use1 = User.objects.get(pk=1)
+# cui1 = Cuisine(name='Australian')
+# cui1.save()
+# res1 = Restaurant(name='Australian Restaurant', location='Australia', cuisine=cui1)
+# res1.save()
+# foo1 = Food(name='Vegemite', cuisine=cui1, restaurant=res1, price=5, avgRating=4.54, numRating=1)
+# foo1.save()
+# rev1 = Review(text='This is awesome', owner=use1, foodRating=5.00, reviewRating=5, food=foo1)
+# rev1.save()

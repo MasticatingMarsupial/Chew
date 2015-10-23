@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from food.models import Review, Food, User
+from food.models import Review, Food#, User
 from food.serializers_food import FoodSerializer
 
 class CreateableSlugRelatedField(serializers.SlugRelatedField):
@@ -11,16 +11,15 @@ class CreateableSlugRelatedField(serializers.SlugRelatedField):
     except (TypeError, ValueError):
       self.fail('invalid')
 
-class UserSerializer(serializers.ModelSerializer):
+# class UserSerializer(serializers.ModelSerializer):
 
-  class Meta:
-    model = User
-    fields = ['id', 'name']
+  # class Meta:
+    # model = User
+    # fields = ['id', 'name']
 
 class ReviewSerializer(serializers.ModelSerializer):
-  user = UserSerializer(read_only=True) # not sure why false
+  # user = UserSerializer(read_only=True) # not sure why false
 
   class Meta:
     model = Review
-    fields = ['text', 'user', 'foodRating', 'reviewRating', 'food']
 
