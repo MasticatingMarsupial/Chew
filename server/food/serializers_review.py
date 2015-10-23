@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from food.models import Review, Food#, User
+from food.models import Review, Food
 from food.serializers_food import FoodSerializer
 from django.contrib.auth.models import User
 
