@@ -3,8 +3,6 @@
 var React = require('react-native');
 var {
   Image,
-  Platform,
-  ProgressBarAndroid,
   TextInput,
   StyleSheet,
   TouchableNativeFeedback,
@@ -20,9 +18,8 @@ var SearchBar = React.createClass({
     dismissKeyboard();
     this.setState({
       name: filter,
-    })
+    });
     this.props.onSearchButtonPress(filter);
-      
   },
   render: function() {
     console.log('Android SearchBar is rendering', this.props);
