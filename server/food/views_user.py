@@ -21,7 +21,7 @@ def signup(request):
   username = request['username']
   password = request['password']
   if User.objects.filter(username=username).exists():
-    print('user exists')
+    print('user already exists. go somewhere else')
     return redirect('/api/')
   else:
     print('User created')
@@ -44,7 +44,7 @@ def login(request):
       print('disabled account')
       return redirect('/api/reviews')
   else:
-    print('invalid login')
+    print('invalid login. go somewhere else.')
     return redirect('/api/users')
 
       
