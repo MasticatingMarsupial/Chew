@@ -39,10 +39,10 @@ var FoodDetailView = React.createClass({
     this.fetchReviews(this.props.food.id);
   },
   fetchImages: function (query) {
-    console.log('API Query:', API_URL + 'images/foods/'+ query);
-    fetch(API_URL + 'images/foods/'+ query)
+    console.log('API Query:', API_URL + 'images/foods/' + query);
+    fetch(API_URL + 'images/foods/' + query)
       .then((res) => res.json())
-      .catch((err) => console.error("Fetching query failed: " + err))
+      .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {
         console.log('Fetched images', responseData);
         this.setState({
@@ -52,10 +52,10 @@ var FoodDetailView = React.createClass({
       .done();
   },
   fetchReviews: function (query) {
-    console.log('API Query:', API_URL + 'reviews/foods/'+ query);
-    fetch(API_URL + 'reviews/foods/'+ query)
+    console.log('API Query:', API_URL + 'reviews/foods/' + query);
+    fetch(API_URL + 'reviews/foods/' + query)
       .then((res) => res.json())
-      .catch((err) => console.error("Fetching query failed: " + err))
+      .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {
         console.log('Fetched reviews', responseData);
         this.setState({
@@ -109,9 +109,9 @@ var FoodDetailView = React.createClass({
                 style={styles.heartButton}
               >
                 <Icon
-                  name='fontawesome|heart-o'
+                  name="fontawesome|heart-o"
                   size={40}
-                  color='red'
+                  color="red"
                   style={styles.heart}
                 />
               </Button>
@@ -125,7 +125,7 @@ var FoodDetailView = React.createClass({
     }
     return (
       <View
-        automaticallyAdjustContentInsets={false} 
+        automaticallyAdjustContentInsets={false}
         style={styles.container}
       >
         <ScrollView
@@ -171,7 +171,7 @@ var FoodDetailView = React.createClass({
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableElement 
+            <TouchableElement
               onPress={this.pressLikeButton}
             >
               <View style={styles.button}>
@@ -281,7 +281,6 @@ var styles = StyleSheet.create({
   scoresElement: {
     flexDirection: 'column',
     paddingTop: 15,
-    
   },
   scoresElementText: {
     width: 120,
@@ -307,7 +306,6 @@ var styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 16,
   },
-
 });
 
 module.exports = FoodDetailView;

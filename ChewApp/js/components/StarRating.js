@@ -6,7 +6,7 @@ var {
   AppRegistry,
   StyleSheet,
   View
-} = React
+} = React;
 
 var {Icon,} = require('react-native-icons');
 var Button = require('react-native-button');
@@ -33,7 +33,7 @@ var StarRating = React.createClass({
     return {
       maxStars: this.props.maxStars,
       rating: roundedRating
-    }
+    };
   },
   pressStarButton: function (rating) {
     this.props.selectedStar(rating);
@@ -62,7 +62,7 @@ var StarRating = React.createClass({
           <Icon
             name={starIcon}
             size={this.props.starSize}
-            color='black'
+            color="black"
             style={{
               height: this.props.starSize,
               width: this.props.starSize,

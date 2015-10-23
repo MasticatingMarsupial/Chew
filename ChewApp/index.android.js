@@ -16,7 +16,6 @@ var {
 } = React;
 
 var HomeView = require('./js/components/HomeView');
-var SearchBar = require('./js/components/SearchBar');
 var FoodSearchResultView = require('./js/components/FoodSearchResultView');
 var FoodDetailView = require('./js/components/FoodDetailView');
 
@@ -34,14 +33,14 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 
 var RouteMapper = function(route, navigationOperations, onComponentRef) {
   _navigator = navigationOperations;
-  console.log("RouteMapper")
-  console.log("Route is:",route);
+  console.log('RouteMapper');
+  console.log('Route is:',route);
  if (route.name === 'home') {
     console.log('rendering the HomeView');
     return (
       <HomeView navigator={navigationOperations} />
     );
-  } 
+  }
   else if (route.name === 'results') {
     console.log('rerouting to results');
     return (
@@ -50,13 +49,12 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
           style={{flex: 1}}
           navigator={navigationOperations}
           food={route.food.food}
-          
         />
       </View>
     );
   }
   else if (route.name === 'food') {
-    console.log('rerouting to detail view')
+    console.log('rerouting to detail view');
     console.log(route.food);
     return (
       <View style={{flex: 1}}>

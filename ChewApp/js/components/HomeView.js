@@ -23,10 +23,10 @@ var HomeView = React.createClass({
   },
   componentDidMount: function () {
     // Get home page stuff from DB
-    if(Platform.OS === 'ios'){
+    if (Platform.OS === 'ios'){
       navigator.geolocation.getCurrentPosition(
         (position) => this.setState({position}),
-        (error) => alert(error.message),
+        (error) => console.error(error.message),
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
       );
     }
@@ -39,11 +39,11 @@ var HomeView = React.createClass({
         component: FoodSearchResultView,
         // Need to pass search text
         passProps: {
-          food: food, 
+          food: food,
           position: this.state.position
         },
       });
-    } else { 
+    } else {
       this.props.navigator.push({
         title: 'Results',
         name: 'results',
@@ -54,13 +54,13 @@ var HomeView = React.createClass({
     }
   },
   render: function () {
-    console.log('rendering homepage for ' + Platform.OS)
+    console.log('rendering homepage for ' + Platform.OS);
     return (
       <View style={styles.container}>
-        <SearchBar 
-          placeholder='Find your food'
+        <SearchBar
+          placeholder="Find your food"
           onSearchButtonPress={this.searchString}
-          style={styles.searchBar} 
+          style={styles.searchBar}
         />
         <Text style={styles.welcome}>
           Welcome to Chew!
