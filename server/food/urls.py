@@ -5,6 +5,7 @@ urlpatterns = [
   url(r'^api/foods/$', views_food.FoodList.as_view()),
   url(r'^api/foods/(?P<pk>[0-9]+)/$', views_food.FoodDetail.as_view()),
   url(r'^api/foods/restaurants/(?P<restaurant_pk>[0-9]+)/$', views_food.FoodGroups.as_view()),
+  url(r'^api/foods/favorites/(?P<account_pk>[0-9]+)/$', views_food.FoodFavorites.as_view()),
   url(r'^api/reviews/$', views_review.ReviewList.as_view()),
   url(r'^api/reviews/(?P<pk>[0-9]+)/$', views_review.ReviewDetail.as_view()),
   url(r'^api/search/(?P<search_term>.+)/$', views_search.Search.as_view()),
