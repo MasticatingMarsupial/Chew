@@ -58,20 +58,15 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'food',
     'rest_framework',
-    'social.apps.django_app.default',
-    'oauth2_provider',
+    'rest_framework.authtoken'
 )
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
     )
 }
 
