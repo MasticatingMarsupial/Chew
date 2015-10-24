@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import Http404
-from food.models import Food
+from food.models import Food, Account
 from food.serializers_food import FoodSerializer
 
 class FoodList(APIView):
@@ -53,4 +53,16 @@ class FoodGroups(APIView):
   def get(self, request, restaurant_pk, format=None):
     foods = self.get_object(restaurant_pk=restaurant_pk)
     serializer = FoodSerializer(foods, many=True)
+    return Response(serializer.data)
+
+class FoodFavorites(APIView):
+  def get_object(self, account_pk):
+    try:
+      return Account.objects.filter(pk=account_pk).first().food_favorites
+    except Account.DoesNotExist:
+      raise Http404
+
+  def get(self, request, account_pk, format=None):
+    favorites = self.get_object(account_pk=account_pk)
+    serializer = FoodSerializer(favorites, many=True)
     return Response(serializer.data)

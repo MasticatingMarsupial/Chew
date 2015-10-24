@@ -38,10 +38,11 @@ class Review(models.Model):
   owner = models.ForeignKey(User)
   foodRating = models.DecimalField(max_digits=3, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
   reviewRating = models.IntegerField(null=True)
-  food = models.ForeignKey(Food) 
+  food = models.ForeignKey(Food)
 
 class Image(models.Model):
-  food = models.ForeignKey(Food, null=True) 
+  food = models.ForeignKey(Food, null=True)
+  owner = models.ForeignKey(User, null=True)
   image = models.CharField(max_length=255, unique=True)
   review = models.ForeignKey(Review, null=True)
   votes = models.IntegerField(default=0)
