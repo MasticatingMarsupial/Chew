@@ -5,24 +5,24 @@
   "scripts": {
     "start": "node_modules/react-native/packager/packager.sh",
     "lint": "eslint src",
-    "test": "jest"
+    "test": "NODE_ENV=test jest"
   },
 
   "jest": {
-  "scriptPreprocessor": "node_modules/react-native/jestSupport/scriptPreprocess.js",
-  "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js",
-  "testPathIgnorePatterns": [
-    "/node_modules/",
-    "packager/react-packager/src/Activity/"
-  ],
-  "testFileExtensions": [
-    "js"
-  ],
-  "unmockedModulePathPatterns": [
-    "promise",
-    "source-map"
-  ]
-},
+    "scriptPreprocessor": "node_modules/react-native/jestSupport/scriptPreprocess.js",
+    "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "packager/react-packager/src/Activity/"
+    ],
+    "testFileExtensions": [
+      "js"
+    ],
+    "unmockedModulePathPatterns": [
+      "promise",
+      "source-map"
+    ]
+  },
 
   "dependencies": {
     "react-native": "^0.12.0",
@@ -30,5 +30,8 @@
     "react-native-search-bar": "^2.2.0",
     "react-native-looped-carousel": "^0.0.4",
     "react-native-button": "^1.2.1"
+  },
+  "devDependencies": {
+    "jest-cli": "0.5.7"
   }
 }
