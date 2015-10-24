@@ -1,11 +1,12 @@
 'use strict';
 
-// jest.dontMock('../js/components/HomeView.js');
+jest.dontMock('../js/components/HomeView');
 
-// var homeView = require('../js/components/HomeView.js');
+var HomeView = require('../js/components/HomeView');
 
 describe('The Jest framework', () => {
   it('should be able to run tests', () => {
     expect(1).toEqual(1);
   });
 });
+
