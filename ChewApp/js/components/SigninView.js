@@ -3,7 +3,6 @@
 var React = require('react-native');
 var Button = require('react-native-button');
 var UserActions = require('../actions/UserActions');
-var UserStore = require('../stores/UserStore.js');
 
 var {
   StyleSheet,
@@ -25,17 +24,7 @@ var SigninView = React.createClass({
       password: null
     };
   },
-
-  componentDidMount: function () {
-    UserStore.addChangeListener(this._onChange);
-   },
-
-  componentWillUnmount: function () {
-    UserStore.removeChangeListener(this._onChange);
-  },
-  _onChange: function () {
-    this.setState({account: UserStore.getAccount()});
-  },
+  
   routeToNextPage: function () {
     if (Platform.OS === 'ios'){
       this.props.navigator.push({
@@ -115,9 +104,6 @@ var SigninView = React.createClass({
                 SIGNUP
               </Button>
             </View>
-            <Text style={styles.welcome}>
-              {this.state.account}
-            </Text>
           </View>
         </View>
       </View>
