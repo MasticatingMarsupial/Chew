@@ -73,6 +73,25 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
       </View>
     );
   }
+  else if (route.name === 'favourites') {
+    console.log('rerouting to favourites view');
+    return (
+      <View style={{flex: 1}}>
+        <ToolbarAndroid
+          actions={[]}
+          navIcon={require('image!android_back_white')}
+          onIconClicked={navigationOperations.pop}
+          style={styles.toolbar}
+          titleColor="white"
+          title="Favourites" />
+        <FoodDetailView
+          style={styles.navigator}
+          navigator={navigationOperations}
+          food={route.food}
+        />
+      </View>
+    );
+  }
   else {
     return (
       <View style={styles.container}>
