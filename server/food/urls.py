@@ -11,6 +11,6 @@ urlpatterns = [
   url(r'^api/images/foods/(?P<food_pk>\w+)/$', views_image.ImageGroups.as_view()),
   url(r'^api/users/$', views_user.UserList.as_view()),
   url(r'^api/users/(?P<pk>[0-9]+)/$', views_user.UserDetail.as_view()),
-  url(r'^api/signup/$', views_user.signup),
-  url(r'^api/login/$', views_user.login),
+  url(r'^api/signup/$', views_user.Signup.as_view()),
+  url(r'^api/signin/$', views_user.Signin.as_view()),
 ]

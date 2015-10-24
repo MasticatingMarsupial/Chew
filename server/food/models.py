@@ -2,6 +2,9 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 
+class Setting(models.Model):
+  distance = models.DecimalField(max_digits=5, decimal_places=4)
+
 class Tag(models.Model):
   name = models.CharField(max_length=255, unique=True)
 
@@ -32,7 +35,7 @@ class Food(models.Model):
 
 class Review(models.Model):
   text = models.CharField(max_length=2000, null=True)
-  owner = models.ForeignKey('auth.User', related_name='reviews')
+  owner = models.ForeignKey(User)
   foodRating = models.DecimalField(max_digits=3, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
   reviewRating = models.IntegerField(null=True)
   food = models.ForeignKey(Food) 
@@ -42,3 +45,13 @@ class Image(models.Model):
   image = models.CharField(max_length=255, unique=True)
   review = models.ForeignKey(Review, null=True)
   votes = models.IntegerField(default=0)
+
+class Account(models.Model):
+  user = models.OneToOneField(User)
+  food_favorites = models.ManyToManyField(Food, related_name='users_favorited')
+  food_liked = models.ManyToManyField(Food, related_name='users_liked')
+  food_disliked = models.ManyToManyField(Food, related_name='users_disliked')
+  images_liked = models.ManyToManyField(Image, related_name='users_liked')
+  search_preferences = models.OneToOneField(Setting, null=True)
+  reviews_liked = models.ManyToManyField(Review, related_name='users_liked')
+  reviews_disliked = models.ManyToManyField(Review, related_name='users_disliked')
