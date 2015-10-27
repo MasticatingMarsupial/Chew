@@ -1,16 +1,22 @@
 'use strict';
 
 var React = require('react-native');
+var Dimensions = require('Dimensions');
+
 var {
   AppRegistry,
   StyleSheet,
   NavigatorIOS,
   View,
+  Text,
 } = React;
 
 var Drawer = require('react-native-drawer');
 
 var HomeView = require('./js/components/HomeView');
+var DrawerView = require('./js/components/DrawerView');
+
+var { width, height } = Dimensions.get('window');
 
 var ChewApp = React.createClass({
   getInitialState() {
@@ -45,13 +51,21 @@ var ChewApp = React.createClass({
     return (
       <Drawer
         type="overlay"
-        openDrawerOffset={50}
+        openDrawerOffset={100}
         panCloseMask={1}
         ref="drawer"
-        tweenEasing={'linear'}
-        content={<View style={styles.test} />}
+        tweenHandler={(ratio) => {
+          this.refs.shadowOverlay.setNativeProps({
+             opacity: ((ratio * 1.5) / 2),
+          });
+          return {
+            drawer: { shadowRadius: Math.min(ratio*5*5, 5) },
+          }
+        }}
+        content={<DrawerView />}
       >
         {navigationView}
+        <View ref="shadowOverlay" style={styles.overlay} />
       </Drawer>
     );
   }
@@ -60,11 +74,18 @@ var ChewApp = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    opacity: 1
   },
-  test: {
-    backgroundColor: 'black'
-  }
+  overlay: {
+    flex: 1,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: width,
+    height: height,
+    opacity: 0,
+    backgroundColor: 'black',
+  },
 });
 
 AppRegistry.registerComponent('ChewApp', () => ChewApp);
