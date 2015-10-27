@@ -6,9 +6,12 @@ var {
   TextInput,
   StyleSheet,
   TouchableNativeFeedback,
+  DrawerLayoutAndroid,
   View,
 } = React;
 var dismissKeyboard = require('dismissKeyboard');
+var DrawerView = require('./DrawerView');
+
 
 
 var SearchBar = React.createClass({
@@ -24,18 +27,21 @@ var SearchBar = React.createClass({
   render: function() {
     console.log('Android SearchBar is rendering', this.props);
     var loadingView = <View style={styles.spinner} />;
+    var drawerView = <DrawerView/>;
+
     return (
       <View style={styles.searchBar}>
         <TouchableNativeFeedback
             background={(TouchableNativeFeedback.SelectableBackgroundBorderless())}
-            onPress={() => this.refs.input && this.refs.input.focus()}>
+            onPress={() => {this.drawer.openDrawer(); console.log(this.drawer)}}>
           <View>
             <Image
-              source={require('image!android_search_white')}
+              source={require('image!android_menu_white')}
               style={styles.icon}
             />
           </View>
         </TouchableNativeFeedback>
+      
         <TextInput
           ref="input"
           autoCapitalize="none"
@@ -46,6 +52,7 @@ var SearchBar = React.createClass({
           placeholderTextColor="rgba(255, 255, 255, 0.75)"
           onFocus={this.props.onFocus}
           style={styles.searchBarInput}
+          backgroundColor="blue"
         />
         {loadingView}
       </View>
