@@ -59,7 +59,7 @@ var FoodSearchResultView = React.createClass({
       return;
     }
     if (Platform.OS === 'android'){
-      var url =  API_URL + 'search/' + encodeURIComponent(query) + '/?coords=' + encodeURIComponent(51.50998) + ',' + encodeURIComponent(-0.1337);
+      var url =  API_URL + 'search/' + encodeURIComponent(query) + '/?coords=' + encodeURIComponent(37.783541) + ',' + encodeURIComponent(-122.408975);
     } else {
       var url =  API_URL + 'search/' + encodeURIComponent(query) + '/?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
     }

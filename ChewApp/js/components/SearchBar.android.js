@@ -6,11 +6,11 @@ var {
   TextInput,
   StyleSheet,
   TouchableNativeFeedback,
-  DrawerLayoutAndroid,
   View,
 } = React;
 var dismissKeyboard = require('dismissKeyboard');
-var DrawerView = require('./DrawerView');
+var {Icon,} = require('react-native-icons');
+
 
 
 
@@ -24,16 +24,20 @@ var SearchBar = React.createClass({
     });
     this.props.onSearchButtonPress(filter);
   },
+  onMenuButtonPress: function(){
+    console.log(this);
+    this.props.onMenuButtonPress();
+  },
   render: function() {
     console.log('Android SearchBar is rendering', this.props);
     var loadingView = <View style={styles.spinner} />;
-    var drawerView = <DrawerView/>;
+    // var drawerView = <DrawerView/>;
 
     return (
       <View style={styles.searchBar}>
         <TouchableNativeFeedback
             background={(TouchableNativeFeedback.SelectableBackgroundBorderless())}
-            onPress={() => {this.drawer.openDrawer(); console.log(this.drawer)}}>
+            onPress={() => { this.onMenuButtonPress(); }}>
           <View>
             <Image
               source={require('image!android_menu_white')}
@@ -41,14 +45,19 @@ var SearchBar = React.createClass({
             />
           </View>
         </TouchableNativeFeedback>
-      
+        <Icon
+          name="ion|android-search"
+          size={22}
+          color="rgba(255, 255, 255, 0.75)"
+          style={styles.search}
+        />
         <TextInput
           ref="input"
           autoCapitalize="none"
           autoCorrect={false}
           autoFocus={false}
           onSubmitEditing={this.onSubmitEditing}
-          placeholder="Pick-a-Chew"
+          placeholder="Search"
           placeholderTextColor="rgba(255, 255, 255, 0.75)"
           onFocus={this.props.onFocus}
           style={styles.searchBarInput}
@@ -84,6 +93,13 @@ var styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginHorizontal: 8,
+  },
+  search: {
+    width: 24,
+    height: 24,
+    marginTop: 2,
+    marginHorizontal: 8,
+    marginRight: 1,
   },
 });
 
