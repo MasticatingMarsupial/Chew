@@ -10,6 +10,7 @@ var {
   BackAndroid,
   Navigator,
   StyleSheet,
+  DrawerLayoutAndroid,
   ToolbarAndroid,
   Text,
   View,
@@ -18,6 +19,7 @@ var {
 var HomeView = require('./js/components/HomeView');
 var FoodSearchResultView = require('./js/components/FoodSearchResultView');
 var FoodDetailView = require('./js/components/FoodDetailView');
+var DrawerView = require('./js/components/DrawerView');
 
 //Keeps track of which page we are on
 var _navigator;
@@ -35,6 +37,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
   _navigator = navigationOperations;
   console.log('RouteMapper');
   console.log('Route is:',route);
+  console.log('this: ', this);
  if (route.name === 'home') {
     console.log('rendering the HomeView');
     return (
@@ -103,14 +106,28 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 
 
 var ChewApp = React.createClass({
+  openDrawer:function() {
+    console.log('PRINT ME OUT RIGHT NOW!!!');
+    console.log('this.refs', this);
+    // this.drawer.openDrawer();
+    // this.refs['DRAWER'].openDrawer();
+  },
   render: function() {
     var initialRoute = {name: 'home'};
+    var drawerView = <DrawerView/>;
     return (
-      <Navigator
-        style={styles.navigator}
-        initialRoute={initialRoute}
-        renderScene={RouteMapper}
-        />
+      <DrawerLayoutAndroid
+      drawerWidth={250}
+      drawerPosition={DrawerLayoutAndroid.positions.Left}
+      ref={(drawer) => { this.drawer = drawer; console.log(drawer);}}
+      renderNavigationView={() => drawerView}>
+        <Navigator
+          style={styles.navigator}
+          initialRoute={initialRoute}
+          renderScene={RouteMapper}
+          openMenuSlider={this.openDrawer.bind(this)}
+          />
+      </DrawerLayoutAndroid>
     );
   }
 });
