@@ -107,10 +107,8 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 
 var ChewApp = React.createClass({
   openDrawer:function() {
-    console.log('PRINT ME OUT RIGHT NOW!!!');
-    console.log('this.refs', this);
-    // this.drawer.openDrawer();
-    // this.refs['DRAWER'].openDrawer();
+    this.refs.DRAWER.openDrawer();
+
   },
   render: function() {
     var initialRoute = {name: 'home'};
@@ -119,13 +117,13 @@ var ChewApp = React.createClass({
       <DrawerLayoutAndroid
       drawerWidth={250}
       drawerPosition={DrawerLayoutAndroid.positions.Left}
-      ref={(drawer) => { this.drawer = drawer; console.log(drawer);}}
+      ref="DRAWER"
       renderNavigationView={() => drawerView}>
         <Navigator
           style={styles.navigator}
           initialRoute={initialRoute}
           renderScene={RouteMapper}
-          openMenuSlider={this.openDrawer.bind(this)}
+          openMenuSlider={this.openDrawer}
           />
       </DrawerLayoutAndroid>
     );
