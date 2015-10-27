@@ -110,9 +110,12 @@ var ChewApp = React.createClass({
     this.refs.DRAWER.openDrawer();
 
   },
+  onMenuButtonPress: function (menuString) {
+    console.log('Selected', menuString);
+  },
   render: function() {
     var initialRoute = {name: 'home'};
-    var drawerView = <DrawerView/>;
+    var drawerView = <DrawerView onMenuButtonPress={this.onMenuButtonPress} />;
     return (
       <DrawerLayoutAndroid
       drawerWidth={250}

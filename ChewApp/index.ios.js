@@ -31,6 +31,9 @@ var ChewApp = React.createClass({
   showMenuSlider: function(){
     this.refs.drawer.open()
   },
+  onMenuButtonPress: function (menuString) {
+    console.log('Selected', menuString);
+  },
   render: function() {
     var navigationView = (
       <NavigatorIOS 
@@ -62,7 +65,7 @@ var ChewApp = React.createClass({
             drawer: { shadowRadius: Math.min(ratio*5*5, 5) },
           }
         }}
-        content={<DrawerView />}
+        content={<DrawerView onMenuButtonPress={this.onMenuButtonPress} />}
       >
         {navigationView}
         <View ref="shadowOverlay" style={styles.overlay} />
