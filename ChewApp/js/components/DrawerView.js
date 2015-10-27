@@ -12,8 +12,19 @@ var {
 } = React;
 
 var DrawerView = React.createClass({
+  onHomeButtonPress: function () {
+    // console.log('Home button pressed!');
+    this.props.onMenuButtonPress('Home');
+  },
+  onFavouritesButtonPress: function () {
+    // console.log('Favourites button pressed!');
+    this.props.onMenuButtonPress('Favourites');
+  },
+  onSignInLogOutButtonPress: function () {
+    // console.log('Sign In/Log Out button pressed!');
+    this.props.onMenuButtonPress('SignInSignOut');
+  },
   render: function() {
-    console.log(this);
     var TouchableElement = TouchableHighlight;
       if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
@@ -27,7 +38,7 @@ var DrawerView = React.createClass({
         </View>
         <Text style={styles.name}>Kyle Cho</Text>
         <TouchableElement
-          onPress={this.props.onPress}
+          onPress={this.onHomeButtonPress}
           onShowUnderlay={this.props.onHighlight}
           onHideUnderlay={this.props.onUnhighlight}
         >
@@ -36,7 +47,7 @@ var DrawerView = React.createClass({
           </View>
         </TouchableElement>
         <TouchableElement
-          onPress={this.props.onPress}
+          onPress={this.onFavouritesButtonPress}
           onShowUnderlay={this.props.onHighlight}
           onHideUnderlay={this.props.onUnhighlight}
         >
@@ -45,7 +56,7 @@ var DrawerView = React.createClass({
           </View>
         </TouchableElement>
         <TouchableElement
-          onPress={this.props.onPress}
+          onPress={this.onSignInLogOutButtonPress}
           onShowUnderlay={this.props.onHighlight}
           onHideUnderlay={this.props.onUnhighlight}
         >
