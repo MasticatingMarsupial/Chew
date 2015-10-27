@@ -60,13 +60,14 @@ var HomeView = React.createClass({
         <SearchBar
           placeholder="Find your food"
           onSearchButtonPress={this.searchString}
+          onMenuButtonPress={() => {this.props.navigator.props.openMenuSlider();}}
           style={styles.searchBar}
         />
         <Text style={styles.welcome}>
           Welcome to Chew!
         </Text>
         <Text style={styles.instructions}>
-          We'll help you find the food you crave
+          We help you find the food you crave
         </Text>
       </View>
     );
