@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react-native');
+var UserStore = require('../stores/UserStore');
 
 var {
   StyleSheet,
@@ -9,6 +10,7 @@ var {
   ScrollView,
   Image,
   Text,
+  TextInput,
   TouchableHighlight,
   TouchableNativeFeedback,
   ListView,
@@ -23,6 +25,7 @@ var StarRating = require('./StarRating');
 var {width, height} = Dimensions.get('window');
 
 var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
 
 var FoodDetailView = React.createClass({
   getInitialState: function () {
@@ -30,7 +33,7 @@ var FoodDetailView = React.createClass({
     return {
       dataSource: dataSource,
       images: [],
-      reviewsDataSource: dataSource.cloneWithRows([])
+      reviewsDataSource: dataSource.cloneWithRows([]),
     };
   },
   componentDidMount: function () {
@@ -67,8 +70,45 @@ var FoodDetailView = React.createClass({
   pressLikeButton: function () {
     console.log('Like button pressed');
   },
-  pressHeartButton: function () {
-    console.log('Heart button pressed');
+  pressHeartButton: function (index) {
+    var user = UserStore.getAccount();
+    this.state.images[index].votes++;
+    this.setState({
+      images: this.state.images,
+    }, function () {
+      console.log('I hope this works');
+    });
+    // this.addImageToUserLikes(index, this.state.images[index].id, user.id);
+    this.addVotesToImage(index, this.state.images[index].id);
+  },
+  addImageToUserLikes: function (index, imageId, userId) {
+    console.log('API Query:', API_URL + 'users/' + userId);
+    fetch(API_URL + 'users/', + userId, JSON.stringify({
+      method: 'PUT',
+      // headers: { token: 'token-goes-here'},
+      body: {
+        images_liked: this.state.images[index].id
+      }
+    }))
+      .catch((err) => console.error('Unsuccessfully requested to like an image: ', err))
+      .then((responseData) => {
+        console.log('Successfully requested to like an image: ', responseData);
+        // this.addVotesToImage(index, imageId);
+      })
+      .done()
+  },
+  addVotesToImage: function (index, imageId) {
+    console.log('API Query:', API_URL + 'images/' + imageId);
+    fetch(API_URL + 'images/' + imageId, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        votes: this.state.images[index].votes
+      })
+    })
+      .catch((err) => console.error('Unsuccessfully requested to upvote: ', err))
+      .then((responseData) => console.log('Successfully requested to upvote: ', responseData))
+      .done()
   },
   selectedStar: function (rating) {
     console.log('Rated ' + rating + ' stars!');
@@ -77,7 +117,7 @@ var FoodDetailView = React.createClass({
     return (
       <View style={styles.reviewContainer}>
         <View style={styles.reviewTopContainer}>
-          <Text style={styles.username}>{rowData.user.name}</Text>
+          <Text style={styles.username}>{rowData.owner}</Text>
           <View style={styles.reviewStarContainer}>
             <StarRating maxStars={5}
               rating={parseFloat(rowData.foodRating)}
@@ -97,10 +137,8 @@ var FoodDetailView = React.createClass({
       if (Platform.OS === 'android') {
         TouchableElement = TouchableNativeFeedback;
       }
-
-    var images = [];
-    for (var i = 0; i < this.state.images.length; i++) {
-      images.push(
+    var images = this.state.images.map(function (image, i) {
+      return (
         <View key={i + 1} style={styles.slide}>
           <Image
             source={{uri: this.state.images[i].image}}
@@ -109,7 +147,7 @@ var FoodDetailView = React.createClass({
             <View style={styles.heartContainer}>
               <Button
                 activeOpacity={0.20}
-                onPress={this.pressHeartButton}
+                onPress={this.pressHeartButton.bind(this, i)}
                 style={styles.heartButton}
               >
                 <Icon
@@ -125,8 +163,8 @@ var FoodDetailView = React.createClass({
             </View>
           </Image>
         </View>
-      );
-    }
+        )}, this);
+
     return (
       <View
         automaticallyAdjustContentInsets={false}
@@ -233,7 +271,7 @@ var styles = StyleSheet.create({
   heartContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 15,
+    marginTop: 300,
     marginRight: 15,
   },
   heartButton: {
