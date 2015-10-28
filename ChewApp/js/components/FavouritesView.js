@@ -16,10 +16,6 @@ var {
 } = React;
 
 var FoodDetailView = require('./FoodDetailView');
-var SearchBar = require('react-native-search-bar');
-if (Platform.OS === 'android'){
-  SearchBar = require('./SearchBar');
-}
 
 var UserStore = require('../stores/UserStore');
 
@@ -44,23 +40,19 @@ var FoodSearchResultView = React.createClass({
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
       );
     }
-    console.log(this.props.food);
-    //This needs an empty string case
-    if (this.props.food !== undefined){
-      this.searchString(this.props.food);
-    } else {
-      console.log('EMPTY SEARCH INPUTTED');
-    }
+    this.searchString();
   },
   searchString: function () {
     console.log('trying to search');
     //build the URL for the search
     var User = UserStore.getAccount();
     var UserId = User.id;
+    //FOR TESTING ONLY
+    UserId = 2;
     if (Platform.OS === 'android'){
-      var url =  API_URL + 'favourites/' + encodeURIComponent(UserId) + '/?coords=' + encodeURIComponent(51.50998) + ',' + encodeURIComponent(-0.1337);
+      var url =  API_URL + 'foods/favorites/' + encodeURIComponent(UserId); //+ '/?coords=' + encodeURIComponent(51.50998) + ',' + encodeURIComponent(-0.1337);
     } else {
-      var url =  API_URL + 'favourites/' + encodeURIComponent(UserId) + '/?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
+      var url =  API_URL + 'foods/favorites/' + encodeURIComponent(UserId); //+ '/?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
     }
 
     console.log('url', url);

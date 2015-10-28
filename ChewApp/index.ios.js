@@ -8,7 +8,6 @@ var {
   StyleSheet,
   NavigatorIOS,
   View,
-  Text,
 } = React;
 
 var Drawer = require('react-native-drawer');
@@ -22,25 +21,22 @@ var ChewApp = React.createClass({
   getInitialState() {
     return {};
   },
+  hideMenuSlider: function () {
+    this.refs.drawer.close();
+  },
   showMenuSlider: function () {
-    console.log('Showing slider');
-  },
-  hideMenuSlider: function(){
-    this.refs.drawer.close()
-  },
-  showMenuSlider: function(){
-    this.refs.drawer.open()
+    this.refs.drawer.open();
   },
   onMenuButtonPress: function (menuString) {
     console.log('Selected', menuString);
   },
   render: function() {
     var navigationView = (
-      <NavigatorIOS 
-        style={styles.container} 
-        barTintColor='red'
-        titleTextColor='white'
-        tintColor='white'
+      <NavigatorIOS
+        style={styles.container}
+        barTintColor="red"
+        titleTextColor="white"
+        tintColor="white"
         initialRoute={{
           title: 'Home',
           component: HomeView,
@@ -62,8 +58,8 @@ var ChewApp = React.createClass({
              opacity: ((ratio * 1.5) / 2),
           });
           return {
-            drawer: { shadowRadius: Math.min(ratio*5*5, 5) },
-          }
+            drawer: { shadowRadius: Math.min(ratio * 5 * 5, 5) },
+          };
         }}
         content={<DrawerView onMenuButtonPress={this.onMenuButtonPress} />}
       >

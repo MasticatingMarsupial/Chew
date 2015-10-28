@@ -10,12 +10,14 @@ var {
   View,
   Text,
   TextInput,
-  Image
+  // Dimensions,
 } = React;
 
 var HomeView = require('./HomeView');
-// var API_URL = 'http://chewmast.herokuapp.com/api/'
-var API_URL = 'http://localhost:8000/api/'
+var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
+// var {width, height} = Dimensions.get('window');
+
 
 var SigninView = React.createClass({
   getInitialState: function () {
@@ -24,14 +26,14 @@ var SigninView = React.createClass({
       password: null
     };
   },
-  
+
   routeToNextPage: function () {
     if (Platform.OS === 'ios'){
       this.props.navigator.push({
         title: 'Home',
         component: HomeView,
       });
-    } else { 
+    } else {
       this.props.navigator.push({
         title: 'Home',
         name: 'home',
@@ -52,11 +54,11 @@ var SigninView = React.createClass({
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        username: this.state.username, 
+        username: this.state.username,
         password: this.state.password
       })
     }).then((res) => res.json())
-      .catch((err) => console.error("Signin failed: " + err))
+      .catch((err) => console.error('Signin failed: ' + err))
       .then((data) => {
         UserActions.populate(data.account);
       })
@@ -67,14 +69,9 @@ var SigninView = React.createClass({
     console.log('rendering signin page for ' + Platform.OS);
     return (
       <View>
-        <View style={styles.logoContainer}>
-          <Image 
-            source={{uri: 'http://3.bp.blogspot.com/-I1W6mGh5z-M/U771MY6_TEI/AAAAAAAAKPA/tfbZuptLJmY/s1600/cute-koala.png'}}
-            style={styles.logo}
-          />
-        </View>
         <View style={styles.container}>
           <View style={styles.authContainer}>
+            <Text>Username</Text>
             <TextInput
               style={styles.input}
               autoCorrect={false}
@@ -82,6 +79,7 @@ var SigninView = React.createClass({
               onSubmitEditing={this.handleSignin}
               value={this.state.username}
             />
+            <Text>Password</Text>
             <TextInput
               style={styles.input}
               autoCorrect={false}
@@ -90,19 +88,22 @@ var SigninView = React.createClass({
               secureTextEntry={true}
               value={this.state.password}
             />
-            <View style={styles.buttonsContainer}>
-              <Button 
-                onPress={this.handleSignin}
-                style={styles.button}
-              >
-                SIGNIN
-              </Button>
-              <Button 
-                onPress={this.handleSignup}
-                style={styles.button}
-              >
-                SIGNUP
-              </Button>
+            <View style={styles.buttonContainer}>
+              <View style={styles.button}>
+                <Button
+                  onPress={this.handleSignin}
+                >
+                  <Text style={styles.buttonText}>Log In</Text>
+                </Button>
+              </View>
+              <View style={[styles.button, styles.signup]}>
+                <Button
+                  style={styles.signup}
+                  onPress={this.handleSignup}
+                >
+                  <Text style={styles.buttonText}>Sign Up</Text>
+                </Button>
+              </View>
             </View>
           </View>
         </View>
@@ -114,45 +115,45 @@ var SigninView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
     flexDirection: 'row',
-  },
-  logoContainer: {
-    paddingTop: 64,
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'column'
+    paddingTop: 45,
   },
   authContainer: {
     flex: 1,
-    alignItems: 'center'
-  },
-  buttonsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  button: {
-    margin: 10,
-    textAlign: 'center',
-    backgroundColor: 'red',
-    color: 'black'
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+    paddingTop: 90,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
   input: {
-    height: 40, 
-    borderColor: 'gray', 
-    borderWidth: 1
+    flexDirection: 'row',
+    height: 40,
   },
-  logo: {
-    height: 200,
-    width: 200,
-    margin: 10
-  }
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  button: {
+    borderWidth: 1,
+    marginLeft: 15,
+    marginRight: 15,
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderStyle: 'solid',
+    borderColor: '#808080',
+  },
+  signup: {
+  },
+  buttonText: {
+    marginTop: 5,
+    marginBottom: 5,
+    fontSize: 16,
+  },
 });
 
 module.exports = SigninView;

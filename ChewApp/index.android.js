@@ -20,6 +20,8 @@ var HomeView = require('./js/components/HomeView');
 var FoodSearchResultView = require('./js/components/FoodSearchResultView');
 var FoodDetailView = require('./js/components/FoodDetailView');
 var DrawerView = require('./js/components/DrawerView');
+var SigninView = require('./js/components/SigninView');
+var FavouritesView = require('./js/components/FavouritesView');
 
 //Keeps track of which page we are on
 var _navigator;
@@ -42,6 +44,19 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
     console.log('rendering the HomeView');
     return (
       <HomeView navigator={navigationOperations} />
+    );
+  }
+  else if (route.name === 'login') {
+    return (
+      <View style={{flex: 1}}>
+        <ToolbarAndroid
+          actions={[]}
+          style={styles.toolbar}
+          titleColor="white"
+          title={"Chew"}
+        />
+        <SigninView navigator={navigationOperations} />
+      </View>
     );
   }
   else if (route.name === 'results') {
@@ -87,10 +102,9 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
           style={styles.toolbar}
           titleColor="white"
           title="Favourites" />
-        <FoodDetailView
+        <FavouritesView
           style={styles.navigator}
           navigator={navigationOperations}
-          food={route.food}
         />
       </View>
     );
@@ -112,6 +126,9 @@ var ChewApp = React.createClass({
   },
   onMenuButtonPress: function (menuString) {
     console.log('Selected', menuString);
+    var route = {name: menuString.toLowerCase()};
+    this.refs.NAVIGATOR.push(route);
+    this.refs.DRAWER.closeDrawer();
   },
   render: function() {
     var initialRoute = {name: 'home'};
@@ -124,6 +141,7 @@ var ChewApp = React.createClass({
       renderNavigationView={() => drawerView}>
         <Navigator
           style={styles.navigator}
+          ref="NAVIGATOR"
           initialRoute={initialRoute}
           renderScene={RouteMapper}
           openMenuSlider={this.openDrawer}
