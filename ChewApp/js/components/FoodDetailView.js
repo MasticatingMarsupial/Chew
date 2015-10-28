@@ -20,6 +20,7 @@ var Dimensions = require('Dimensions');
 var {Icon,} = require('react-native-icons');
 var Carousel = require('react-native-looped-carousel');
 var Button = require('react-native-button');
+var GoogleStaticMap = require('./GoogleStaticMap');
 var StarRating = require('./StarRating');
 
 var {width, height} = Dimensions.get('window');
@@ -221,6 +222,13 @@ var FoodDetailView = React.createClass({
               </View>
             </TouchableElement>
           </View>
+          <GoogleStaticMap 
+            style={{width: width, height: 200}}
+            latitude={'32.064171'}
+            longitude={'34.7748068'}
+            zoom={15}
+            size={{ width: width, height: 200 }}
+          />
           <ListView
             dataSource={this.state.reviewsDataSource}
             renderRow={this.renderRow}
