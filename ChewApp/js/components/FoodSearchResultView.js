@@ -68,7 +68,7 @@ var FoodSearchResultView = React.createClass({
     //Fetches the data from the server with the passed search terms
     fetch(url)
       .then((res) => res.json())
-      .catch((err) => console.error('Fetching query failed: ' + err))
+      .catch((err) => console.error('Fetching query failed. Check the network connection: ' + err))
       .then((responseData) => {
         console.log('response data:', responseData);
         console.log(this.state.dataSource);
@@ -122,6 +122,7 @@ var FoodSearchResultView = React.createClass({
         <SearchBar
           placeholder="Pick-a-Chew"
           onSearchButtonPress={this.searchString}
+          onMenuButtonPress={() => {this.props.navigator.props.openMenuSlider();}}
           style={styles.searchBar}
         />
         {content}
