@@ -30,8 +30,6 @@ class ImageDetail(APIView):
   def put(self, request, pk, format=None):
     image = self.get_object(pk)
     serializer = ImageSerializer(image, data=request.data)
-    print(image)
-    print(serializer)
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data)
