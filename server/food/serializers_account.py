@@ -19,4 +19,4 @@ class AccountSerializer(serializers.ModelSerializer):
   
   class Meta:
     model = Account
-    fields = ['id', 'user']
+    fields = ['id', 'user', 'food_favorites', 'food_liked', 'food_disliked', 'images_liked', 'search_preferences', 'reviews_liked', 'reviews_disliked' ]

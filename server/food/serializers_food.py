@@ -15,7 +15,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Address
-    fields = ['street_address', 'city', 'state', 'zipcode']
+    fields = ['street_address', 'city', 'state', 'zipcode', 'latitude', 'longitude']
 
 class RestaurantSerializer(serializers.ModelSerializer):
   cuisine = CreateableSlugRelatedField(slug_field='name', queryset=Cuisine.objects.all())
