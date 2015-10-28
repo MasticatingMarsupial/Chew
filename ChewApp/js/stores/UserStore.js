@@ -1,3 +1,5 @@
+'use strict';
+
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var FoodConstants = require('../constants/FoodConstants');
@@ -13,7 +15,7 @@ function populate (account) {
 }
 
 function update (id, updates) {
-  if( _currentAccount.id === id ) {
+  if ( _currentAccount.id === id ) {
     _currentAccount = assign({}, _currentAccount, updates);
   }
 }
@@ -29,7 +31,7 @@ var UserStore = assign({}, EventEmitter.prototype, {
   },
 
   emitChange: function () {
-    this.emit(CHANGE_EVENT)
+    this.emit(CHANGE_EVENT);
   },
 
   addChangeListener: function (callback) {
@@ -42,13 +44,13 @@ var UserStore = assign({}, EventEmitter.prototype, {
 });
 
 AppDispatcher.register(function(action) {
-  var account, username;
+  var account, username, id;
 
-  switch(action.actionType) {
+  switch (action.actionType) {
     case FoodConstants.USER_SIGNIN:
       console.log(action);
       account = action.account;
-      if( account.account_id ) {
+      if ( account.account_id ) {
         populate(account);
       }
       break;
@@ -59,12 +61,13 @@ AppDispatcher.register(function(action) {
 
     case FoodConstants.USER_UPDATE:
       id = action.account_id;
-      if( username ) {
-        update(id, action.updates)
+      if ( username ) {
+        update(id, action.updates);
       }
+      break;
 
     default:
   }
-})
+});
 
 module.exports = UserStore;

@@ -22,6 +22,9 @@ var Carousel = require('react-native-looped-carousel');
 var Button = require('react-native-button');
 var GoogleStaticMap = require('./GoogleStaticMap');
 var StarRating = require('./StarRating');
+if (Platform.OS === 'android'){
+  var WebIntent = require('react-native-webintent');
+}
 
 var {width, height} = Dimensions.get('window');
 
@@ -35,6 +38,7 @@ var FoodDetailView = React.createClass({
       dataSource: dataSource,
       images: [],
       reviewsDataSource: dataSource.cloneWithRows([]),
+      coords: '',
     };
   },
   componentDidMount: function () {
@@ -96,7 +100,7 @@ var FoodDetailView = React.createClass({
         console.log('Successfully requested to like an image: ', responseData);
         // this.addVotesToImage(index, imageId);
       })
-      .done()
+      .done();
   },
   addVotesToImage: function (index, imageId) {
     console.log('API Query:', API_URL + 'images/' + imageId);
@@ -109,10 +113,16 @@ var FoodDetailView = React.createClass({
     })
       .catch((err) => console.error('Unsuccessfully requested to upvote: ', err))
       .then((responseData) => console.log('Successfully requested to upvote: ', responseData))
-      .done()
+      .done();
   },
   selectedStar: function (rating) {
     console.log('Rated ' + rating + ' stars!');
+  },
+  openMap: function() {
+      WebIntent.open('geo:' + this.state.url);
+  },
+  updateCoords: function (text) {
+    this.setState({url: '37.78362449999999,-122.4089988'});
   },
   renderRow: function (rowData) {
     return (
@@ -164,7 +174,8 @@ var FoodDetailView = React.createClass({
             </View>
           </Image>
         </View>
-        )}, this);
+      );
+    }, this);
 
     return (
       <View
@@ -215,6 +226,13 @@ var FoodDetailView = React.createClass({
           </View>
           <View style={styles.buttonContainer}>
             <TouchableElement
+              onPress={() => {this.updateCoords(); this.openMap();}}
+            >
+              <View style={styles.button}>
+                <Text style={styles.buttonText}> Take Me There </Text>
+              </View>
+            </TouchableElement>
+            <TouchableElement
               onPress={this.pressLikeButton}
             >
               <View style={styles.button}>
@@ -222,7 +240,7 @@ var FoodDetailView = React.createClass({
               </View>
             </TouchableElement>
           </View>
-          <GoogleStaticMap 
+          <GoogleStaticMap
             style={{width: width, height: 200}}
             latitude={'32.064171'}
             longitude={'34.7748068'}

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   FOOD_CREATE: 'FOOD_CREATE',
   FOOD_COMPLETE: 'FOOD_COMPLETE',
