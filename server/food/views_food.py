@@ -62,7 +62,7 @@ class FoodGroups(APIView):
 class FoodFavorites(APIView):
   def get_object(self, account_pk):
     try:
-      return Account.objects.filter(pk=account_pk).first().food_favorites
+      return Account.objects.filter(pk=account_pk).first().food_favorites.all()
     except Account.DoesNotExist:
       raise Http404
 
