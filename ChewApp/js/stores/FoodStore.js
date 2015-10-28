@@ -1,3 +1,5 @@
+'use strict';
+
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var FoodConstants = require('../constants/FoodConstants');
@@ -109,7 +111,7 @@ var FoodStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   var text;
 
-  switch(action.actionType) {
+  switch (action.actionType) {
     case FoodConstants.FOOD_CREATE:
       text = action.text.trim();
       if (text !== '') {

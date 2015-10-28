@@ -18,7 +18,7 @@ if (Platform.OS === 'android'){
 var HomeView = React.createClass({
   getInitialState: function () {
     return {
-      position: 'unknown'
+      position: 'unknown',
     };
   },
   componentDidMount: function () {

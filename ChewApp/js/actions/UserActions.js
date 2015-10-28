@@ -1,3 +1,5 @@
+'use strict';
+
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var FoodConstants = require('../constants/FoodConstants');
 
@@ -15,7 +17,7 @@ var UserActions = {
       actionType: FoodConstants.USER_UPDATE,
       username: username,
       updates: updates
-    })
+    });
   },
 
   signout: function() {
