@@ -153,7 +153,6 @@ var GoogleStaticMap = React.createClass({
     return apiKey ? `key=${apiKey}` : '';
   },
   render: function () {
-    console.log(this.staticMapUrl());
     return (
       <Image
         style={[this.props.style, this.props.size]}
