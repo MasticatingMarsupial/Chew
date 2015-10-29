@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import Http404
-from food.models import Food, Account
+from food.models import Food, Account, Tag
 from food.serializers_food import FoodSerializer
 from food.utils import prepare_food
 
@@ -71,3 +71,24 @@ class FoodFavorites(APIView):
     favorites = prepare_food(request, favorites)
     serializer = FoodSerializer(favorites, many=True)
     return Response(serializer.data)
+
+class FoodRecs(APIView):
+  def prepare_data(request, data):
+    data = prepare_food(request, data)
+    data = FoodSerializer(data, many=True).data
+    return data
+
+  def get(self, request, format=None):
+    trending = Food.objects.order_by('updated_at')[:10].all()
+    trending = prepare_food(request, trending)
+    trending = FoodSerializer(trending, many=True).data
+    # trending = self.prepare_data(request=request, data=trending)
+    hot_dog_tag = Tag.objects.get(name='hot dog')
+    hot_dogs = Food.objects.filter(tags=hot_dog_tag).all()
+    hot_dogs = prepare_food(request, hot_dogs)
+    hot_dogs = FoodSerializer(hot_dogs, many=True).data
+    chinese_tag = Tag.objects.get(name='chinese')
+    chinese = Food.objects.filter(tags=chinese_tag).all()
+    chinese = prepare_food(request, chinese)
+    chinese = FoodSerializer(chinese, many=True).data
+    return Response({'trending':trending, 'hot_dogs':hot_dogs, 'chinese':chinese})
