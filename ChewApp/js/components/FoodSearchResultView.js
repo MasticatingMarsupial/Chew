@@ -6,7 +6,7 @@ var {
   StyleSheet,
   View,
   ListView,
-  TouchableHighlight,
+  TouchableOpacity,
   TouchableNativeFeedback,
   Text,
   Image,
@@ -133,7 +133,7 @@ var FoodSearchResultView = React.createClass({
 
 var FoodCell = React.createClass({
   render: function () {
-    var TouchableElement = TouchableHighlight;
+    var TouchableElement = TouchableOpacity;
     if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
     }
