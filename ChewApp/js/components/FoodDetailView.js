@@ -11,9 +11,10 @@ var {
   Image,
   Text,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
   TouchableNativeFeedback,
   ListView,
+  LinkingIOS,
 } = React;
 
 var Dimensions = require('Dimensions');
@@ -38,13 +39,18 @@ var FoodDetailView = React.createClass({
       dataSource: dataSource,
       images: [],
       reviewsDataSource: dataSource.cloneWithRows([]),
-      coords: '',
+      restLongitude: '',
+      restLatitude: '',
     };
   },
   componentDidMount: function () {
-    // this.fetchImages(this.props.food.id);
     this.fetchImages(this.props.food.id);
     this.fetchReviews(this.props.food.id);
+    this.setState({
+      restName: this.props.food.restaurant.name,
+      restLongitude: this.props.food.restaurant.address.longitude,
+      restLatitude: this.props.food.restaurant.address.latitude,
+    });
   },
   fetchImages: function (query) {
     console.log('API Query:', API_URL + 'images/foods/' + query);
@@ -52,7 +58,7 @@ var FoodDetailView = React.createClass({
       .then((res) => res.json())
       .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {
-        console.log('Fetched images', responseData);
+        // console.log('Fetched images', responseData);
         this.setState({
           images: responseData
         });
@@ -65,7 +71,7 @@ var FoodDetailView = React.createClass({
       .then((res) => res.json())
       .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {
-        console.log('Fetched reviews', responseData);
+        // console.log('Fetched reviews', responseData);
         this.setState({
           reviewsDataSource: this.state.dataSource.cloneWithRows(responseData)
         });
@@ -119,10 +125,12 @@ var FoodDetailView = React.createClass({
     console.log('Rated ' + rating + ' stars!');
   },
   openMap: function() {
-      WebIntent.open('geo:' + this.state.url);
-  },
-  updateCoords: function (text) {
-    this.setState({url: '37.78362449999999,-122.4089988'});
+    var latLongStr = this.state.restLatitude + ',' + this.state.restLongitude;
+    if (Platform.OS === 'android') {
+      WebIntent.open('geo:' + latLongStr);
+    } else {
+      LinkingIOS.openURL('http://maps.apple.com/?z=12&q=' + this.state.restName + '&ll=' + latLongStr);
+    }
   },
   renderRow: function (rowData) {
     return (
@@ -144,7 +152,7 @@ var FoodDetailView = React.createClass({
     );
   },
   render: function () {
-    var TouchableElement = TouchableHighlight;
+    var TouchableElement = TouchableOpacity;
       if (Platform.OS === 'android') {
         TouchableElement = TouchableNativeFeedback;
       }
@@ -226,7 +234,7 @@ var FoodDetailView = React.createClass({
           </View>
           <View style={styles.buttonContainer}>
             <TouchableElement
-              onPress={() => {this.updateCoords(); this.openMap();}}
+              onPress={() => this.openMap()}
             >
               <View style={styles.button}>
                 <Text style={styles.buttonText}> Take Me There </Text>
