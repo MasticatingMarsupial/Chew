@@ -23,7 +23,7 @@ if (Platform.OS === 'android'){
 
 
 //TODO: Update to production URL's when ready
-var API_URL = 'http://localhost:8000/api/';
+var API_URL = 'http://chewmast.herokuapp.com/api/';
 
 var FoodSearchResultView = React.createClass({
   getInitialState: function () {
