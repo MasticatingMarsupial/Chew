@@ -250,8 +250,8 @@ var FoodDetailView = React.createClass({
           </View>
           <GoogleStaticMap
             style={{width: width, height: 200}}
-            latitude={'32.064171'}
-            longitude={'34.7748068'}
+            latitude={this.state.restLatitude}
+            longitude={this.state.restLongitude}
             zoom={15}
             size={{ width: width, height: 200 }}
           />
