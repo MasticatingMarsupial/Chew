@@ -50,7 +50,7 @@ AppDispatcher.register(function(action) {
     case FoodConstants.USER_SIGNIN:
       console.log(action);
       account = action.account;
-      if ( account.account_id ) {
+      if( account.id ) {
         populate(account);
       }
       break;
