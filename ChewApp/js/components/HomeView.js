@@ -7,9 +7,12 @@ var {
   Platform,
   View,
   Text,
+  ScrollView,
+  Image
 } = React;
 
 var FoodSearchResultView = require('./FoodSearchResultView');
+var DiscoveryView = require('./DiscoveryView');
 var SearchBar = require('react-native-search-bar');
 if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
@@ -63,36 +66,27 @@ var HomeView = React.createClass({
           onMenuButtonPress={() => {this.props.navigator.props.openMenuSlider();}}
           style={styles.searchBar}
         />
-        <Text style={styles.welcome}>
-          Welcome to Chew!
-        </Text>
-        <Text style={styles.instructions}>
-          We help you find the food you crave
-        </Text>
+        <DiscoveryView navigator={this.props.navigator}/>
       </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
+  scroll: {
+    height: 50
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    borderWidth: 0
   },
   searchBar: {
     marginTop: 64,
     height: 44,
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  }
 });
 
 module.exports = HomeView;

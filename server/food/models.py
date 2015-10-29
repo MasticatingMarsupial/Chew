@@ -20,11 +20,15 @@ class Address(models.Model):
   longitude = models.DecimalField(max_digits=10, decimal_places=7, validators=[MinValueValidator(-180), MaxValueValidator(180)])
 
 class Restaurant(models.Model):
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
   name = models.CharField(max_length=255)
   address = models.ForeignKey(Address)
   cuisine = models.ForeignKey(Cuisine)
 
 class Food(models.Model):
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
   name = models.CharField(max_length=255)
   cuisine = models.ForeignKey(Cuisine) 
   restaurant = models.ForeignKey(Restaurant)
@@ -34,6 +38,8 @@ class Food(models.Model):
   tags = models.ManyToManyField(Tag)
 
 class Review(models.Model):
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
   text = models.CharField(max_length=2000, null=True)
   owner = models.ForeignKey(User)
   foodRating = models.DecimalField(max_digits=3, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
@@ -41,6 +47,7 @@ class Review(models.Model):
   food = models.ForeignKey(Food)
 
 class Image(models.Model):
+  created_at = models.DateTimeField(auto_now_add=True)
   food = models.ForeignKey(Food, null=True)
   owner = models.ForeignKey(User, null=True)
   image = models.CharField(max_length=255, unique=True)
@@ -48,6 +55,8 @@ class Image(models.Model):
   votes = models.IntegerField(default=0)
 
 class Account(models.Model):
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
   user = models.OneToOneField(User)
   food_favorites = models.ManyToManyField(Food, related_name='users_favorited')
   food_liked = models.ManyToManyField(Food, related_name='users_liked')
