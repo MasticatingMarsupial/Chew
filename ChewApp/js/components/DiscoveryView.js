@@ -85,10 +85,15 @@ var DiscoveryView = React.createClass({
 
   render: function () {
     var pages = [];
+    var page;
     for( var key in this.state.recs ) {
-      pages.push(
-        <DiscoveryPage onFoodPress={this.onFoodPress} tabLabel={key.toUpperCase().replace('_', ' ')} foods={this.state.recs[key]} />
-      );
+      page = <DiscoveryPage onFoodPress={this.onFoodPress} tabLabel={key.toUpperCase().replace('_', ' ')} foods={this.state.recs[key]} />;
+      if( key === 'trending' ) {
+        pages.unshift(page);
+      } else {
+        pages.push(page);
+      }
+      
     }
     return (
       <ScrollableTabView locked={false} renderTabBar={() => <DiscoveryTabBar />} style={styles.container}>
