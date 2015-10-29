@@ -29,8 +29,8 @@ if (Platform.OS === 'android'){
 
 var {width, height} = Dimensions.get('window');
 
-var API_URL = 'http://chewmast.herokuapp.com/api/';
-// var API_URL = 'http://localhost:8000/api/';
+// var API_URL = 'http://chewmast.herokuapp.com/api/';
+var API_URL = 'http://localhost:8000/api/';
 
 var FoodDetailView = React.createClass({
   getInitialState: function () {
@@ -83,24 +83,37 @@ var FoodDetailView = React.createClass({
   },
   pressHeartButton: function (index) {
     var user = UserStore.getAccount();
-    this.state.images[index].votes++;
-    this.setState({
-      images: this.state.images,
-    }, function () {
-      console.log('I hope this works');
-    });
-    // this.addImageToUserLikes(index, this.state.images[index].id, user.id);
-    this.addVotesToImage(index, this.state.images[index].id);
+    if (user.images_liked.find((image) => image.id === this.state.images[index].id ) === undefined) {
+      this.state.images[index].votes++;
+      this.setState({
+        images: this.state.images,
+      }, () => {
+        console.log('I hope this works');
+        user.images_liked.push(this.state.images[index]);
+        this.addImageToUserLikes(index, this.state.images[index].id, user);
+      });
+    } else {
+      console.log('Image was already liked');
+    }
+      
   },
-  addImageToUserLikes: function (index, imageId, userId) {
-    console.log('API Query:', API_URL + 'users/' + userId);
-    fetch(API_URL + 'users/', + userId, JSON.stringify({
+  addImageToUserLikes: function (index, imageId, user) {
+    console.log('API Query:', API_URL + 'users/' + user.id);
+    fetch(API_URL + 'users/' + user.id, {
       method: 'PUT',
-      // headers: { token: 'token-goes-here'},
-      body: {
-        images_liked: this.state.images[index].id
-      }
-    }))
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id: user.id,
+        user: user.user,
+        food_favorites: user.food_favorites,
+        food_liked: user.food_liked,
+        food_disliked: user.food_disliked,
+        images_liked: user.images_liked,
+        search_preferences: user.search_preferences,
+        reviews_liked: user.reviews_liked,
+        reviews_disliked: [user.reviews_liked[0]],
+      })
+    })
       .catch((err) => console.error('Unsuccessfully requested to like an image: ', err))
       .then((responseData) => {
         console.log('Successfully requested to like an image: ', responseData);
@@ -114,7 +127,9 @@ var FoodDetailView = React.createClass({
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        votes: this.state.images[index].votes
+        id: this.state.images[index].id,
+        image: this.state.images[index].image,
+        votes: this.state.images[index].votes,
       })
     })
       .catch((err) => console.error('Unsuccessfully requested to upvote: ', err))
