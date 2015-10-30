@@ -10,7 +10,6 @@ var {
   ScrollView,
   Image,
   Text,
-  TextInput,
   TouchableOpacity,
   TouchableNativeFeedback,
   ListView,
@@ -48,6 +47,9 @@ var FoodDetailView = React.createClass({
   componentDidMount: function () {
     this.fetchImages(this.props.food.id);
     this.fetchReviews(this.props.food.id);
+    this.setLocation();
+  },
+  setLocation: function(){
     this.setState({
       restName: this.props.food.restaurant.name,
       restLongitude: this.props.food.restaurant.address.longitude,
@@ -97,7 +99,6 @@ var FoodDetailView = React.createClass({
     } else {
       console.log('Image was already liked');
     }
-      
   },
   addImageToUserLikes: function (index, imageId, user) {
     console.log('API Query:', API_URL + 'users/' + user.id);
@@ -144,16 +145,17 @@ var FoodDetailView = React.createClass({
   onMapButtonPress: function() {
     var latLongStr = this.state.restLatitude + ',' + this.state.restLongitude;
     if (Platform.OS === 'android') {
-      WebIntent.open('geo:' + latLongStr);
+      WebIntent.open('geo:0,0?q=' + latLongStr + '(' + this.state.restName + ')');
     } else {
       LinkingIOS.openURL('http://maps.apple.com/?z=12&q=' + this.state.restName + '&ll=' + latLongStr);
     }
   },
   onPostmatesButtonPress: function() {
-    if (Platform.OS === 'android') {
-
-    } else {
       var url = 'postmates://';
+    if (Platform.OS === 'android') {
+      //TODO: Needs error handling for not downloaded.
+      WebIntent.open(url);
+    } else {
       LinkingIOS.canOpenURL(url, (supported) => {
         if (!supported) {
           AlertIOS.alert('Postmates App Required', 'In order to request a delivery, please download the Postmates app from the App Store', [
@@ -176,16 +178,17 @@ var FoodDetailView = React.createClass({
     LinkingIOS.openURL('https://itunes.apple.com/us/app/postmates/id512393983?mt=8');
   },
   onUberButtonPress: function () {
-    uberClientKey = '';
-
+    var uberClientKey = '';
+    var url = 'uber://?client_id=' + uberClientKey + '&action=setPickup&pickup[=my_location]&dropoff[latitude]=' + this.state.restLatitude + '&dropoff[longitude]=' + this.state.restLongitude + '&dropoff[nickname]=' + this.state.restName;
+// This would be what we would use if we were going to provide deeper uber intergration
     if (uberClientKey === '') {
       console.log('NEED TO INPUT CLIENT KEY. DO NOT PUSH THIS UP.');
     }
 
     if (Platform.OS === 'android') {
-
+      //TODO: we need to handle the case of the app not being downloaded
+      WebIntent.open(url);
     } else {
-      var url = 'uber://?client_id=' + uberClientKey + '&action=setPickup&pickup[=my_location]&dropoff[latitude]=' + this.state.restLatitude + '&dropoff[longitude]=' + this.state.restLongitude + '&dropoff[nickname]=' + this.state.restName;
       LinkingIOS.canOpenURL(url, (supported) => {
         if (!supported) {
           AlertIOS.alert('Uber App Required', 'In order to request a ride, please download the Uber app from the App Store', [
