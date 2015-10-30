@@ -20,9 +20,9 @@ var DiscoveryTabBar = require('./DiscoveryTabBar');
 var FoodDetailView = require('./FoodDetailView');
 var mockImage = {
   image: 'http://40.media.tumblr.com/155e0538162f818cf12cd876683c3136/tumblr_inline_nmuyiqTnC51sxzdh5_500.jpg'
-}
+};
 var mockData = [];
-for( var i = 0; i < 10; i++ ) {
+for (var i = 0; i < 10; i++) {
   mockData.push(mockImage);
 }
 
@@ -47,13 +47,12 @@ var DiscoveryView = React.createClass({
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
       );
     } else {
-      this.setState({position: {coords: {latitude: 37.783541, longitude: -122.408975}}}, this.fetchRecs)
+      this.setState({position: {coords: {latitude: 37.783541, longitude: -122.408975}}}, this.fetchRecs);
     }
   },
-
   fetchRecs: function () {
     var uri = API_URL + 'foods/recommendations/';
-    if( this.state.position.coords ) {
+    if (this.state.position.coords) {
       uri += '?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
     }
     fetch(uri)
@@ -62,7 +61,7 @@ var DiscoveryView = React.createClass({
       .then((data) => {
         this.setState({
           recs: data
-        })
+        });
       })
       .done();
   },
@@ -86,14 +85,13 @@ var DiscoveryView = React.createClass({
   render: function () {
     var pages = [];
     var page;
-    for( var key in this.state.recs ) {
+    for (var key in this.state.recs) {
       page = <DiscoveryPage onFoodPress={this.onFoodPress} tabLabel={key.toUpperCase().replace('_', ' ')} foods={this.state.recs[key]} />;
-      if( key === 'trending' ) {
+      if (key === 'trending') {
         pages.unshift(page);
       } else {
         pages.push(page);
       }
-      
     }
     return (
       <ScrollableTabView locked={false} renderTabBar={() => <DiscoveryTabBar />} style={styles.container}>
@@ -159,13 +157,13 @@ var styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   imageContainer: {
-    width: windowSize.width/2,
-    height: windowSize.width/2,
+    width: windowSize.width / 2,
+    height: windowSize.width / 2,
     backgroundColor: 'black',
   },
   thumbImage: {
-    width: windowSize.width/2,
-    height: windowSize.width/2,
+    width: windowSize.width / 2,
+    height: windowSize.width / 2,
     backgroundColor: 'black',
     opacity: 0.8
   },

@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react-native');
 var {
   Image,
@@ -7,11 +9,11 @@ var {
 var defaultMapScale = ()=> {
   var isRetina = PixelRatio.get() >= 2;
   return isRetina ? 2 : 1;
-}
+};
 
 var values = (obj)=> {
   return Object.keys(obj).map(key => obj[key]);
-}
+};
 
 var IMAGE_FORMATS = {
   //png8 or png (default) specifies the 8-bit PNG format.
@@ -43,7 +45,7 @@ var MAP_TYPES = {
   //hybrid specifies a hybrid of the satellite and roadmap image,
   // showing a transparent layer of major streets and place names on the satellite image.
   HYBRID: 'hybrid'
-}
+};
 
 var IMAGE_FORMATS_VALUES = values(IMAGE_FORMATS);
 var MAP_TYPES_VALUES = values(MAP_TYPES);
@@ -147,7 +149,7 @@ var GoogleStaticMap = React.createClass({
 
     var markerParams = `markers=icon:dot%7Cshadow:true%7C${latitude},${longitude}`;
     return hasCenterMarker ? markerParams : '';
-  }, 
+  },
   apiKeyParam: function () {
     var apiKey = this.constructor.ApiKey;
     return apiKey ? `key=${apiKey}` : '';
