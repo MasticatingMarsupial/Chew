@@ -50,7 +50,7 @@ class Image(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   food = models.ForeignKey(Food, null=True)
   owner = models.ForeignKey(User, null=True)
-  image = models.CharField(max_length=255, unique=True)
+  image = models.CharField(max_length=255)
   review = models.ForeignKey(Review, null=True)
   votes = models.IntegerField(default=0)
 
