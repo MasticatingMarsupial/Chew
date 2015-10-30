@@ -69,11 +69,21 @@ class Signin(APIView):
     password = data['password']
 
     user = authenticate(username=username, password=password)
+    print(user, type(user))
     if user is not None:
       token = Token.objects.get_or_create(user=user)[0]
       account = AccountSerializer(Account.objects.get(user=user)).data
       return Response({'token': token.key, 'account': account})
     else:
       return Response('Username or password is invalid', status.HTTP_400_BAD_REQUEST)
+
+class TokenCheck(APIView):
+  def get(self, request, token, format=None):
+    if Token.objects.filter(key=token).exists():
+      userid = Token.objects.get(key=token).user_id
+      account = AccountSerializer(Account.objects.get(user=userid)).data
+      return Response(account)
+    else:
+      return Response('Invalid token', status.HTTP_400_BAD_REQUEST)
 
         

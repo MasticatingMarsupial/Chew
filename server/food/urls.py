@@ -2,6 +2,7 @@ from django.conf.urls import url
 from food import views_food, views_review, views_search, views_image, views_user
 
 urlpatterns = [
+# add api-token auth route
   url(r'^api/foods/$', views_food.FoodList.as_view()),
   url(r'^api/foods/(?P<pk>[0-9]+)/$', views_food.FoodDetail.as_view()),
   url(r'^api/foods/restaurants/(?P<restaurant_pk>[0-9]+)/$', views_food.FoodGroups.as_view()),
@@ -17,4 +18,5 @@ urlpatterns = [
   url(r'^api/signin/$', views_user.Signin.as_view()),
   url(r'^api/users/$', views_user.UserList.as_view()),
   url(r'^api/users/(?P<pk>[0-9]+)/$', views_user.UserDetail.as_view()),
+  url(r'^api/token-check/(?P<token>.+)/$', views_user.TokenCheck.as_view()),
 ]
