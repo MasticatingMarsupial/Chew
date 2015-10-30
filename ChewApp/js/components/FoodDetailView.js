@@ -87,6 +87,7 @@ var FoodDetailView = React.createClass({
   },
   pressHeartButton: function (index) {
     var user = UserStore.getAccount();
+    console.log(user);
     if (user.images_liked.find((image) => image.id === this.state.images[index].id ) === undefined) {
       this.state.images[index].votes++;
       this.setState({
@@ -114,13 +115,13 @@ var FoodDetailView = React.createClass({
         images_liked: user.images_liked,
         search_preferences: user.search_preferences,
         reviews_liked: user.reviews_liked,
-        reviews_disliked: [user.reviews_liked[0]],
+        reviews_disliked: user.reviews_liked,
       })
     })
       .catch((err) => console.error('Unsuccessfully requested to like an image: ', err))
       .then((responseData) => {
         console.log('Successfully requested to like an image: ', responseData);
-        // this.addVotesToImage(index, imageId);
+        this.addVotesToImage(index, imageId);
       })
       .done();
   },
