@@ -18,12 +18,14 @@ var StarRating = React.createClass({
     selectedStar: React.PropTypes.func,
     style: View.propTypes.style,
     starSize: React.PropTypes.number,
+    starColor: React.PropTypes.string,
   },
   getDefaultProps: function() {
     return {
       disabled: false,
       maxStars: 5,
-      rating: 0
+      rating: 0,
+      starColor: 'black',
     };
   },
   getInitialState: function () {
@@ -61,7 +63,7 @@ var StarRating = React.createClass({
           <Icon
             name={starIcon}
             size={this.props.starSize}
-            color="black"
+            color={this.props.starColor}
             style={{
               height: this.props.starSize,
               width: this.props.starSize,

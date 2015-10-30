@@ -6,9 +6,6 @@ var {
   StyleSheet,
   Platform,
   View,
-  Text,
-  ScrollView,
-  Image
 } = React;
 
 var FoodSearchResultView = require('./FoodSearchResultView');

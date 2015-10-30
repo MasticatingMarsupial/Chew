@@ -6,12 +6,45 @@ var {
   Image,
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   TouchableNativeFeedback,
+  AsyncStorage,
   Platform,
 } = React;
 
+var API_URL = 'http://chewmast.herokuapp.com/api/';
+var UserActions = require('../actions/UserActions');
+var UserStore = require('../stores/UserStore');
+
+
+
 var DrawerView = React.createClass({
+  getInitialState: function () {
+    return {'token': 'none'};
+  },
+  componentWillMount: function () {
+    // Get home page stuff from DB
+    AsyncStorage.getItem('token').then((value) => {
+      console.log(value);
+      if (value !== null){
+        //TODO: Needs a validation check
+        fetch(API_URL + 'token-check/' + this.state.token)
+          .then((res) => res.json())
+          .catch((err) => console.error('Fetching token data failed. Check the network connection: ' + err))
+          .then((responseData) => {
+            console.log('response data:', responseData);
+            //UserActions.populate(responseData.account);
+          })
+          .done(
+            console.log('Finished populating user data'));
+        this.setState({'token': value});
+      }
+    }).done();
+  },
+  saveData: function(key, value) {
+    AsyncStorage.setItem(key, value);
+    this.setState({key: value});
+  },
   onHomeButtonPress: function () {
     // console.log('Home button pressed!');
     this.props.onMenuButtonPress('Home');
@@ -22,51 +55,74 @@ var DrawerView = React.createClass({
   },
   onSignInLogOutButtonPress: function () {
     // console.log('Sign In/Log Out button pressed!');
+    this.saveData('token', 'none');
     this.props.onMenuButtonPress('SignInSignOut');
   },
+  onLoginButtonPress: function () {
+    this.props.onMenuButtonPress('Login');
+  },
   render: function() {
-    var TouchableElement = TouchableHighlight;
-      if (Platform.OS === 'android') {
+    var TouchableElement = TouchableOpacity;
+    if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
     }
-    return (
-      <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <Image source={{uri: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAKYAAAAJDJkMWJkNjIwLTljMWMtNDQ0MC04ZWZmLWQ1ZjgyMjQ5OTE0Nw.jpg'}}
-                 style={styles.profileImage}
-          />
-        </View>
-        <Text style={styles.name}>Kyle Cho</Text>
-        <TouchableElement
-          onPress={this.onHomeButtonPress}
-          onShowUnderlay={this.props.onHighlight}
-          onHideUnderlay={this.props.onUnhighlight}
-        >
-          <View style={styles.textContainer}>
-            <Text style={styles.listText}>Home</Text>
-          </View>
-        </TouchableElement>
-        <TouchableElement
-          onPress={this.onFavouritesButtonPress}
-          onShowUnderlay={this.props.onHighlight}
-          onHideUnderlay={this.props.onUnhighlight}
-        >
-          <View style={styles.textContainer}>
-            <Text style={styles.listText}>Favourites</Text>
-          </View>
-        </TouchableElement>
-        <TouchableElement
-          onPress={this.onSignInLogOutButtonPress}
-          onShowUnderlay={this.props.onHighlight}
-          onHideUnderlay={this.props.onUnhighlight}
-        >
-          <View style={[styles.textContainer, styles.textContainerLast]}>
-            <Text style={styles.listText}>Logout</Text>
-          </View>
-        </TouchableElement>
+    //TODO: Enable loading of actual data when api call is available && line #36
+    // var account = UserStore.getAccount();
+    // {account.user.first_name + account.user.last_name}
+    var component = this.state.token !== 'none' ?
+    <View>
+    <View style={styles.imageContainer}>
+      <Image source={{uri: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAKYAAAAJDJkMWJkNjIwLTljMWMtNDQ0MC04ZWZmLWQ1ZjgyMjQ5OTE0Nw.jpg'}}
+      style={styles.profileImage}
+      />
+    </View>
+    <Text style={styles.name}>Kyle Cho</Text>
+    <TouchableElement
+      onPress={this.onHomeButtonPress}
+      onShowUnderlay={this.props.onHighlight}
+      onHideUnderlay={this.props.onUnhighlight}
+    >
+      <View style={styles.textContainer}>
+        <Text style={styles.listText}>Home</Text>
       </View>
+    </TouchableElement>
+    <TouchableElement
+      onPress={this.onFavouritesButtonPress}
+      onShowUnderlay={this.props.onHighlight}
+      onHideUnderlay={this.props.onUnhighlight}
+    >
+      <View style={styles.textContainer}>
+        <Text style={styles.listText}>Favourites</Text>
+      </View>
+    </TouchableElement>
+    <TouchableElement
+      onPress={this.onSignInLogOutButtonPress}
+      onShowUnderlay={this.props.onHighlight}
+      onHideUnderlay={this.props.onUnhighlight}
+    >
+      <View style={[styles.textContainer, styles.textContainerLast]}>
+        <Text style={styles.listText}>Logout</Text>
+      </View>
+    </TouchableElement>
+    </View>
+    :
+    <View>
+    <Text style={styles.name}>Login to access your information</Text>
+      <TouchableElement
+        onPress={this.onLoginButtonPress}
+        onShowUnderlay={this.props.onHighlight}
+        onHideUnderlay={this.props.onUnhighlight}
+      >
+        <View style={styles.textContainer}>
+          <Text style={styles.listText}>Login</Text>
+        </View>
+      </TouchableElement>
+    </View>;
+
+    return (
+      <View style={styles.container}>{component}</View>
     );
-  }
+  },
 });
 
 var styles = StyleSheet.create({
