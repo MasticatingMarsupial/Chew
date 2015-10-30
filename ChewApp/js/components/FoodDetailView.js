@@ -15,6 +15,7 @@ var {
   TouchableNativeFeedback,
   ListView,
   LinkingIOS,
+  AlertIOS,
 } = React;
 
 var Dimensions = require('Dimensions');
@@ -39,6 +40,7 @@ var FoodDetailView = React.createClass({
       dataSource: dataSource,
       images: [],
       reviewsDataSource: dataSource.cloneWithRows([]),
+      restName: '',
       restLongitude: '',
       restLatitude: '',
     };
@@ -139,13 +141,71 @@ var FoodDetailView = React.createClass({
   selectedStar: function (rating) {
     console.log('Rated ' + rating + ' stars!');
   },
-  openMap: function() {
+  onMapButtonPress: function() {
     var latLongStr = this.state.restLatitude + ',' + this.state.restLongitude;
     if (Platform.OS === 'android') {
       WebIntent.open('geo:' + latLongStr);
     } else {
       LinkingIOS.openURL('http://maps.apple.com/?z=12&q=' + this.state.restName + '&ll=' + latLongStr);
     }
+  },
+  onPostmatesButtonPress: function() {
+    if (Platform.OS === 'android') {
+
+    } else {
+      var url = 'postmates://';
+      LinkingIOS.canOpenURL(url, (supported) => {
+        if (!supported) {
+          AlertIOS.alert('Postmates App Required', 'In order to request a delivery, please download the Postmates app from the App Store', [
+            {
+              text: 'Go to App Store',
+              onPress: this.downloadPostmates
+            },
+            {
+              text: 'Cancel',
+              onPress: this.cancel
+            }
+          ]);
+        } else {
+          LinkingIOS.openURL(url);
+        }
+      });
+    }
+  },
+  downloadPostmates: function () {
+    LinkingIOS.openURL('https://itunes.apple.com/us/app/postmates/id512393983?mt=8');
+  },
+  onUberButtonPress: function () {
+    uberClientKey = '';
+
+    if (uberClientKey === '') {
+      console.log('NEED TO INPUT CLIENT KEY. DO NOT PUSH THIS UP.');
+    }
+
+    if (Platform.OS === 'android') {
+
+    } else {
+      var url = 'uber://?client_id=' + uberClientKey + '&action=setPickup&pickup[=my_location]&dropoff[latitude]=' + this.state.restLatitude + '&dropoff[longitude]=' + this.state.restLongitude + '&dropoff[nickname]=' + this.state.restName;
+      LinkingIOS.canOpenURL(url, (supported) => {
+        if (!supported) {
+          AlertIOS.alert('Uber App Required', 'In order to request a ride, please download the Uber app from the App Store', [
+            {
+              text: 'Go to App Store',
+              onPress: this.downloadUber
+            },
+            {
+              text: 'Cancel',
+              onPress: this.cancel
+            }
+          ]);
+        } else {
+          LinkingIOS.openURL(url);
+        }
+      });
+    }
+  },
+  downloadUber: function () {
+    LinkingIOS.openURL('https://itunes.apple.com/us/app/uber/id368677368');
   },
   renderRow: function (rowData) {
     return (
@@ -249,7 +309,7 @@ var FoodDetailView = React.createClass({
           </View>
           <View style={styles.buttonContainer}>
             <TouchableElement
-              onPress={() => this.openMap()}
+              onPress={() => this.onMapButtonPress()}
             >
               <View style={styles.button}>
                 <Text style={styles.buttonText}> Take Me There </Text>
@@ -260,6 +320,22 @@ var FoodDetailView = React.createClass({
             >
               <View style={styles.button}>
                 <Text style={styles.buttonText}> I Like This </Text>
+              </View>
+            </TouchableElement>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableElement
+              onPress={this.onPostmatesButtonPress}
+            >
+              <View style={styles.button}>
+                <Text style={styles.buttonText}> Order on Postmates </Text>
+              </View>
+            </TouchableElement>
+            <TouchableElement
+              onPress={this.onUberButtonPress}
+            >
+              <View style={styles.button}>
+                <Text style={styles.buttonText}> Ride with Uber </Text>
               </View>
             </TouchableElement>
           </View>
