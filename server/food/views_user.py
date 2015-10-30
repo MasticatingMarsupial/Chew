@@ -5,8 +5,7 @@ from rest_framework.exceptions import ParseError
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from food.serializers_review import UserSerializer
-from food.serializers_account import AccountSerializer
+from food.serializers_account import AccountSerializer, UserSerializer
 from django.contrib.auth import login
 from django.views.decorators.csrf import csrf_exempt
 from food.models import Account
@@ -16,13 +15,29 @@ class UserList(generics.ListAPIView):
   serializer_class = UserSerializer
 
 class UserDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Account.objects.get(pk=pk)
+    except Account.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    account = self.get_object(pk)
+    serializer = AccountSerializer(account)
+    return Response(serializer.data)
+
   def put(self, request, pk, format=None):
-    user = self.get_object(pk)
-    serializer = UserSerializer(user, data=request.data)
+    account = self.get_object(pk)
+    serializer = AccountSerializer(account, data=request.data)
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    account = self.get_object(pk)
+    account.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class Signup(APIView):
   def post(self, request, format=None):
@@ -54,11 +69,21 @@ class Signin(APIView):
     password = data['password']
 
     user = authenticate(username=username, password=password)
+    print(user, type(user))
     if user is not None:
       token = Token.objects.get_or_create(user=user)[0]
       account = AccountSerializer(Account.objects.get(user=user)).data
       return Response({'token': token.key, 'account': account})
     else:
       return Response('Username or password is invalid', status.HTTP_400_BAD_REQUEST)
+
+class TokenCheck(APIView):
+  def get(self, request, token, format=None):
+    if Token.objects.filter(key=token).exists():
+      userid = Token.objects.get(key=token).user_id
+      account = AccountSerializer(Account.objects.get(user=userid)).data
+      return Response(account)
+    else:
+      return Response('Invalid token', status.HTTP_400_BAD_REQUEST)
 
         
