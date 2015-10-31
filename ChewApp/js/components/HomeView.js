@@ -58,13 +58,6 @@ var HomeView = React.createClass({
         position: this.state.position,
       });
     }
-    // if( Platform.OS === 'android' ) {
-    //   AndroidGeolocation.getCurrentLocation(
-    //       (position) => console.log(position),
-    //       (error) => console.error(error));
-    //   AndroidGeolocation.getConnection(
-    //       (position) => console.log(position));
-    // }
   },
   render: function () {
     console.log('rendering homepage for ' + Platform.OS);
