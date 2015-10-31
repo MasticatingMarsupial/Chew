@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
     fields = ['id', 'username', 'reviews']
 
 class ReviewSerializer(serializers.ModelSerializer):
-  owner = serializers.ReadOnlyField(source='owner.username')
+  # owner = serializers.ReadOnlyField(source='owner.username')
 
   class Meta:
     model = Review

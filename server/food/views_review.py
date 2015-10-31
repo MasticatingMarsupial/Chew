@@ -9,10 +9,7 @@ from food.permissions import IsOwnerOrReadOnly
 class ReviewList(generics.ListCreateAPIView):
   queryset = Review.objects.all()
   serializer_class = ReviewSerializer
-  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-  def perform_create(self, serializer):
-    serializer.save(owner=self.request.user)
+  # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
   queryset = Review.objects.all()
