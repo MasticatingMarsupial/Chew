@@ -5,10 +5,10 @@ from rest_framework.exceptions import ParseError
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from food.serializers_account import AccountSerializer, UserSerializer
-from django.contrib.auth import login
+from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
 from food.models import Account
+from food.serializers_account import AccountSerializer, UserSerializer
 
 class UserList(generics.ListAPIView):
   queryset = User.objects.all()
@@ -69,7 +69,6 @@ class Signin(APIView):
     password = data['password']
 
     user = authenticate(username=username, password=password)
-    print(user, type(user))
     if user is not None:
       token = Token.objects.get_or_create(user=user)[0]
       account = AccountSerializer(Account.objects.get(user=user)).data
