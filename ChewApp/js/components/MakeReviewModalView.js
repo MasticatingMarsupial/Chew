@@ -12,6 +12,7 @@ var {
   TouchableNativeFeedback,
   Modal,
   ScrollView,
+  AlertIOS,
 } = React;
 
 var Button = require('react-native-button');
@@ -45,8 +46,7 @@ var MakeReviewModalView = React.createClass({
   onSubmitReview: function () {
     console.log('Submitting review!');
     if (this.state.rating === 0) {
-      // Alert to submit a review
-      console.log('You need to rate the food first!');
+      AlertIOS.alert('Rating Required', 'You must give a star rating in order to submit a review');
     } else {
       console.log(this.state.rating);
       console.log(this.state.reviewText);
