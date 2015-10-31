@@ -28,5 +28,6 @@ dependencies {
     compile 'com.facebook.react:react-native:0.12.+'
     compile project(':react-native-icons')
     compile project(':RNWebIntent')
+    compile 'com.google.android.gms:play-services:8.1.0'
 
 }
