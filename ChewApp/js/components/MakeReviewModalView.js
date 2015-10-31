@@ -22,6 +22,7 @@ var MakeReviewModalView = React.createClass({
   getInitialState: function () {
     return {
       visible: this.props.visible,
+      rating: 0,
     };
   },
   componentWillReceiveProps: function (nextProps) {
@@ -34,9 +35,6 @@ var MakeReviewModalView = React.createClass({
   },
   onSubmitReview: function () {
     console.log('Submitting review!')
-  },
-  blurReviewInput: function () {
-    this.refs.review.blur();
   },
   render: function () {
     var TouchableElement = TouchableOpacity;
@@ -60,6 +58,7 @@ var MakeReviewModalView = React.createClass({
                   disabled={false}
                   starSize={40}
                   selectedStar={this.onStarRatingPress}
+                  starColor="#737373"
                   style={styles.starRating}
                 />
               </View>
