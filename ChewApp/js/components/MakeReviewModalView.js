@@ -44,15 +44,16 @@ var MakeReviewModalView = React.createClass({
     });
   },
   onSubmitReview: function () {
-    console.log('Submitting review!');
     if (this.state.rating === 0) {
+      console.log('Can not review without star rating!');
       if (Platform.OS === 'ios'){
         AlertIOS.alert('Rating Required', 'You must give a star rating in order to submit a review');
       }
     } else {
-      console.log(this.state.rating);
-      console.log(this.state.reviewText);
-      // this.props.onSubmitReview(this.state.rating)
+      console.log('Submitting review!');
+      console.log('Stars', this.state.rating);
+      console.log('Review', this.state.reviewText);
+      this.props.onSubmitReview(this.state.rating, this.state.reviewText);
     }
   },
   render: function () {
@@ -82,7 +83,7 @@ var MakeReviewModalView = React.createClass({
                 />
               </View>
               <View style={styles.reviewTextInputContainer}>
-                <TextInput multiline={true} onChangeText={this.onChangeText} style={styles.reviewTextInput} />
+                <TextInput multiline={true} value={this.state.reviewText} onChangeText={this.onChangeText} style={styles.reviewTextInput} />
               </View>
               <TouchableElement onPress={this.onSubmitReview} style={styles.submitButton}>
                 <Text style={styles.submit}>Submit</Text>
