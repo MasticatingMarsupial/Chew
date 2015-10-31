@@ -23,6 +23,7 @@ var MakeReviewModalView = React.createClass({
     return {
       visible: this.props.visible,
       rating: 0,
+      reviewText: '',
     };
   },
   componentWillReceiveProps: function (nextProps) {
@@ -32,9 +33,25 @@ var MakeReviewModalView = React.createClass({
   },
   onStarRatingPress: function (value) {
     console.log('Rated ' + value + ' stars!');
+    this.setState({
+      rating: value,
+    });
+  },
+  onChangeText: function (text) {
+    this.setState({
+      reviewText: text,
+    });
   },
   onSubmitReview: function () {
-    console.log('Submitting review!')
+    console.log('Submitting review!');
+    if (this.state.rating === 0) {
+      // Alert to submit a review
+      console.log('You need to rate the food first!');
+    } else {
+      console.log(this.state.rating);
+      console.log(this.state.reviewText);
+      // this.props.onSubmitReview(this.state.rating)
+    }
   },
   render: function () {
     var TouchableElement = TouchableOpacity;
@@ -63,9 +80,9 @@ var MakeReviewModalView = React.createClass({
                 />
               </View>
               <View style={styles.reviewTextInputContainer}>
-                <TextInput ref="review" multiline={true} returnKeyType={this.dismissKeyboard} style={styles.reviewTextInput} />
+                <TextInput multiline={true} onChangeText={this.onChangeText} style={styles.reviewTextInput} />
               </View>
-              <TouchableElement onPress={this.props.onSubmitReview} style={styles.submitButton}>
+              <TouchableElement onPress={this.onSubmitReview} style={styles.submitButton}>
                 <Text style={styles.submit}>Submit</Text>
               </TouchableElement>
             </View>
