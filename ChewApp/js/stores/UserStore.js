@@ -15,7 +15,7 @@ function populate (account) {
 }
 
 function update (id, updates) {
-  if ( _currentAccount.id === id ) {
+  if (_currentAccount.id === id) {
     _currentAccount = assign({}, _currentAccount, updates);
   }
 }
@@ -50,7 +50,7 @@ AppDispatcher.register(function(action) {
     case FoodConstants.USER_SIGNIN:
       console.log(action);
       account = action.account;
-      if( account.id ) {
+      if (account.id) {
         populate(account);
       }
       break;
@@ -61,7 +61,7 @@ AppDispatcher.register(function(action) {
 
     case FoodConstants.USER_UPDATE:
       id = action.account_id;
-      if ( username ) {
+      if (username) {
         update(id, action.updates);
       }
       break;

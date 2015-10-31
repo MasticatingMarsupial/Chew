@@ -10,7 +10,7 @@ var {
   View,
   Text,
   TextInput,
-  // Dimensions,
+  AsyncStorage,
 } = React;
 
 var HomeView = require('./HomeView');
@@ -60,11 +60,20 @@ var SigninView = React.createClass({
     }).then((res) => res.json())
       .catch((err) => console.error('Signin failed: ' + err))
       .then((data) => {
-        UserActions.populate(data.account);
+        if (data === 'Username or password is invalid'){
+          //TODO: Handle error notification
+          console.log('Bad Login');
+        } else {
+          this.saveData('token', data.token);
+          UserActions.populate(data.account);
+        }
       })
       .done(this.routeToNextPage);
   },
-
+  saveData: function(key, value) {
+    AsyncStorage.setItem(key, value);
+    this.setState({key: value});
+  },
   render: function () {
     console.log('rendering signin page for ' + Platform.OS);
     return (

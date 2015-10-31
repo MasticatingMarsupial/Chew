@@ -18,6 +18,8 @@ var {
 var API_URL = 'http://chewmast.herokuapp.com/api/';
 var DiscoveryTabBar = require('./DiscoveryTabBar');
 var FoodDetailView = require('./FoodDetailView');
+var StarRating = require('./StarRating');
+
 var mockImage = {
   image: 'http://40.media.tumblr.com/155e0538162f818cf12cd876683c3136/tumblr_inline_nmuyiqTnC51sxzdh5_500.jpg'
 };
@@ -36,7 +38,7 @@ var DiscoveryView = React.createClass({
     };
   },
 
-  componentDidMount: function () {
+  componentWillMount: function () {
     if (Platform.OS === 'ios'){
       this.fetchRecs();
       navigator.geolocation.getCurrentPosition(
@@ -86,7 +88,11 @@ var DiscoveryView = React.createClass({
     var pages = [];
     var page;
     for (var key in this.state.recs) {
-      page = <DiscoveryPage onFoodPress={this.onFoodPress} tabLabel={key.toUpperCase().replace('_', ' ')} foods={this.state.recs[key]} />;
+      page = <DiscoveryPage
+                onFoodPress={this.onFoodPress}
+                tabLabel={key.toUpperCase().replace('_', ' ')}
+                foods={this.state.recs[key]}
+              />;
       if (key === 'trending') {
         pages.unshift(page);
       } else {
@@ -94,7 +100,12 @@ var DiscoveryView = React.createClass({
       }
     }
     return (
-      <ScrollableTabView locked={false} renderTabBar={() => <DiscoveryTabBar />} style={styles.container}>
+      <ScrollableTabView
+        locked={false}
+        renderTabBar={() => <DiscoveryTabBar />}
+        edgeHitWith={50}
+        style={styles.container}
+      >
         {pages}
       </ScrollableTabView>
     );
@@ -115,7 +126,14 @@ var DiscoveryPage = React.createClass({
       );
     });
     return (
-      <ScrollView style={styles.scrollGroup} horizontal={false} centerContent={true} keyboardDismissMode={'on-drag'} contentOffset={{x:0,y:0}} contentInset={{top:0,left:0,bottom:0,right:0}}>
+      <ScrollView
+        style={styles.scrollGroup}
+        horizontal={false}
+        centerContent={true}
+        keyboardDismissMode={'on-drag'}
+        contentOffset={{x:0,y:0}}
+        contentInset={{top:0,left:0,bottom:0,right:0}}
+      >
         <View style={styles.container}>
           {thumbs}
         </View>
@@ -133,10 +151,20 @@ var ThumbView = React.createClass({
             source={{uri: this.props.food.preview_image.image}}
             style={styles.thumbImage}
           />
-          <View style={[styles.textContainer, Platform.OS === 'ios' && styles.textContainerOS]} marginBottom={-80}>
+          <View
+            style={[styles.textContainer, Platform.OS === 'ios' && styles.textContainerOS]}
+            marginBottom={-80}
+          >
             <Text style={styles.title}>{this.props.food.name}</Text>
-            <Text style={styles.text}>Rating: {this.props.food.avgRating}</Text>
-            <Text style={styles.text}>Distance: {this.props.food.distance}</Text>
+            <View style={styles.reviewStarContainer}>
+              <StarRating maxStars={5}
+                rating={parseFloat(this.props.food.avgRating)}
+                disabled={true}
+                starColor={'white'}
+                styles={styles.reviewStarRating}
+                starSize={15}/>
+            </View>
+            <Text style={styles.text}>{this.props.food.distance} Miles</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -190,6 +218,13 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
     alignSelf: 'center',
+  },
+  reviewStarContainer: {
+    marginTop: 5,
+    marginLeft: 10,
+    alignSelf: 'center',
+  },
+  reviewStarRating: {
   },
 });
 
