@@ -45,7 +45,7 @@ var MakeReviewModalView = React.createClass({
     }
     return (
       <Modal animated={true} visible={this.state.visible} transparent={true}>
-        <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
+        <ScrollView scrollEnabled={false} keyboardShouldPersistTaps={false} contentContainerStyle={styles.container}>
           <View style={styles.solidContent}>
             <View style={styles.foodTitleContainer}>
               <Text style={styles.foodTitle}>{this.props.food.name}</Text>
