@@ -12,6 +12,7 @@ var {
   TouchableNativeFeedback,
   Modal,
   ScrollView,
+  AlertIOS,
 } = React;
 
 var Button = require('react-native-button');
@@ -22,6 +23,8 @@ var MakeReviewModalView = React.createClass({
   getInitialState: function () {
     return {
       visible: this.props.visible,
+      rating: 0,
+      reviewText: '',
     };
   },
   componentWillReceiveProps: function (nextProps) {
@@ -31,12 +34,27 @@ var MakeReviewModalView = React.createClass({
   },
   onStarRatingPress: function (value) {
     console.log('Rated ' + value + ' stars!');
+    this.setState({
+      rating: value,
+    });
+  },
+  onChangeText: function (text) {
+    this.setState({
+      reviewText: text,
+    });
   },
   onSubmitReview: function () {
-    console.log('Submitting review!')
-  },
-  blurReviewInput: function () {
-    this.refs.review.blur();
+    if (this.state.rating === 0) {
+      console.log('Can not review without star rating!');
+      if (Platform.OS === 'ios'){
+        AlertIOS.alert('Rating Required', 'You must give a star rating in order to submit a review');
+      }
+    } else {
+      console.log('Submitting review!');
+      console.log('Stars', this.state.rating);
+      console.log('Review', this.state.reviewText);
+      this.props.onSubmitReview(this.state.rating, this.state.reviewText);
+    }
   },
   render: function () {
     var TouchableElement = TouchableOpacity;
@@ -45,7 +63,7 @@ var MakeReviewModalView = React.createClass({
     }
     return (
       <Modal animated={true} visible={this.state.visible} transparent={true}>
-        <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
+        <ScrollView scrollEnabled={false} keyboardShouldPersistTaps={false} contentContainerStyle={styles.container}>
           <View style={styles.solidContent}>
             <View style={styles.foodTitleContainer}>
               <Text style={styles.foodTitle}>{this.props.food.name}</Text>
@@ -56,17 +74,18 @@ var MakeReviewModalView = React.createClass({
               </View>
               <View style={styles.starRatingContainer}>
                 <StarRating maxStars={5}
-                  rating={parseFloat(this.props.food.rating)}
+                  rating={parseFloat(this.state.rating)}
                   disabled={false}
                   starSize={40}
                   selectedStar={this.onStarRatingPress}
+                  starColor="#737373"
                   style={styles.starRating}
                 />
               </View>
               <View style={styles.reviewTextInputContainer}>
-                <TextInput ref="review" multiline={true} returnKeyType={this.dismissKeyboard} style={styles.reviewTextInput} />
+                <TextInput multiline={true} value={this.state.reviewText} onChangeText={this.onChangeText} style={styles.reviewTextInput} />
               </View>
-              <TouchableElement onPress={this.props.onSubmitReview} style={styles.submitButton}>
+              <TouchableElement onPress={this.onSubmitReview} style={styles.submitButton}>
                 <Text style={styles.submit}>Submit</Text>
               </TouchableElement>
             </View>

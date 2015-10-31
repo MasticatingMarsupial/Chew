@@ -2,6 +2,8 @@
 
 var React = require('react-native');
 var UserStore = require('../stores/UserStore');
+var ReviewAction = require('../actions/ReviewActions');
+var ReviewStore = require('../stores/ReviewStore');
 
 var {
   StyleSheet,
@@ -48,9 +50,16 @@ var FoodDetailView = React.createClass({
     };
   },
   componentDidMount: function () {
+    ReviewStore.addChangeListener(this._onChange);
     this.fetchImages(this.props.food.id);
     this.fetchReviews(this.props.food.id);
     this.setLocation();
+  },
+  componentWillUnmount: function () {
+    ReviewStore.removeChangeListener(this._onChange);
+  },
+  _onChange: function () {
+    // Method to setState based upon Store changes
   },
   setLocation: function(){
     this.setState({
@@ -237,9 +246,17 @@ var FoodDetailView = React.createClass({
     this.setState({isReviewModalOpen: true});
   },
   onCloseReviewButtonPress: function () {
+    this.dismissReviewModal();
+  },
+  dismissReviewModal: function () {
     this.setState({isReviewModalOpen: false});
   },
-
+  submitReview: function (rating, review) {
+    console.log('Submitting rating:', rating);
+    console.log('Submitting review:', review);
+    this.dismissReviewModal();
+    ReviewAction.create(rating, review);
+  },
   render: function () {
     var TouchableElement = TouchableOpacity;
       if (Platform.OS === 'android') {
@@ -279,7 +296,7 @@ var FoodDetailView = React.createClass({
         automaticallyAdjustContentInsets={false}
         style={styles.container}
       >
-        <MakeReviewModalView visible={this.state.isReviewModalOpen} onCloseReviewButtonPress={this.onCloseReviewButtonPress} food={this.props.food} />
+        <MakeReviewModalView visible={this.state.isReviewModalOpen} onSubmitReview={this.submitReview} onCloseReviewButtonPress={this.onCloseReviewButtonPress} food={this.props.food} />
         <ScrollView
           style={styles.scrollView}
         >
