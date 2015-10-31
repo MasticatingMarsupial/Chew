@@ -46,7 +46,9 @@ var MakeReviewModalView = React.createClass({
   onSubmitReview: function () {
     console.log('Submitting review!');
     if (this.state.rating === 0) {
-      AlertIOS.alert('Rating Required', 'You must give a star rating in order to submit a review');
+      if (Platform.OS === 'ios'){
+        AlertIOS.alert('Rating Required', 'You must give a star rating in order to submit a review');
+      }
     } else {
       console.log(this.state.rating);
       console.log(this.state.reviewText);
@@ -71,7 +73,7 @@ var MakeReviewModalView = React.createClass({
               </View>
               <View style={styles.starRatingContainer}>
                 <StarRating maxStars={5}
-                  rating={parseFloat(this.props.food.rating)}
+                  rating={parseFloat(this.state.rating)}
                   disabled={false}
                   starSize={40}
                   selectedStar={this.onStarRatingPress}
