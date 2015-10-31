@@ -2,6 +2,8 @@
 
 var React = require('react-native');
 var UserStore = require('../stores/UserStore');
+var ReviewAction = require('../actions/ReviewActions');
+var ReviewStore = require('../stores/ReviewStore');
 
 var {
   StyleSheet,
@@ -48,9 +50,16 @@ var FoodDetailView = React.createClass({
     };
   },
   componentDidMount: function () {
+    ReviewStore.addChangeListener(this._onChange);
     this.fetchImages(this.props.food.id);
     this.fetchReviews(this.props.food.id);
     this.setLocation();
+  },
+  componentWillUnmount: function () {
+    ReviewStore.removeChangeListener(this._onChange);
+  },
+  _onChange: function () {
+    // Method to setState based upon Store changes
   },
   setLocation: function(){
     this.setState({
@@ -246,6 +255,7 @@ var FoodDetailView = React.createClass({
     console.log('Submitting rating:', rating);
     console.log('Submitting review:', review);
     this.dismissReviewModal();
+    ReviewAction.create(rating, review);
   },
   render: function () {
     var TouchableElement = TouchableOpacity;
