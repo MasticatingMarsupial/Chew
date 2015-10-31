@@ -34,36 +34,37 @@ var HomeView = React.createClass({
       );
     }
     if( Platform.OS === 'android' ) {
+      AndroidGeolocation.getCurrentLocation((position) => this.setState({position}))
     }
   },
   searchString: function (food) {
     // Executes query to DB for possible foods by string
-    // if (Platform.OS === 'ios'){
-    //   this.props.navigator.push({
-    //     title: 'Results',
-    //     component: FoodSearchResultView,
-    //     // Need to pass search text
-    //     passProps: {
-    //       food: food,
-    //       position: this.state.position
-    //     },
-    //   });
-    // } else {
-    //   this.props.navigator.push({
-    //     title: 'Results',
-    //     name: 'results',
-    //     // Need to pass search text
-    //     food: {food},
-    //     position: this.state.position,
-    //   });
-    // }
-    if( Platform.OS === 'android' ) {
-      AndroidGeolocation.getCurrentLocation(
-          (position) => console.log(position),
-          (error) => console.error(error));
-      AndroidGeolocation.getConnection(
-          (position) => console.log(position));
+    if (Platform.OS === 'ios'){
+      this.props.navigator.push({
+        title: 'Results',
+        component: FoodSearchResultView,
+        // Need to pass search text
+        passProps: {
+          food: food,
+          position: this.state.position
+        },
+      });
+    } else {
+      this.props.navigator.push({
+        title: 'Results',
+        name: 'results',
+        // Need to pass search text
+        food: {food},
+        position: this.state.position,
+      });
     }
+    // if( Platform.OS === 'android' ) {
+    //   AndroidGeolocation.getCurrentLocation(
+    //       (position) => console.log(position),
+    //       (error) => console.error(error));
+    //   AndroidGeolocation.getConnection(
+    //       (position) => console.log(position));
+    // }
   },
   render: function () {
     console.log('rendering homepage for ' + Platform.OS);
@@ -75,7 +76,7 @@ var HomeView = React.createClass({
           onMenuButtonPress={() => {this.props.navigator.props.openMenuSlider();}}
           style={styles.searchBar}
         />
-        <DiscoveryView navigator={this.props.navigator}/>
+        <DiscoveryView navigator={this.props.navigator} />
       </View>
     );
   }

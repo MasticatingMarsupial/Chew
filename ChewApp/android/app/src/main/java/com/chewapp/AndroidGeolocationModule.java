@@ -56,19 +56,16 @@ public class AndroidGeolocationModule extends ReactContextBaseJavaModule
       .addApi(LocationServices.API)
       .build();
     mGoogleApiClient.connect();
-
-    mLocationRequest = LocationRequest.create()
-      .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-      .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-      .setFastestInterval(1 * 1000); // 1 second, in milliseconds
   }
 
   @ReactMethod
-  public void getCurrentLocation(Callback success, Callback error) {
+  public void getCurrentLocation(Callback success) {
     WritableMap location = Arguments.createMap();
+    WritableMap coords = Arguments.createMap();
     mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-    location.putDouble("lat", mLastLocation.getLatitude());
-    location.putDouble("lng", mLastLocation.getLongitude());
+    coords.putDouble("latitude", mLastLocation.getLatitude());
+    coords.putDouble("longitude", mLastLocation.getLongitude());
+    location.putMap("coords", coords);
     success.invoke(location);
   }
 
