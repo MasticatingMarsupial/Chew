@@ -17,6 +17,7 @@ var {
 
 var FoodDetailView = require('./FoodDetailView');
 var SearchBar = require('react-native-search-bar');
+var AndroidGeolocation = require('./AndroidGeolocation');
 if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
 }
@@ -42,6 +43,9 @@ var FoodSearchResultView = React.createClass({
         (error) => console.error(error.message),
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
       );
+    }
+    if (Platform.OS === 'android') {
+      AndroidGeolocation.getCurrentLocation((position) => this.setState({position}));
     }
     console.log(this.props.food);
     //This needs an empty string case

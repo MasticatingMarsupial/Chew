@@ -12,6 +12,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.smixx.reactnativeicons.ReactNativeIcons;
 import com.ivanph.webintent.RNWebIntentPackage;
+import com.chewapp.androidgeo.AndroidGeolocationPackage;
 
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
 
@@ -30,6 +31,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                 .addPackage(new MainReactPackage())
                 .addPackage(new ReactNativeIcons())
                 .addPackage(new RNWebIntentPackage())
+                .addPackage(new AndroidGeolocationPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();

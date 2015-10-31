@@ -19,7 +19,6 @@ var API_URL = 'http://chewmast.herokuapp.com/api/';
 var DiscoveryTabBar = require('./DiscoveryTabBar');
 var FoodDetailView = require('./FoodDetailView');
 var StarRating = require('./StarRating');
-
 var mockImage = {
   image: 'http://40.media.tumblr.com/155e0538162f818cf12cd876683c3136/tumblr_inline_nmuyiqTnC51sxzdh5_500.jpg'
 };
@@ -28,7 +27,7 @@ for (var i = 0; i < 10; i++) {
   mockData.push(mockImage);
 }
 
-
+var AndroidGeolocation = require('./AndroidGeolocation');
 
 var DiscoveryView = React.createClass({
   getInitialState: function () {
@@ -49,10 +48,11 @@ var DiscoveryView = React.createClass({
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
       );
     } else {
-      this.setState({position: {coords: {latitude: 37.783541, longitude: -122.408975}}}, this.fetchRecs);
+      AndroidGeolocation.getCurrentLocation((position) => this.setState({position: position}, this.fetchRecs));
     }
   },
   fetchRecs: function () {
+    console.log(this.state);
     var uri = API_URL + 'foods/recommendations/';
     if (this.state.position.coords) {
       uri += '?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
