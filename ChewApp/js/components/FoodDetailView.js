@@ -237,9 +237,16 @@ var FoodDetailView = React.createClass({
     this.setState({isReviewModalOpen: true});
   },
   onCloseReviewButtonPress: function () {
+    this.dismissReviewModal();
+  },
+  dismissReviewModal: function () {
     this.setState({isReviewModalOpen: false});
   },
-
+  submitReview: function (rating, review) {
+    console.log('Submitting rating:', rating);
+    console.log('Submitting review:', review);
+    this.dismissReviewModal();
+  },
   render: function () {
     var TouchableElement = TouchableOpacity;
       if (Platform.OS === 'android') {
@@ -279,7 +286,7 @@ var FoodDetailView = React.createClass({
         automaticallyAdjustContentInsets={false}
         style={styles.container}
       >
-        <MakeReviewModalView visible={this.state.isReviewModalOpen} onCloseReviewButtonPress={this.onCloseReviewButtonPress} food={this.props.food} />
+        <MakeReviewModalView visible={this.state.isReviewModalOpen} onSubmitReview={this.submitReview} onCloseReviewButtonPress={this.onCloseReviewButtonPress} food={this.props.food} />
         <ScrollView
           style={styles.scrollView}
         >
