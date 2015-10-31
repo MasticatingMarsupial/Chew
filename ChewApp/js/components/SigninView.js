@@ -17,6 +17,9 @@ var HomeView = require('./HomeView');
 var API_URL = 'http://chewmast.herokuapp.com/api/';
 // var API_URL = 'http://localhost:8000/api/';
 // var {width, height} = Dimensions.get('window');
+if (Platform.OS === 'android'){
+  var dismissKeyboard = require('dismissKeyboard');
+}
 
 
 var SigninView = React.createClass({
@@ -28,12 +31,14 @@ var SigninView = React.createClass({
   },
 
   routeToNextPage: function () {
+    console.log('Platform:', Platform.OS);
     if (Platform.OS === 'ios'){
       this.props.navigator.push({
         title: 'Home',
         component: HomeView,
       });
     } else {
+      console.log('re-routing to home', this.props.navigator);
       this.props.navigator.push({
         title: 'Home',
         name: 'home',
@@ -42,14 +47,21 @@ var SigninView = React.createClass({
   },
 
   handleSignin: function () {
+    if (Platform.OS === 'android') {
+      dismissKeyboard();
+    }
     this.sendAuthRequest('signin/');
   },
 
   handleSignup: function () {
+    if (Platform.OS === 'android') {
+      dismissKeyboard();
+    }
     this.sendAuthRequest('signup/');
   },
 
   sendAuthRequest: function (path) {
+    var loginSuccess = true;
     fetch(API_URL + path, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -63,12 +75,24 @@ var SigninView = React.createClass({
         if (data === 'Username or password is invalid'){
           //TODO: Handle error notification
           console.log('Bad Login');
+          loginSuccess = false;
+        }
+        else if (data === 'Username already taken') {
+          loginSuccess = false;
         } else {
+          console.log(data);
           this.saveData('token', data.token);
           UserActions.populate(data.account, data.token);
         }
       })
-      .done(this.routeToNextPage);
+      .done(() => {
+        if (loginSuccess) {
+          console.log('redirecting', this);
+          this.routeToNextPage();
+        } else {
+          this.setState({error: path});
+        }
+      });
   },
   saveData: function(key, value) {
     AsyncStorage.setItem(key, value);
@@ -76,9 +100,22 @@ var SigninView = React.createClass({
   },
   render: function () {
     console.log('rendering signin page for ' + Platform.OS);
+    var error;
+    if (this.state.error === 'signup/'){
+      error = <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Sorry, that username has been taken</Text>
+      </View>;
+    } else if (this.state.error === 'signin/') {
+      error = <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>An incorrect username or password was entered</Text>
+      </View>;
+    } else {
+      error = <View/>;
+    }
     return (
       <View>
         <View style={styles.container}>
+        {error}
           <View style={styles.authContainer}>
             <Text>Username</Text>
             <TextInput
@@ -124,7 +161,7 @@ var SigninView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     paddingTop: 45,
   },
   authContainer: {
@@ -165,6 +202,14 @@ var styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     fontSize: 16,
+  },
+  errorContainer: {
+  },
+  errorText: {
+    alignSelf: 'center',
+    backgroundColor: '#FFCDD2',
+    borderRadius: 10,
+    color: 'red',
   },
 });
 

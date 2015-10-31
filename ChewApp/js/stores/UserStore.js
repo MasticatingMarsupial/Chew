@@ -8,9 +8,11 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'userChange';
 
 var _currentAccount = {};
+var _currentToken = {};
 
-function populate (account) {
+function populate (account, token) {
   _currentAccount  = account;
+  _currentToken = token;
   console.log(_currentAccount);
 }
 
@@ -28,6 +30,10 @@ var UserStore = assign({}, EventEmitter.prototype, {
 
   getAccount: function () {
     return _currentAccount;
+  },
+
+  getToken: function () {
+    return _currentToken;
   },
 
   emitChange: function () {
