@@ -15,6 +15,7 @@ var {
   ListView,
   LinkingIOS,
   AlertIOS,
+  Modal,
 } = React;
 
 var Dimensions = require('Dimensions');
@@ -22,6 +23,7 @@ var {Icon,} = require('react-native-icons');
 var Carousel = require('react-native-looped-carousel');
 var Button = require('react-native-button');
 var GoogleStaticMap = require('./GoogleStaticMap');
+var MakeReviewModalView = require('./MakeReviewModalView');
 var StarRating = require('./StarRating');
 if (Platform.OS === 'android'){
   var WebIntent = require('react-native-webintent');
@@ -42,6 +44,7 @@ var FoodDetailView = React.createClass({
       restName: '',
       restLongitude: '',
       restLatitude: '',
+      isReviewModalOpen: false,
     };
   },
   componentDidMount: function () {
@@ -229,6 +232,14 @@ var FoodDetailView = React.createClass({
       </View>
     );
   },
+  onMakeReviewButtonPress: function () {
+    console.log('Make review button pressed');
+    this.setState({isReviewModalOpen: true});
+  },
+  onCloseReviewButtonPress: function () {
+    this.setState({isReviewModalOpen: false});
+  },
+
   render: function () {
     var TouchableElement = TouchableOpacity;
       if (Platform.OS === 'android') {
@@ -268,6 +279,7 @@ var FoodDetailView = React.createClass({
         automaticallyAdjustContentInsets={false}
         style={styles.container}
       >
+        <MakeReviewModalView visible={this.state.isReviewModalOpen} onCloseReviewButtonPress={this.onCloseReviewButtonPress} food={this.props.food} />
         <ScrollView
           style={styles.scrollView}
         >
@@ -349,6 +361,15 @@ var FoodDetailView = React.createClass({
             zoom={15}
             size={{ width: width, height: 200 }}
           />
+          <View style={styles.buttonContainer}>
+            <TouchableElement
+              onPress={this.onMakeReviewButtonPress}
+            >
+              <View style={styles.button}>
+                <Text style={styles.buttonText}> Make a Review </Text>
+              </View>
+            </TouchableElement>
+          </View>
           <ListView
             dataSource={this.state.reviewsDataSource}
             renderRow={this.renderRow}
