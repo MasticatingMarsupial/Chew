@@ -38,6 +38,11 @@ var StarRating = React.createClass({
   },
   pressStarButton: function (rating) {
     this.props.selectedStar(rating);
+    if (!this.props.disabled) {
+      this.setState({
+        rating: rating,
+      });
+    }
   },
   render: function () {
     var starsLeft = this.state.rating;
