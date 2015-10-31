@@ -28,8 +28,6 @@ for (var i = 0; i < 10; i++) {
 }
 
 var AndroidGeolocation = require('./AndroidGeolocation');
->>>>>>> Uses new AndroidGeolocation Module for searching
-
 
 var DiscoveryView = React.createClass({
   getInitialState: function () {
