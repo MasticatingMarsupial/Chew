@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from food.models import Account
+from food.models import Account, Image
 from django.contrib.auth.models import User
+from django.db.models import F
 from food.serializers_food import FoodSerializer
 from food.serializers_image import ImageSerializer
 from food.serializers_review import ReviewSerializer
@@ -29,9 +30,15 @@ class AccountSerializer(serializers.ModelSerializer):
     model = Account
     fields = ['id', 'user', 'food_favorites', 'food_liked', 'food_disliked', 'images_liked', 'reviews_liked', 'reviews_disliked' ]
 
-  # def update(self, instance, validated_data):
-  #   images_liked_data = validated_data.pop('images_liked')
-  #   account = Account.objects.get_or_create(id=instance.pk, defaults=validated_data)[0]
-  #   for image in images_liked_data:
-  #     account.images_liked.add(image)
-  #   return account
+  def update(self, instance, validated_data):
+    images_liked_data = validated_data.pop('images_liked')
+    account = Account.objects.get(id=instance.pk)
+    for image in images_liked_data:
+      img = image['image']
+      query = Image.objects.get(image=img)
+      if account.images_liked.filter(pk=query.id).exists():
+        continue
+      else:
+        Image.objects.filter(image=img).update(votes=F('votes') +1)
+        account.images_liked.add(query)
+    return account
