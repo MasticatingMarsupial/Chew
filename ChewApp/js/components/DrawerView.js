@@ -28,12 +28,13 @@ var DrawerView = React.createClass({
       console.log(value);
       if (value !== null){
         //TODO: Needs a validation check
+        UserStore
         fetch(API_URL + 'token-check/' + this.state.token)
           .then((res) => res.json())
           .catch((err) => console.error('Fetching token data failed. Check the network connection: ' + err))
           .then((responseData) => {
             console.log('response data:', responseData);
-            //UserActions.populate(responseData.account);
+            //UserActions.populate(responseData.account, this.state.token);
           })
           .done(
             console.log('Finished populating user data'));

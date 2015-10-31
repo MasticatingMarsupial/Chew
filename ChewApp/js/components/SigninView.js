@@ -65,7 +65,7 @@ var SigninView = React.createClass({
           console.log('Bad Login');
         } else {
           this.saveData('token', data.token);
-          UserActions.populate(data.account);
+          UserActions.populate(data.account, data.token);
         }
       })
       .done(this.routeToNextPage);
@@ -129,13 +129,16 @@ var styles = StyleSheet.create({
   },
   authContainer: {
     flex: 1,
-    paddingTop: 90,
+    paddingTop: 40,
     paddingLeft: 15,
     paddingRight: 15,
   },
   input: {
     flexDirection: 'row',
     height: 40,
+    borderStyle: 'solid',
+    borderColor: '#808080',
+    borderBottomWidth: 1,
   },
   buttonContainer: {
     flexDirection: 'row',

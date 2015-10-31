@@ -5,10 +5,11 @@ var FoodConstants = require('../constants/FoodConstants');
 
 var UserActions = {
 
-  populate: function (account) {
+  populate: function (account, token) {
     AppDispatcher.dispatch({
       actionType: FoodConstants.USER_SIGNIN,
-      account: account
+      account: account,
+      token: token,
     });
   },
 

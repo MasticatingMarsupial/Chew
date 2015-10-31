@@ -162,7 +162,7 @@ var ThumbView = React.createClass({
                 disabled={true}
                 starColor={'white'}
                 styles={styles.reviewStarRating}
-                starSize={15}/>
+                starSize={11}/>
             </View>
             <Text style={styles.text}>{this.props.food.distance} Miles</Text>
           </View>
@@ -193,7 +193,7 @@ var styles = StyleSheet.create({
     width: windowSize.width / 2,
     height: windowSize.width / 2,
     backgroundColor: 'black',
-    opacity: 0.8
+    opacity: 0.65
   },
   textContainer: {
     alignSelf: 'center',
