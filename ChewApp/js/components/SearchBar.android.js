@@ -73,7 +73,7 @@ var styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'red',
+    backgroundColor: '#F44336',
     height: 56,
   },
   searchBarInput: {
@@ -83,7 +83,7 @@ var styles = StyleSheet.create({
     color: 'white',
     height: 50,
     padding: 0,
-    backgroundColor: 'red'
+    backgroundColor: '#F44336'
   },
   spinner: {
     width: 30,
