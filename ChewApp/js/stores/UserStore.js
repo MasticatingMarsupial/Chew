@@ -58,17 +58,21 @@ AppDispatcher.register(function(action) {
       account = action.account;
       if (account.id) {
         populate(account);
+        UserStore.emitChange();
       }
       break;
 
     case FoodConstants.USER_SIGNOUT:
       destroy();
+      UserStore.emitChange();
+
       break;
 
     case FoodConstants.USER_UPDATE:
       id = action.account_id;
       if (username) {
         update(id, action.updates);
+        UserStore.emitChange();
       }
       break;
 
