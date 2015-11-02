@@ -2,14 +2,10 @@ from rest_framework import status, generics, permissions, mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import Http404
-from food.models import *
+from food.models import Review, User, Food
 from food.permissions import IsOwnerOrReadOnly
 from food.serializers_review import ReviewSerializer
 
-# class ReviewList(generics.ListCreateAPIView):
-  # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-  # def perform_create(self, serializer):
 class ReviewList(APIView):
   def get_object(self, pk):
     try:
