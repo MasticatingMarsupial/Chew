@@ -13,6 +13,7 @@ var {
 } = React;
 
 var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
 var UserActions = require('../actions/UserActions');
 var UserStore = require('../stores/UserStore');
 
@@ -68,6 +69,7 @@ var DrawerView = React.createClass({
   onSignInLogOutButtonPress: function () {
     // console.log('Sign In/Log Out button pressed!');
     this.saveData('token', 'none');
+    UserActions.signout();
     this.props.onMenuButtonPress('SignInSignOut');
   },
   onLoginButtonPress: function () {

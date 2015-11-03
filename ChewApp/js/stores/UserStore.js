@@ -6,25 +6,34 @@ var FoodConstants = require('../constants/FoodConstants');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'userChange';
+var API_URL = 'http://localhost:8000/api/';
 
 var _currentAccount = {};
 var _currentToken = {};
 
 function populate (account, token) {
-  _currentAccount  = account;
-  _currentToken = token;
-  console.log(_currentAccount);
+  _currentAccount  = account || _currentAccount;
+  _currentToken = token || _currentToken;
 }
 
 function update (id, updates) {
   if (_currentAccount.id === id) {
     _currentAccount = assign({}, _currentAccount, updates);
+    console.log(_currentAccount);
+    fetch(API_URL + 'users/' + _currentAccount.id, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(_currentAccount)
+    })
+    .then((res) => res.json())
+    .catch((err) => console.error('Update failed: ' + err))
+    .done((resData) => populate(resData));
   }
-  console.log(_currentAccount);
 }
 
 function destroy () {
   _currentAccount = {};
+  _currentToken = {};
 }
 
 var UserStore = assign({}, EventEmitter.prototype, {

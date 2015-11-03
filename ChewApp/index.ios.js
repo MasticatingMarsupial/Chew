@@ -53,7 +53,7 @@ var ChewApp = React.createClass({
         component: FavouritesView
       });
     }
-    if( menuString === 'Login') {
+    if( menuString === 'SignInSignOut') {
       this.refs.drawer.close();
       this.refs.nav.popToTop();
     }
