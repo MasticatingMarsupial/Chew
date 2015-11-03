@@ -35,8 +35,8 @@ class ReviewList(APIView):
     serializer = ReviewSerializer(review, data=request.data)
     if serializer.is_valid():
       serializer.save(owner=user)
-      return Response(serializer.data, status.HTTP_200_OK)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+      return Response('Food updated', status.HTTP_200_OK)
+    return Response('Couldn\'t update the review', status.HTTP_400_BAD_REQUEST)
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
   queryset = Review.objects.all()

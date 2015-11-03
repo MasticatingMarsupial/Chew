@@ -31,7 +31,6 @@ class AccountSerializer(serializers.ModelSerializer):
     fields = ['id', 'user', 'food_favorites', 'food_liked', 'food_disliked', 'images_liked', 'reviews_liked', 'reviews_disliked' ]
 
   def update(self, instance, validated_data):
-    images_liked_data = validated_data.pop('images_liked')
     user_data = validated_data.pop('user')
     print(user_data)
     user = User.objects.get(username=user_data['username'])
@@ -40,13 +39,25 @@ class AccountSerializer(serializers.ModelSerializer):
     user.email = user_data['email']
     print(user)
     user.save()
+    print(self.context)
+    updated_data = validated_data.pop(self.context)
+    print(updated_data)
     account = Account.objects.get(id=instance.pk)
-    for image in images_liked_data:
-      img = image['image']
-      query = Image.objects.get(image=img)
-      if account.images_liked.filter(pk=query.id).exists():
-        continue
-      else:
-        Image.objects.filter(image=img).update(votes=F('votes') +1)
-        account.images_liked.add(query)
+    if self.context == 'images_liked':
+      for data in updated_data:
+        img = data['image']
+        query = Image.objects.get(image=img)
+        if account.images_liked.filter(pk=query.id).exists():
+          continue
+        else:
+          Image.objects.filter(image=img).update(votes=F('votes') +1)
+          account.images_liked.add(query)
+    else:
+      for data in updated_data:
+        food = data['id']
+        query = Food.objects.get(pk=food)
+        if account.foods_liked.filter(pk=query.id).exists():
+          continue
+        else:
+          account.foods_liked.add(query)
     return account
