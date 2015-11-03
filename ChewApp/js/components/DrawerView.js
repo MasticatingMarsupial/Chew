@@ -13,6 +13,7 @@ var {
 } = React;
 
 var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
 var UserActions = require('../actions/UserActions');
 var UserStore = require('../stores/UserStore');
 
@@ -31,7 +32,6 @@ var DrawerView = React.createClass({
     // Get home page stuff from DB
     UserStore.addChangeListener(this._onChange);
     AsyncStorage.getItem('token').then((value) => {
-      console.log(value);
       if (value !== null){
         //TODO: Needs a validation check
         console.log(API_URL + 'token-check/' + value);
@@ -59,7 +59,7 @@ var DrawerView = React.createClass({
   },
   onHomeButtonPress: function () {
     // console.log('Home button pressed!');
-    this.props.onMenuButtonPress('Home');
+    this.props.onMenuButtonPress('Profile');
   },
   onFavouritesButtonPress: function () {
     // console.log('Favourites button pressed!');
@@ -68,6 +68,7 @@ var DrawerView = React.createClass({
   onSignInLogOutButtonPress: function () {
     // console.log('Sign In/Log Out button pressed!');
     this.saveData('token', 'none');
+    UserActions.signout();
     this.props.onMenuButtonPress('SignInSignOut');
   },
   onLoginButtonPress: function () {
