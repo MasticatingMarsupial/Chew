@@ -1,9 +1,10 @@
 'use strict';
 
 var React = require('react-native');
-var UserStore = require('../stores/UserStore');
 var ReviewAction = require('../actions/ReviewActions');
 var ReviewStore = require('../stores/ReviewStore');
+var UserAction = require('../actions/UserActions');
+var UserStore = require('../stores/UserStore');
 
 var {
   StyleSheet,
@@ -18,6 +19,7 @@ var {
   LinkingIOS,
   AlertIOS,
   Modal,
+  AsyncStorage,
 } = React;
 
 var Dimensions = require('Dimensions');
@@ -33,8 +35,14 @@ if (Platform.OS === 'android'){
 
 var {width, height} = Dimensions.get('window');
 
-var API_URL = 'http://chewmast.herokuapp.com/api/';
-// var API_URL = 'http://localhost:8000/api/';
+// var API_URL = 'http://chewmast.herokuapp.com/api/';
+var API_URL = 'http://localhost:8000/api/';
+
+function getUserState () {
+  return {
+    account: UserStore.getAccount()
+  };
+}
 
 var FoodDetailView = React.createClass({
   getInitialState: function () {
@@ -50,16 +58,17 @@ var FoodDetailView = React.createClass({
     };
   },
   componentDidMount: function () {
-    ReviewStore.addChangeListener(this._onChange);
+    UserStore.addChangeListener(this._onChange);
     this.fetchImages(this.props.food.id);
     this.fetchReviews(this.props.food.id);
     this.setLocation();
   },
   componentWillUnmount: function () {
-    ReviewStore.removeChangeListener(this._onChange);
+    UserStore.removeChangeListener(this._onChange);
   },
   _onChange: function () {
-    // Method to setState based upon Store changes
+    this.fetchImages(this.props.food.id);
+    this.setState(getUserState());
   },
   setLocation: function(){
     this.setState({
@@ -87,7 +96,7 @@ var FoodDetailView = React.createClass({
       .then((res) => res.json())
       .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {
-        // console.log('Fetched reviews', responseData);
+        console.log('Fetched reviews', responseData);
         this.setState({
           reviewsDataSource: this.state.dataSource.cloneWithRows(responseData)
         });
@@ -98,58 +107,24 @@ var FoodDetailView = React.createClass({
     console.log('Like button pressed');
   },
   pressHeartButton: function (index) {
+    // var token = UserStore.getToken(); // token
+    // fetch(API_URL + 'token-check/' + token.token)
+    //   .then((response) => response)
+    //   .catch((err) => console.error('Fetching query failed: ' + err))
+    //   .then((response) => {
+    //     if (response.status === 200) {
+    //       this.addImageToUserAndUpvote(index);
+    //     } else {
+    //      console.log('invalid token');
+    //    }
+    //   })
+    //   .done();
+
+    // // token authentication above
     var user = UserStore.getAccount();
-    if (user.images_liked.find((image) => image.id === this.state.images[index].id ) === undefined) {
-      this.state.images[index].votes++;
-      this.setState({
-        images: this.state.images,
-      }, () => {
-        console.log('I hope this works');
-        user.images_liked.push(this.state.images[index]);
-        this.addImageToUserLikes(index, this.state.images[index].id, user);
-      });
-    } else {
-      console.log('Image was already liked');
-    }
-  },
-  addImageToUserLikes: function (index, imageId, user) {
-    console.log('API Query:', API_URL + 'users/' + user.id);
-    fetch(API_URL + 'users/' + user.id, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        id: user.id,
-        user: user.user,
-        food_favorites: user.food_favorites,
-        food_liked: user.food_liked,
-        food_disliked: user.food_disliked,
-        images_liked: user.images_liked,
-        search_preferences: user.search_preferences,
-        reviews_liked: user.reviews_liked,
-        reviews_disliked: [user.reviews_liked[0]],
-      })
-    })
-      .catch((err) => console.error('Unsuccessfully requested to like an image: ', err))
-      .then((responseData) => {
-        console.log('Successfully requested to like an image: ', responseData);
-        // this.addVotesToImage(index, imageId);
-      })
-      .done();
-  },
-  addVotesToImage: function (index, imageId) {
-    console.log('API Query:', API_URL + 'images/' + imageId);
-    fetch(API_URL + 'images/' + imageId, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        id: this.state.images[index].id,
-        image: this.state.images[index].image,
-        votes: this.state.images[index].votes,
-      })
-    })
-      .catch((err) => console.error('Unsuccessfully requested to upvote: ', err))
-      .then((responseData) => console.log('Successfully requested to upvote: ', responseData))
-      .done();
+    var image = this.state.images[index];
+    UserAction.updateAccountImageLikes(user.user.username, user, image);
+
   },
   selectedStar: function (rating) {
     console.log('Rated ' + rating + ' stars!');
