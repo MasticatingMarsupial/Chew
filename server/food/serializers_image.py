@@ -5,3 +5,8 @@ class ImageSerializer(serializers.ModelSerializer):
   class Meta:
     model = Image
     fields = ['id', 'image', 'votes']
+    extra_kwargs = {
+      "image": {
+        "validators": [],
+      }
+    }
