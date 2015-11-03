@@ -6,7 +6,8 @@ var FoodConstants = require('../constants/FoodConstants');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'userChange';
-var API_URL = 'http://localhost:8000/api/';
+var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
 
 var _currentAccount = {};
 var _currentToken = {};
@@ -19,7 +20,6 @@ function populate (account, token) {
 function update (id, updates) {
   if (_currentAccount.id === id) {
     _currentAccount = assign({}, _currentAccount, updates);
-    console.log(_currentAccount);
     fetch(API_URL + 'users/' + _currentAccount.id, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},

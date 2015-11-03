@@ -52,7 +52,6 @@ var ProfileView = React.createClass({
       editable[key] = ! this.state.editable[key];
     }
     if( this.state.editMode ) {
-      console.log(this.state);
       UserActions.updateAccount(this.state.id, {user: this.state.profile})
     }
     this.setState({editable: editable, editMode: !this.state.editMode});
@@ -74,7 +73,6 @@ var ProfileView = React.createClass({
             editable={this.state.editable[savedKey]}
             value={this.state.profile[savedKey]}
             onChangeText={(text) => {
-              console.log(text);
               var profile = this.state.profile;
               profile[savedKey] = text;
               this.setState({profile: profile});

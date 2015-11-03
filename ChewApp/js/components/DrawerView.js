@@ -32,7 +32,6 @@ var DrawerView = React.createClass({
     // Get home page stuff from DB
     UserStore.addChangeListener(this._onChange);
     AsyncStorage.getItem('token').then((value) => {
-      console.log(value);
       if (value !== null){
         //TODO: Needs a validation check
         console.log(API_URL + 'token-check/' + value);
