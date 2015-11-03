@@ -1,20 +1,47 @@
 from rest_framework import status, generics, permissions, mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from food.models import *
-from food.serializers_review import ReviewSerializer
 from django.http import Http404
+from food.models import Review, User, Food
 from food.permissions import IsOwnerOrReadOnly
+from food.serializers_review import ReviewSerializer
 
-class ReviewList(generics.ListCreateAPIView):
-  queryset = Review.objects.all()
-  serializer_class = ReviewSerializer
-  # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+class ReviewList(APIView):
+  def get_object(self, pk):
+    try:
+      return Review.objects.get(pk=pk)
+    except Review.DoesNotExist:
+      raise Http404
+
+  def get(self, request, format=None):
+    reviews = Review.objects.all()
+    serializer = ReviewSerializer(reviews, many=True)
+    return Response(serializer.data)
+
+  def post(self, request, format=None):    
+    user = User.objects.get(pk=self.request.data['owner'])
+    food = Food.objects.get(pk=self.request.data['food'])
+    serializer = ReviewSerializer(data=request.data)
+    if Review.objects.filter(food=food, owner=user).exists():
+      return Response('Food already reviewed', status.HTTP_400_BAD_REQUEST)
+    else:
+      if serializer.is_valid():
+        serializer.save(owner=user)
+        return Response('Successfully created review', status.HTTP_201_CREATED)
+
+  def put(self, request, format=None):
+    review = self.get_object(pk=request.data['id'])
+    user = User.objects.get(pk=self.request.data['owner'])
+    serializer = ReviewSerializer(review, data=request.data)
+    if serializer.is_valid():
+      serializer.save(owner=user)
+      return Response(serializer.data, status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
   queryset = Review.objects.all()
   serializer_class = ReviewSerializer
-  permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+  # permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
 
 
 class ReviewGroups(APIView):
