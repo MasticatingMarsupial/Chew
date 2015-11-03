@@ -16,14 +16,20 @@ var API_URL = 'http://chewmast.herokuapp.com/api/';
 var UserActions = require('../actions/UserActions');
 var UserStore = require('../stores/UserStore');
 
-
+function getUserState() {
+  return {
+    account: UserStore.getAccount()
+  };
+}
 
 var DrawerView = React.createClass({
   getInitialState: function () {
-    return {'token': 'none'};
+    return {'token': 'none',
+            'account': ''};
   },
   componentWillMount: function () {
     // Get home page stuff from DB
+    UserStore.addChangeListener(this._onChange);
     AsyncStorage.getItem('token').then((value) => {
       console.log(value);
       if (value !== null){
@@ -36,18 +42,20 @@ var DrawerView = React.createClass({
             console.log('response data:', responseData);
             if (responseData !== 'Invalid token') {
               this.setState({token: value});
+              console.log('populating');
               UserActions.populate(responseData, value);
             }
           })
-          .done(
-            console.log('Finished populating user data'));
-        this.setState({'token': value});
+          .done();
       }
     }).done();
   },
   saveData: function(key, value) {
     AsyncStorage.setItem(key, value);
     this.setState({key: value});
+  },
+  _onChange: function() {
+    this.setState(getUserState());
   },
   onHomeButtonPress: function () {
     // console.log('Home button pressed!');
@@ -70,17 +78,14 @@ var DrawerView = React.createClass({
     if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
     }
-    //TODO: Enable loading of actual data when api call is available && line #36
-    // var account = UserStore.getAccount();
-    // {account.user.first_name + account.user.last_name}
-    var component = this.state.token !== 'none' ?
+    var component = this.state.account ?
     <View>
     <View style={styles.imageContainer}>
       <Image source={{uri: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAKYAAAAJDJkMWJkNjIwLTljMWMtNDQ0MC04ZWZmLWQ1ZjgyMjQ5OTE0Nw.jpg'}}
       style={styles.profileImage}
       />
     </View>
-    <Text style={styles.name}>Kyle Cho</Text>
+    <Text style={styles.name}>{this.state.account.user.first_name + ' ' + this.state.account.user.last_name}</Text>
     <TouchableElement
       onPress={this.onHomeButtonPress}
       onShowUnderlay={this.props.onHighlight}
