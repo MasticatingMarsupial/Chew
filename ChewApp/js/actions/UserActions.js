@@ -27,7 +27,7 @@ var UserActions = {
 
   updateAccountImageLikes: function (username, updates, image) {
     updates.images_liked.push(image);
-    fetch(API_URL + 'users/' + updates.id, {
+    fetch(API_URL + 'users/' + updates.id + '/likes/images', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(updates)
@@ -35,6 +35,7 @@ var UserActions = {
       .then((res) => res.json())
       .catch((err) => console.error('Update requested failed: ' + err))
       .then((responseData) => {
+        console.log(responseData);
         if (updates.images_liked.length === responseData.images_liked.length) {
           console.log('Like image successfully saved to account and db');
           AppDispatcher.dispatch({

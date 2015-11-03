@@ -121,8 +121,10 @@ var FoodDetailView = React.createClass({
     //   .done();
 
     // // token authentication above
+    console.log('pressheartbutton');
     var user = UserStore.getAccount();
     var image = this.state.images[index];
+    console.log(user, image);
     UserAction.updateAccountImageLikes(user.user.username, user, image);
 
   },
