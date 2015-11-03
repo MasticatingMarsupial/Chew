@@ -32,6 +32,14 @@ class AccountSerializer(serializers.ModelSerializer):
 
   def update(self, instance, validated_data):
     images_liked_data = validated_data.pop('images_liked')
+    user_data = validated_data.pop('user')
+    print(user_data)
+    user = User.objects.get(username=user_data['username'])
+    user.first_name = user_data['first_name']
+    user.last_name = user_data['last_name']
+    user.email = user_data['email']
+    print(user)
+    user.save()
     account = Account.objects.get(id=instance.pk)
     for image in images_liked_data:
       img = image['image']

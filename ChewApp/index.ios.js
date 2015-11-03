@@ -14,6 +14,9 @@ var Drawer = require('react-native-drawer');
 
 var HomeView = require('./js/components/HomeView');
 var DrawerView = require('./js/components/DrawerView');
+var SigninView = require('./js/components/SigninView');
+var FavouritesView = require('./js/components/FavouritesView');
+var ProfileView = require('./js/components/ProfileView');
 
 var { width, height } = Dimensions.get('window');
 
@@ -29,10 +32,36 @@ var ChewApp = React.createClass({
   },
   onMenuButtonPress: function (menuString) {
     console.log('Selected', menuString);
+    if( menuString === 'Login' ) {
+      this.refs.drawer.close();
+      this.refs.nav.push({
+        title: 'Signin',
+        component: SigninView
+      });
+    }
+    if( menuString === 'Profile') {
+      this.refs.drawer.close();
+      this.refs.nav.push({
+        title: 'Profile',
+        component: ProfileView
+      });
+    }
+    if( menuString === 'Favourites') {
+      this.refs.drawer.close();
+      this.refs.nav.push({
+        title: 'Favourites',
+        component: FavouritesView
+      });
+    }
+    if( menuString === 'SignInSignOut') {
+      this.refs.drawer.close();
+      this.refs.nav.popToTop();
+    }
   },
   render: function() {
     var navigationView = (
       <NavigatorIOS
+        ref="nav"
         style={styles.container}
         barTintColor="red"
         titleTextColor="white"
