@@ -58,12 +58,14 @@ var FoodDetailView = React.createClass({
     };
   },
   componentDidMount: function () {
+    ReviewStore.addChangeListener(this._onChange);
     UserStore.addChangeListener(this._onChange);
     this.fetchImages(this.props.food.id);
     this.fetchReviews(this.props.food.id);
     this.setLocation();
   },
   componentWillUnmount: function () {
+    ReviewStore.removeChangeListener(this._onChange);
     UserStore.removeChangeListener(this._onChange);
   },
   _onChange: function () {
