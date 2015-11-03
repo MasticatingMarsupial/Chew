@@ -59,7 +59,7 @@ var DrawerView = React.createClass({
   },
   onHomeButtonPress: function () {
     // console.log('Home button pressed!');
-    this.props.onMenuButtonPress('Home');
+    this.props.onMenuButtonPress('Profile');
   },
   onFavouritesButtonPress: function () {
     // console.log('Favourites button pressed!');

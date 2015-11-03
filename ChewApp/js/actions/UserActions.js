@@ -13,10 +13,11 @@ var UserActions = {
     });
   },
 
-  updateAccount: function(username, updates) {
+  updateAccount: function(id, updates) {
+    console.log(id);
     AppDispatcher.dispatch({
       actionType: FoodConstants.USER_UPDATE,
-      username: username,
+      account_id: id,
       updates: updates
     });
   },
