@@ -11,6 +11,7 @@ var {
   Modal,
   ScrollView,
   AlertIOS,
+  TouchableNativeFeedback,
 } = React;
 
 var Button = require('react-native-button');
@@ -114,8 +115,6 @@ var MakeReviewModalView = React.createClass({
         </Modal>
       );
     } else {
-      console.log(this.props.food.name);
-
       return (
         <AndroidModal
           isOpen={this.state.isOpen}
@@ -125,8 +124,15 @@ var MakeReviewModalView = React.createClass({
         >
         <View style={styles.solidContent}>
           <View>
-            <Button onPress={this.onCloseReviewButtonPress} style={styles.androidCloseButton}>X</Button>
-            <View>
+            <Button onPress={this.props.onCloseReviewButtonPress} style={styles.androidCloseButton}>
+              <Icon
+                name="ion|android-close"
+                size={25}
+                color="black"
+                style={styles.closeAndroid}
+              />
+            </Button>
+            <View style={styles.androidReviewTextInputContainer}>
               <TextInput
                 style={styles.androidReviewTextInput}
                 multiline={true}
@@ -134,6 +140,9 @@ var MakeReviewModalView = React.createClass({
                 onChangeText={this.onChangeText}
                 autoFocus={true}
                 placeholder={'Write your review here'}
+                textAlign="start"
+                textAlignVertical="top"
+                underlineColor="transparent"
               />
             </View>
             <View style={styles.androidStarRatingContainer}>
@@ -145,6 +154,9 @@ var MakeReviewModalView = React.createClass({
                 starColor="#737373"
                 style={styles.starRating}
               />
+              <Button onPress={this.onSubmitReview} style={styles.buttonAndroid}>
+                <View><Text>Submit</Text></View>
+              </Button>
             </View>
           </View>
         </View>
@@ -255,16 +267,39 @@ var styles = StyleSheet.create({
   androidCloseButton: {
     fontSize: 25,
     fontWeight: 'bold',
+    color: '#808080',
   },
   androidSubmitContainer: {
     flexDirection: 'row',
   },
   androidStarRatingContainer: {
+    paddingTop: 3,
+    paddingRight: 10,
+    flexDirection: 'row',
+  },
+  androidReviewTextInputContainer: {
+    height: 168,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#808080',
   },
   androidReviewTextInput: {
-    alignSelf: 'flex-start',
     fontSize: 18,
-    height: 170,
+    height: 176,
+    borderWidth: 0,
+  },
+  closeAndroid: {
+    height: 35,
+    width: 35,
+  },
+  buttonAndroid: {
+    borderWidth: 1,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop: 2,
+    paddingBottom: 2,
+    borderStyle: 'solid',
+    borderColor: '#808080',
   },
 });
 
