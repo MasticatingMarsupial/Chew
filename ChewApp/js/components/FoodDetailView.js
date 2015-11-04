@@ -150,17 +150,20 @@ var FoodDetailView = React.createClass({
     if (Object.keys(user).length > 0) {
       UserAction.updateAccountLikes(user.user.username, user, food);
     } else {
-      console.log('User not signed in');
-      AlertIOS.alert('Account Required', 'Please sign in or create an account to like this food', [
-        {
-          text: 'Sign In',
-          onPress: this.goToSigninView
-        },
-        {
-          text: 'No thanks',
-          onPress: this.cancel
-        }
-      ]);
+      if (Platform.OS === 'android') {
+        this.goToSigninView();
+      } else {
+        AlertIOS.alert('Account Required', 'Please sign in or create an account to like this food', [
+          {
+            text: 'Sign In',
+            onPress: this.goToSigninView
+          },
+          {
+            text: 'No thanks',
+            onPress: this.cancel
+          }
+        ]);
+      }
     }
   },
   pressHeartButton: function (index) {
@@ -170,17 +173,20 @@ var FoodDetailView = React.createClass({
     if (Object.keys(user).length > 0) {
       UserAction.updateAccountLikes(user.user.username, user, image);
     } else {
-      console.log('User not signed in');
-      AlertIOS.alert('Account Required', 'Please sign in or create an account to like this image', [
-        {
-          text: 'Sign in',
-          onPress: this.goToSigninView
-        },
-        {
-          text: 'No thanks',
-          onPress: this.cancel
-        }
-      ]);
+      if (Platform.OS === 'android') {
+        this.goToSigninView();
+      } else {
+        AlertIOS.alert('Account Required', 'Please sign in or create an account to like this image', [
+          {
+            text: 'Sign in',
+            onPress: this.goToSigninView
+          },
+          {
+            text: 'No thanks',
+            onPress: this.cancel
+          }
+        ]);
+      }
     }
   },
   selectedStar: function (rating) {

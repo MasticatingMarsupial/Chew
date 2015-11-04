@@ -36,10 +36,7 @@ var SigninView = React.createClass({
       this.props.navigator.pop();
     } else {
       console.log('re-routing to home', this.props.navigator);
-      this.props.navigator.push({
-        title: 'Home',
-        name: 'home',
-      });
+      this.props.navigator.pop();
     }
   },
 
