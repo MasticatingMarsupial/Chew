@@ -12,8 +12,8 @@ var {
   Platform,
 } = React;
 
-// var API_URL = 'http://chewmast.herokuapp.com/api/';
-var API_URL = 'http://localhost:8000/api/';
+var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
 var UserActions = require('../actions/UserActions');
 var UserStore = require('../stores/UserStore');
 
