@@ -83,12 +83,10 @@ class FoodRecs(APIView):
     trending = prepare_food(request, trending)
     trending = FoodSerializer(trending, many=True).data
     # trending = self.prepare_data(request=request, data=trending)
-    hot_dog_tag = Tag.objects.get(name='hot dog')
-    hot_dogs = Food.objects.filter(tags=hot_dog_tag).all()
-    hot_dogs = prepare_food(request, hot_dogs)
-    hot_dogs = FoodSerializer(hot_dogs, many=True).data
-    chinese_tag = Tag.objects.get(name='chinese')
-    chinese = Food.objects.filter(tags=chinese_tag).all()
-    chinese = prepare_food(request, chinese)
-    chinese = FoodSerializer(chinese, many=True).data
-    return Response({'trending':trending, 'hot_dogs':hot_dogs, 'chinese':chinese})
+    hot_stuff = Food.objects.order_by('updated_at')[11:20].all()
+    hot_stuff = prepare_food(request, hot_stuff)
+    hot_stuff = FoodSerializer(hot_stuff, many=True).data
+    popular = Food.objects.order_by('updated_at')[21:30].all()
+    popular = prepare_food(request, popular)
+    popular = FoodSerializer(popular, many=True).data
+    return Response({'trending':trending, 'hot stuff':hot_stuff, 'popular':popular})
