@@ -12,8 +12,8 @@ var {
   Platform,
 } = React;
 
-var API_URL = 'http://chewmast.herokuapp.com/api/';
-// var API_URL = 'http://localhost:8000/api/';
+// var API_URL = 'http://chewmast.herokuapp.com/api/';
+var API_URL = 'http://localhost:8000/api/';
 var UserActions = require('../actions/UserActions');
 var UserStore = require('../stores/UserStore');
 
@@ -79,7 +79,7 @@ var DrawerView = React.createClass({
     if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
     }
-    var component = this.state.account ?
+    var component = this.state.account.user ?
     <View>
     <View style={styles.imageContainer}>
       <Image source={{uri: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAKYAAAAJDJkMWJkNjIwLTljMWMtNDQ0MC04ZWZmLWQ1ZjgyMjQ5OTE0Nw.jpg'}}
