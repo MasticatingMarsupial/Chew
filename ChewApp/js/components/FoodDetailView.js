@@ -489,6 +489,7 @@ var styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
+    borderRadius: 5,
     borderWidth: 1,
     paddingLeft: 5,
     paddingRight: 5,
