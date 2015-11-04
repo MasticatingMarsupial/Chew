@@ -10,8 +10,6 @@ var {
   TouchableNativeFeedback,
   Text,
   Image,
-  ProgressBarAndroid,
-  ActivityIndicatorIOS,
   Platform,
 } = React;
 
@@ -21,6 +19,7 @@ var AndroidGeolocation = require('./AndroidGeolocation');
 if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
 }
+var Loading = require('./Loading');
 
 
 //TODO: Update to production URL's when ready
@@ -111,7 +110,7 @@ var FoodSearchResultView = React.createClass({
   },
   render: function () {
     var content = this.state.dataSource.getRowCount() === 0 ?
-      <NoFood/>
+      <Loading/>
       :
       <ListView
         dataSource={this.state.dataSource}
@@ -164,40 +163,11 @@ var FoodCell = React.createClass({
   }
 });
 
-var NoFood = React.createClass({
-  render: function() {
-    var spinner = Platform.OS === 'ios' ?
-      <ActivityIndicatorIOS
-          animating={this.props.isLoading}
-          style={styles.spinner}
-        />
-      :
-        <ProgressBarAndroid
-          styleAttr="Large"
-          style={styles.spinner}
-        />;
-    return (
-      <View style={[styles.container, styles.centerText]}>
-        <Text style={styles.noFoodText}>
-          Fetching your options
-        </Text>
-        {spinner}
-      </View>
-      );
-  }
-});
 
 var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-  },
-  centerText: {
-    alignItems: 'center',
-  },
-  noFoodText: {
-    marginTop: 80,
-    color: '#888888',
   },
   searchBar: {
     marginTop: 64,
@@ -231,11 +201,6 @@ var styles = StyleSheet.create({
   cellImage: {
     opacity: 0.6,
     height: 225,
-  },
-  spinner: {
-    width: 100,
-    height: 100,
-    alignItems: 'center',
   },
 });
 

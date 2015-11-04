@@ -31,10 +31,10 @@
     "react-native-drawer": "^1.6.0",
     "react-native-icons": "^0.5.1",
     "react-native-looped-carousel": "https://github.com/djchie/react-native-looped-carousel",
+    "react-native-modalbox": "^1.2.3",
+    "react-native-scrollable-tab-view": "https://github.com/brentvatne/react-native-scrollable-tab-view.git#0.2.1-alpha",
     "react-native-search-bar": "^2.2.0",
-    "react-native-webintent": "^1.0.3",
-    "react-native-button": "^1.2.1",
-    "react-native-scrollable-tab-view": "https://github.com/brentvatne/react-native-scrollable-tab-view.git#0.2.1-alpha"
+    "react-native-webintent": "^1.0.3"
   },
   "devDependencies": {
     "jest-cli": "0.5.7"

@@ -8,28 +8,39 @@ var {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
-  TouchableNativeFeedback,
   Modal,
   ScrollView,
   AlertIOS,
+  TouchableNativeFeedback,
 } = React;
 
 var Button = require('react-native-button');
 var {Icon,} = require('react-native-icons');
 var StarRating = require('./StarRating');
+if (Platform.OS === 'android') {
+  var AndroidModal = require('react-native-modalbox');
+}
 
 var MakeReviewModalView = React.createClass({
   getInitialState: function () {
-    return {
-      visible: this.props.visible,
-      rating: 0,
-      reviewText: '',
-    };
+    if (Platform.OS === 'ios') {
+      console.log('In initial state of Reviews IOS');
+      return {
+        visible: this.props.visible,
+        rating: 0,
+        reviewText: '',
+      };
+    } else {
+      return {
+        isOpen: this.props.isOpen,
+        isDisabled: false
+      };
+    }
   },
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       visible: nextProps.visible,
+      isOpen: nextProps.isOpen,
     });
   },
   onStarRatingPress: function (value) {
@@ -57,53 +68,101 @@ var MakeReviewModalView = React.createClass({
     }
   },
   render: function () {
-    var TouchableElement = TouchableOpacity;
-    if (Platform.OS === 'android') {
-      TouchableElement = TouchableNativeFeedback;
-    }
-    return (
-      <Modal animated={true} visible={this.state.visible} transparent={true}>
-        <ScrollView scrollEnabled={false} keyboardShouldPersistTaps={false} contentContainerStyle={styles.container}>
-          <View style={styles.solidContent}>
-            <View style={styles.foodTitleContainer}>
-              <Text style={styles.foodTitle}>{this.props.food.name}</Text>
+    console.log('In render state of Reviews', this.state.isOpen);
+    if  (Platform.OS === 'ios') {
+      return (
+        <Modal animated={true} visible={this.state.visible} transparent={true}>
+          <ScrollView scrollEnabled={false} keyboardShouldPersistTaps={false} contentContainerStyle={styles.container}>
+            <View style={styles.solidContent}>
+              <View style={styles.foodTitleContainer}>
+                <Text style={styles.foodTitle}>{this.props.food.name}</Text>
+              </View>
+              <View style={styles.reviewContainer}>
+                <View style={styles.headerContainer}>
+                  <Text style={styles.headerText}>Write a Review</Text>
+                </View>
+                <View style={styles.starRatingContainer}>
+                  <StarRating maxStars={5}
+                    rating={parseFloat(this.state.rating)}
+                    disabled={false}
+                    starSize={40}
+                    selectedStar={this.onStarRatingPress}
+                    starColor="#737373"
+                    style={styles.starRating}
+                  />
+                </View>
+                <View style={styles.reviewTextInputContainer}>
+                  <TextInput
+                    multiline={true}
+                    value={this.state.reviewText}
+                    onChangeText={this.onChangeText}
+                    style={styles.reviewTextInput}
+                  />
+                </View>
+              </View>
+              <View style={styles.closeButtonContainer}>
+                <Button activeOpacity={0.20} onPress={this.props.onCloseReviewButtonPress} style={styles.closeButton}>
+                  <Icon
+                    name="ion|android-close"
+                    size={60}
+                    color="white"
+                    style={styles.close}
+                  />
+                </Button>
+              </View>
             </View>
-            <View style={styles.reviewContainer}>
-              <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>Write a Review</Text>
-              </View>
-              <View style={styles.starRatingContainer}>
-                <StarRating maxStars={5}
-                  rating={parseFloat(this.state.rating)}
-                  disabled={false}
-                  starSize={40}
-                  selectedStar={this.onStarRatingPress}
-                  starColor="#737373"
-                  style={styles.starRating}
-                />
-              </View>
-              <View style={styles.reviewTextInputContainer}>
-                <TextInput multiline={true} value={this.state.reviewText} onChangeText={this.onChangeText} style={styles.reviewTextInput} />
-              </View>
-              <TouchableElement onPress={this.onSubmitReview} style={styles.submitButton}>
-                <Text style={styles.submit}>Submit</Text>
-              </TouchableElement>
+          </ScrollView>
+        </Modal>
+      );
+    } else {
+      return (
+        <AndroidModal
+          isOpen={this.state.isOpen}
+          onClosed={this.closeModal}
+          style={styles.modalAndroid}
+          position={"top"}
+        >
+        <View style={styles.solidContent}>
+          <View>
+            <Button onPress={this.props.onCloseReviewButtonPress} style={styles.androidCloseButton}>
+              <Icon
+                name="ion|android-close"
+                size={25}
+                color="black"
+                style={styles.closeAndroid}
+              />
+            </Button>
+            <View style={styles.androidReviewTextInputContainer}>
+              <TextInput
+                style={styles.androidReviewTextInput}
+                multiline={true}
+                value={this.state.reviewText}
+                onChangeText={this.onChangeText}
+                autoFocus={true}
+                placeholder={'Write your review here'}
+                textAlign="start"
+                textAlignVertical="top"
+                underlineColor="transparent"
+              />
             </View>
-            <View style={styles.closeButtonContainer}>
-              <Button activeOpacity={0.20} onPress={this.props.onCloseReviewButtonPress} style={styles.closeButton}>
-                <Icon
-                  name="ion|android-close"
-                  size={60}
-                  color="white"
-                  style={styles.close}
-                />
+            <View style={styles.androidStarRatingContainer}>
+              <StarRating maxStars={5}
+                rating={parseFloat(this.state.rating)}
+                disabled={false}
+                starSize={30}
+                selectedStar={this.onStarRatingPress}
+                starColor="#737373"
+                style={styles.starRating}
+              />
+              <Button onPress={this.onSubmitReview} style={styles.buttonAndroid}>
+                <View><Text>Submit</Text></View>
               </Button>
             </View>
           </View>
-          
-        </ScrollView>
-      </Modal>
-    );
+        </View>
+        </AndroidModal>
+      );
+    }
   }
 });
 
@@ -151,7 +210,7 @@ var styles = StyleSheet.create({
   starRatingContainer: {
     width: 300,
     marginTop: 10,
-    alignItems: 'center',  
+    alignItems: 'center',
   },
   starRating: {
 
@@ -196,7 +255,52 @@ var styles = StyleSheet.create({
     width: 60,
     height: 60,
   },
-
+  modalAndroid: {
+    height: 250,
+  },
+  androidModalTitleContainer: {
+  },
+  androidModalTitle: {
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
+  androidCloseButton: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#808080',
+  },
+  androidSubmitContainer: {
+    flexDirection: 'row',
+  },
+  androidStarRatingContainer: {
+    paddingTop: 3,
+    paddingRight: 10,
+    flexDirection: 'row',
+  },
+  androidReviewTextInputContainer: {
+    height: 168,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#808080',
+  },
+  androidReviewTextInput: {
+    fontSize: 18,
+    height: 176,
+    borderWidth: 0,
+  },
+  closeAndroid: {
+    height: 35,
+    width: 35,
+  },
+  buttonAndroid: {
+    borderWidth: 1,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop: 2,
+    paddingBottom: 2,
+    borderStyle: 'solid',
+    borderColor: '#808080',
+  },
 });
 
 module.exports = MakeReviewModalView;
