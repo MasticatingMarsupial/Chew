@@ -127,7 +127,7 @@ var DiscoveryPage = React.createClass({
     });
     return (
       <ScrollView
-        contentContainerStyle={styles.scrollGroup}
+        style={styles.scrollGroup}
         horizontal={false}
         centerContent={true}
         keyboardDismissMode={'on-drag'}
@@ -178,7 +178,6 @@ var ThumbView = React.createClass({
 
 var styles = StyleSheet.create({
   scrollGroup: {
-    flex: 1,
   },
   container: {
     flex: 1,
