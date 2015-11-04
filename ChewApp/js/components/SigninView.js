@@ -31,11 +31,9 @@ var SigninView = React.createClass({
   },
 
   routeToNextPage: function () {
-    console.log('Platform:', Platform.OS);
     if (Platform.OS === 'ios'){
       this.props.navigator.pop();
     } else {
-      console.log('re-routing to home', this.props.navigator);
       this.props.navigator.pop();
     }
   },
@@ -74,14 +72,12 @@ var SigninView = React.createClass({
         else if (data === 'Username already taken') {
           loginSuccess = false;
         } else {
-          console.log(data);
           this.saveData('token', data.token);
           UserActions.populate(data.account, data.token);
         }
       })
       .done(() => {
         if (loginSuccess) {
-          console.log('redirecting', this);
           this.routeToNextPage();
         } else {
           this.setState({error: path});
@@ -93,7 +89,6 @@ var SigninView = React.createClass({
     this.setState({key: value});
   },
   render: function () {
-    console.log('rendering signin page for ' + Platform.OS);
     var error;
     if (this.state.error === 'signup/'){
       error = <View style={styles.errorContainer}>

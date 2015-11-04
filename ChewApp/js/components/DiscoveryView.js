@@ -53,7 +53,6 @@ var DiscoveryView = React.createClass({
     }
   },
   fetchRecs: function () {
-    console.log(this.state);
     var uri = API_URL + 'foods/recommendations/';
     if (this.state.position.coords) {
       uri += '?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);

@@ -1,0 +1,8 @@
+'use strict';
+
+module.exports = {
+  USER_SIGNIN: 'USER_SIGNIN',
+  USER_SIGNOUT: 'USER_SIGNOUT',
+  USER_UPDATE: 'USER_UPDATE',
+  PROFILE_UPDATE: 'PROFILE_UPDATE'
+};

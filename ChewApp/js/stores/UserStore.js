@@ -2,7 +2,7 @@
 
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
-var FoodConstants = require('../constants/FoodConstants');
+var UserConstants = require('../constants/UserConstants');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'userChange';
@@ -63,7 +63,7 @@ AppDispatcher.register(function(action) {
   var account, username, id;
 
   switch (action.actionType) {
-    case FoodConstants.USER_SIGNIN:
+    case UserConstants.USER_SIGNIN:
       account = action.account;
       if (account.id) {
         populate(account);
@@ -71,16 +71,24 @@ AppDispatcher.register(function(action) {
       }
       break;
 
-    case FoodConstants.USER_SIGNOUT:
+    case UserConstants.USER_SIGNOUT:
       destroy();
       UserStore.emitChange();
 
       break;
 
-    case FoodConstants.USER_UPDATE:
+    case UserConstants.USER_UPDATE:
       id = action.updates.id;
       username = action.username;
       if (username) {
+        update(id, action.updates);
+        UserStore.emitChange();
+      }
+      break;
+
+    case UserConstants.PROFILE_UPDATE:
+      id = action.account_id;
+      if (id) {
         update(id, action.updates);
         UserStore.emitChange();
       }
