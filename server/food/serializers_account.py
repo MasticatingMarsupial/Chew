@@ -32,12 +32,10 @@ class AccountSerializer(serializers.ModelSerializer):
 
   def update(self, instance, validated_data):
     user_data = validated_data.pop('user')
-    print(user_data)
     user = User.objects.get(username=user_data['username'])
     user.first_name = user_data['first_name']
     user.last_name = user_data['last_name']
     user.email = user_data['email']
-    print(user)
     user.save()
     account = Account.objects.get(id=instance.pk)
 
@@ -47,7 +45,6 @@ class AccountSerializer(serializers.ModelSerializer):
       updated_data = validated_data.pop(self.context)
       if self.context == 'images_liked':
         for data in updated_data:
-          print(data)
           img = data['image']
           query = Image.objects.get(image=img)
           if account.images_liked.filter(pk=query.id).exists():
@@ -57,7 +54,6 @@ class AccountSerializer(serializers.ModelSerializer):
             account.images_liked.add(query)
       else:
         for data in updated_data:
-          print(data)
           food = data['name']
           query = Food.objects.get(name=food)
           if account.food_liked.filter(pk=query.id).exists():
