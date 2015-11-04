@@ -25,9 +25,21 @@ var UserActions = {
     });
   },
 
-  updateAccountImageLikes: function (username, updates, image) {
-    updates.images_liked.push(image);
-    fetch(API_URL + 'users/' + updates.id + '/likes/images', {
+  updateAccountLikes: function (username, updates, item) {
+    var endpoint, subArray;
+    if (item.hasOwnProperty('image')) {
+      updates.images_liked.push(item);
+      endpoint = '/likes/images/';
+      subArray = 'images_liked';
+    }
+
+    if (item.hasOwnProperty('price')) {
+      updates.food_liked.push(item);
+      endpoint = '/likes/foods/'      
+      subArray = 'food_liked';
+    }
+
+    fetch(API_URL + 'users/' + updates.id + endpoint, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(updates)
@@ -35,17 +47,14 @@ var UserActions = {
       .then((res) => res.json())
       .catch((err) => console.error('Update requested failed: ' + err))
       .then((responseData) => {
-        console.log(responseData);
-        if (updates.images_liked.length === responseData.images_liked.length) {
-          console.log('Like image successfully saved to account and db');
+        if (updates[subArray].length === responseData[subArray].length) {
           AppDispatcher.dispatch({
             actionType: FoodConstants.USER_UPDATE,
             username: username,
             updates: updates,
           })
         } else {
-          console.log('Liked image already existed in account');
-          updates.images_liked.pop();
+          updates[subArray].pop();
         }
       })
       .done();

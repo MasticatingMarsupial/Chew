@@ -78,8 +78,9 @@ AppDispatcher.register(function(action) {
       break;
 
     case FoodConstants.USER_UPDATE:
-      id = action.account_id;
-      if (id) {
+      id = action.updates.id;
+      username = action.username;
+      if (username) {
         update(id, action.updates);
         UserStore.emitChange();
       }

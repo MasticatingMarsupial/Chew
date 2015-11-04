@@ -39,6 +39,7 @@ var API_URL = 'http://chewmast.herokuapp.com/api/';
 // var API_URL = 'http://localhost:8000/api/';
 
 function getUserState () {
+  console.log('this got called');
   return {
     account: UserStore.getAccount()
   };
@@ -55,6 +56,7 @@ var FoodDetailView = React.createClass({
       restLongitude: '',
       restLatitude: '',
       isReviewModalOpen: false,
+      // foodLiked: undefined,
     };
   },
   componentDidMount: function () {
@@ -63,6 +65,7 @@ var FoodDetailView = React.createClass({
     this.fetchImages(this.props.food.id);
     this.fetchReviews(this.props.food.id);
     this.setLocation();
+    // this.setUserLikes();
   },
   componentWillUnmount: function () {
     ReviewStore.removeChangeListener(this._onChange);
@@ -79,13 +82,19 @@ var FoodDetailView = React.createClass({
       restLatitude: this.props.food.restaurant.address.latitude,
     });
   },
+  // setUserLikes: function () {
+  //   var user = UserStore.getAccount();
+  //   var state = user.food_liked.find((food) => food.id === this.props.food.id);
+  //   this.setState({
+  //     foodLiked: state,
+  //   });
+  // },
   fetchImages: function (query) {
     console.log('API Query:', API_URL + 'images/foods/' + query);
     fetch(API_URL + 'images/foods/' + query)
       .then((res) => res.json())
       .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {
-        // console.log('Fetched images', responseData);
         this.setState({
           images: responseData
         });
@@ -105,29 +114,29 @@ var FoodDetailView = React.createClass({
       })
       .done();
   },
+  sendTokenAuth: function () {
+    var token = UserStore.getToken(); // token
+    fetch(API_URL + 'token-check/' + token.token)
+      .then((response) => response)
+      .catch((err) => console.error('Fetching query failed: ' + err))
+      .then((response) => {
+        if (response.status === 200) {
+          this.addImageToUserAndUpvote(index);
+        } else {
+         console.log('invalid token');
+       }
+      })  
+      .done();
+  },
   pressLikeButton: function () {
-    console.log('Like button pressed');
+    var user = UserStore.getAccount();
+    var food = this.props.food;
+    Object.keys(user).length > 0 ? UserAction.updateAccountLikes(user.user.username, user, food) : console.log('user not logged in');
   },
   pressHeartButton: function (index) {
-    // var token = UserStore.getToken(); // token
-    // fetch(API_URL + 'token-check/' + token.token)
-    //   .then((response) => response)
-    //   .catch((err) => console.error('Fetching query failed: ' + err))
-    //   .then((response) => {
-    //     if (response.status === 200) {
-    //       this.addImageToUserAndUpvote(index);
-    //     } else {
-    //      console.log('invalid token');
-    //    }
-    //   })
-    //   .done();
-
-    // // token authentication above
-    console.log('pressheartbutton');
     var user = UserStore.getAccount();
     var image = this.state.images[index];
-    console.log(user, image);
-    UserAction.updateAccountImageLikes(user.user.username, user, image);
+    Object.keys(user).length > 0 ? UserAction.updateAccountLikes(user.user.username, user, image) : console.log('user not logged in');
 
   },
   selectedStar: function (rating) {

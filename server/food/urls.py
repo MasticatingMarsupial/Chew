@@ -16,8 +16,8 @@ urlpatterns = [
   url(r'^api/signup/$', views_user.Signup.as_view()),
   url(r'^api/signin/$', views_user.Signin.as_view()),
   url(r'^api/users/$', views_user.UserList.as_view()),
-  url(r'^api/users/(?P<pk>[0-9]+)/$', views_user.UserDetail.as_view()),
-  url(r'^api/users/(?P<pk>[0-9]+)/likes/foods/$', views_user.UserDetail.as_view(), {'param':'foods_liked'}),
+  url(r'^api/users/(?P<pk>[0-9]+)/$', views_user.UserDetail.as_view(), {'param':'param'}),
+  url(r'^api/users/(?P<pk>[0-9]+)/likes/foods/$', views_user.UserDetail.as_view(), {'param':'food_liked'}),
   url(r'^api/users/(?P<pk>[0-9]+)/likes/images/$', views_user.UserDetail.as_view(), {'param':'images_liked'}),
   url(r'^api/token-check/(?P<token>.+)/$', views_user.TokenCheck.as_view()),
 ]
