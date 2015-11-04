@@ -22,6 +22,7 @@ var {
   AsyncStorage,
 } = React;
 
+var SigninView = require('./SigninView');
 var Dimensions = require('Dimensions');
 var {Icon,} = require('react-native-icons');
 var Carousel = require('react-native-looped-carousel');
@@ -116,6 +117,7 @@ var FoodDetailView = React.createClass({
   },
   sendTokenAuth: function () {
     var token = UserStore.getToken(); // token
+
     fetch(API_URL + 'token-check/' + token.token)
       .then((response) => response)
       .catch((err) => console.error('Fetching query failed: ' + err))
@@ -128,16 +130,64 @@ var FoodDetailView = React.createClass({
       })  
       .done();
   },
+  goToSigninView: function () {
+    if (Platform.OS === 'ios') {
+      this.props.navigator.push({
+        title: 'Signin',  
+        component: SigninView,
+      });
+    } else {
+      this.props.navigator.push({
+        title: 'Signin',
+        name: 'login',
+      });
+    }
+  },
   pressLikeButton: function () {
     var user = UserStore.getAccount();
     var food = this.props.food;
-    Object.keys(user).length > 0 ? UserAction.updateAccountLikes(user.user.username, user, food) : console.log('user not logged in');
+
+    if (Object.keys(user).length > 0) {
+      UserAction.updateAccountLikes(user.user.username, user, food);
+    } else {
+      if (Platform.OS === 'android') {
+        this.goToSigninView();
+      } else {
+        AlertIOS.alert('Account Required', 'Please sign in or create an account to like this food', [
+          {
+            text: 'Sign In',
+            onPress: this.goToSigninView
+          },
+          {
+            text: 'No thanks',
+            onPress: this.cancel
+          }
+        ]);
+      }
+    }
   },
   pressHeartButton: function (index) {
     var user = UserStore.getAccount();
     var image = this.state.images[index];
-    Object.keys(user).length > 0 ? UserAction.updateAccountLikes(user.user.username, user, image) : console.log('user not logged in');
 
+    if (Object.keys(user).length > 0) {
+      UserAction.updateAccountLikes(user.user.username, user, image);
+    } else {
+      if (Platform.OS === 'android') {
+        this.goToSigninView();
+      } else {
+        AlertIOS.alert('Account Required', 'Please sign in or create an account to like this image', [
+          {
+            text: 'Sign in',
+            onPress: this.goToSigninView
+          },
+          {
+            text: 'No thanks',
+            onPress: this.cancel
+          }
+        ]);
+      }
+    }
   },
   selectedStar: function (rating) {
     console.log('Rated ' + rating + ' stars!');
