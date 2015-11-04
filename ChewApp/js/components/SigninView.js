@@ -33,7 +33,7 @@ var SigninView = React.createClass({
   routeToNextPage: function () {
     console.log('Platform:', Platform.OS);
     if (Platform.OS === 'ios'){
-      this.props.navigator.popToTop();
+      this.props.navigator.pop();
     } else {
       console.log('re-routing to home', this.props.navigator);
       this.props.navigator.push({
