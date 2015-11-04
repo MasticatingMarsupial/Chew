@@ -52,7 +52,7 @@ var ProfileView = React.createClass({
       editable[key] = ! this.state.editable[key];
     }
     if( this.state.editMode ) {
-      UserActions.updateAccount(this.state.id, {user: this.state.profile})
+      UserActions.updateProfile(this.state.id, {user: this.state.profile})
     }
     this.setState({editable: editable, editMode: !this.state.editMode});
   },

@@ -34,15 +34,12 @@ var DrawerView = React.createClass({
     AsyncStorage.getItem('token').then((value) => {
       if (value !== null){
         //TODO: Needs a validation check
-        console.log(API_URL + 'token-check/' + value);
         fetch(API_URL + 'token-check/' + value)
           .then((res) => res.json())
           .catch((err) => console.error('Fetching token data failed. Check the network connection: ' + err))
           .then((responseData) => {
-            console.log('response data:', responseData);
             if (responseData !== 'Invalid token') {
               this.setState({token: value});
-              console.log('populating');
               UserActions.populate(responseData, value);
             }
           })
@@ -58,15 +55,12 @@ var DrawerView = React.createClass({
     this.setState(getUserState());
   },
   onHomeButtonPress: function () {
-    // console.log('Home button pressed!');
     this.props.onMenuButtonPress('Profile');
   },
   onFavouritesButtonPress: function () {
-    // console.log('Favourites button pressed!');
     this.props.onMenuButtonPress('Favourites');
   },
   onSignInLogOutButtonPress: function () {
-    // console.log('Sign In/Log Out button pressed!');
     this.saveData('token', 'none');
     UserActions.signout();
     this.props.onMenuButtonPress('SignInSignOut');
