@@ -129,14 +129,24 @@ var DrawerView = React.createClass({
       </TouchableElement>
     </View>;
 
+    var containerStyle = styles.container;
+    if (Platform.OS === 'ios') {
+      containerStyle = styles.containerIOS;
+    }
+
     return (
-      <View style={styles.container}>{component}</View>
+      <View style={containerStyle}>{component}</View>
     );
   },
 });
 
 var styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  containerIOS: {
+    marginTop: 20,
     flex: 1,
     backgroundColor: 'white',
   },
