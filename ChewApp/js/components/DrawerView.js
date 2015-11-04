@@ -117,7 +117,16 @@ var DrawerView = React.createClass({
     </View>
     :
     <View>
-    <Text style={styles.name}>Login to access your information</Text>
+    <Text style={styles.name}>Login to access your profile</Text>
+      <TouchableElement
+      onPress={this.onHomeButtonPress}
+      onShowUnderlay={this.props.onHighlight}
+      onHideUnderlay={this.props.onUnhighlight}
+     >
+      <View style={styles.textContainer}>
+        <Text style={styles.listText}>Home</Text>
+      </View>
+     </TouchableElement>
       <TouchableElement
         onPress={this.onLoginButtonPress}
         onShowUnderlay={this.props.onHighlight}
@@ -183,6 +192,13 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     paddingLeft: 5,
   },
+  loggedOutTitle: {
+    alignSelf: 'center',
+    fontSize: 24,
+    fontWeight: '200',
+    paddingBottom: 15,
+    paddingTop: 20,
+  }
 });
 
 module.exports = DrawerView;

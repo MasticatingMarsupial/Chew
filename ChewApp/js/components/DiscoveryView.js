@@ -28,6 +28,7 @@ for (var i = 0; i < 10; i++) {
 }
 
 var AndroidGeolocation = require('./AndroidGeolocation');
+var Loading = require('./Loading');
 
 var DiscoveryView = React.createClass({
   getInitialState: function () {
@@ -99,16 +100,18 @@ var DiscoveryView = React.createClass({
         pages.push(page);
       }
     }
-    return (
-      <ScrollableTabView
+    if (this.state.recs.trending === undefined) {
+      return (<Loading/>);
+    } else {
+      return (<ScrollableTabView
         locked={false}
         renderTabBar={() => <DiscoveryTabBar />}
         edgeHitWith={50}
         style={styles.container}
       >
         {pages}
-      </ScrollableTabView>
-    );
+      </ScrollableTabView>);
+    }
   }
 });
 
@@ -121,10 +124,10 @@ var DiscoveryPage = React.createClass({
 
   render: function () {
     var thumbs = this.props.foods.map((food, ind) => {
-      return (
-        <ThumbView food={food} onFoodPress={this.props.onFoodPress} />
-      );
-    });
+        return (
+          <ThumbView food={food} onFoodPress={this.props.onFoodPress} />
+        );
+      });
     return (
       <ScrollView
         style={styles.scrollGroup}

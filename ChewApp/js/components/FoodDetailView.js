@@ -18,8 +18,6 @@ var {
   ListView,
   LinkingIOS,
   AlertIOS,
-  Modal,
-  AsyncStorage,
 } = React;
 
 var SigninView = require('./SigninView');
@@ -127,7 +125,7 @@ var FoodDetailView = React.createClass({
         } else {
          console.log('invalid token');
        }
-      })  
+      })
       .done();
   },
   goToSigninView: function () {
@@ -281,13 +279,18 @@ var FoodDetailView = React.createClass({
   },
   onMakeReviewButtonPress: function () {
     console.log('Make review button pressed');
+    console.log('Initial modal open state', this.state.isReviewModalOpen);
     this.setState({isReviewModalOpen: true});
+    // this.setState({isOpen: true});
+    console.log('Modal open state after press', this.state.isReviewModalOpen);
   },
   onCloseReviewButtonPress: function () {
     this.dismissReviewModal();
+    // this.setState({isOpen: false});
   },
   dismissReviewModal: function () {
     this.setState({isReviewModalOpen: false});
+    // this.setState({isOpen: false});
   },
   submitReview: function (rating, review) {
     console.log('Submitting rating:', rating);
@@ -328,13 +331,26 @@ var FoodDetailView = React.createClass({
         </View>
       );
     }, this);
-
+    var modalComponent = <MakeReviewModalView
+      visible={this.state.isReviewModalOpen}
+      isOpen={this.state.isReviewModalOpen}
+      onSubmitReview={this.submitReview}
+      onCloseReviewButtonPress={this.onCloseReviewButtonPress}
+      food={this.props.food}
+    />;
+    var AndroidModal;
+    var iosModal;
+    if (Platform.OS === 'android') {
+      AndroidModal = modalComponent;
+    } else {
+      iosModal = modalComponent;
+    }
     return (
       <View
         automaticallyAdjustContentInsets={false}
         style={styles.container}
       >
-        <MakeReviewModalView visible={this.state.isReviewModalOpen} onSubmitReview={this.submitReview} onCloseReviewButtonPress={this.onCloseReviewButtonPress} food={this.props.food} />
+      {iosModal}
         <ScrollView
           style={styles.scrollView}
         >
@@ -431,6 +447,7 @@ var FoodDetailView = React.createClass({
             style={styles.reviewList}
           />
         </ScrollView>
+        {AndroidModal}
       </View>
     );
   }
