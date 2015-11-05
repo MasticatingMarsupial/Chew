@@ -99,6 +99,9 @@ var MakeReviewModalView = React.createClass({
                     style={styles.reviewTextInput}
                   />
                 </View>
+                <Button onPress={this.onSubmitReview} style={styles.submitButton}>
+                  <View><Text>Submit</Text></View>
+                </Button>
               </View>
               <View style={styles.closeButtonContainer}>
                 <Button activeOpacity={0.20} onPress={this.props.onCloseReviewButtonPress} style={styles.closeButton}>
