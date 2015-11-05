@@ -20,71 +20,71 @@ if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
 }
 var Loading = require('./Loading');
+var LocationStore = require('../stores/LocationStore');
+var LocationActions = require('../actions/LocationActions');
 
+var resultsCache = [];
 
 //TODO: Update to production URL's when ready
-var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://chewmast.herokuapp.com/api/';
+var API_URL = 'http://localhost:8000/api/';
+
+var getPosition = function () {
+  return {
+    position: LocationStore.getPosition()
+  }
+}
 
 var FoodSearchResultView = React.createClass({
   getInitialState: function () {
+    console.log('get initial state');
     return {
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => r1 !== r2
       }),
-      position: this.props.position,
+      position: getPosition(),
+      searchQueued: this.props.searchQueued,
     };
   },
-  componentDidMount: function () {
-    // Call the search with the search term from the homepage
-    if (Platform.OS === 'ios'){
-      navigator.geolocation.getCurrentPosition(
-        (position) => this.setState({position}),
-        (error) => console.error(error.message),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-      );
-    }
-    if (Platform.OS === 'android') {
-      AndroidGeolocation.getCurrentLocation((position) => this.setState({position}));
-    }
-    console.log(this.props.food);
-    //This needs an empty string case
-    if (this.props.food !== undefined){
-      this.searchString(this.props.food);
-    } else {
-      console.log('EMPTY SEARCH INPUTTED');
-    }
+  componentWillMount: function () {
+    LocationStore.addChangeListener(() => {
+      this.setState(getPosition(), () => {
+        if (this.state.searchQueued && this.props.food) {
+          this.searchString(this.props.food)
+          this.state.searchQueued = false;
+        }
+      });
+    });
+    LocationActions.updateLocation(Platform.OS);
   },
   searchString: function (query) {
-    console.log('trying to search');
+    resultsCache = [];
+    this.setState({query: query, dataSource: this.state.dataSource.cloneWithRows(resultsCache)});
     //build the URL for the search
     if (!query){
       console.log('EMPTY SEARCH INPUTTED');
       return;
     }
-    if (Platform.OS === 'android'){
-      var url =  API_URL + 'search/' + encodeURIComponent(query) + '/?coords=' + encodeURIComponent(37.783541) + ',' + encodeURIComponent(-122.408975);
-    } else {
-      var url =  API_URL + 'search/' + encodeURIComponent(query) + '/?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
+    var url =  API_URL + 'search/' + encodeURIComponent(query)
+    var coordParams = '';
+    if (this.state.position.coords) {
+      coordParams = '/?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
     }
-
-    console.log('url', url);
     //Fetches the data from the server with the passed search terms
-    fetch(url)
+    fetch(url + coordParams)
       .then((res) => res.json())
       .catch((err) => console.error('Fetching query failed. Check the network connection: ' + err))
       .then((responseData) => {
-        console.log('response data:', responseData);
-        console.log(this.state.dataSource);
+        this._formatSearchResults(responseData.data);
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData),
+          dataSource: this.state.dataSource.cloneWithRows(resultsCache),
+          pagination: responseData.pagination
         });
       })
-      .done(
-        console.log('Finished writing to array'));
+      .done();
   },
   selectFood: function (rowId, food) {
     console.log('Food pressed!');
-    console.log(food);
     //This needs a conditional to make the app cross platform
     if (Platform.OS === 'ios'){
       this.props.navigator.push({
@@ -98,6 +98,35 @@ var FoodSearchResultView = React.createClass({
         name: 'food',
         food: food,
       });
+    }
+  },
+  _formatSearchResults: function (results) {
+    var result;
+    var maxLen = 40;
+    for( var i = 0; i < results.length; i++ ) {
+      result = results[i];
+      if( result.name.length > maxLen ) {
+        result.displayName = result.name.slice(0, maxLen - 2) + '...'
+      } else {
+        result.displayName = result.name;
+      }
+      resultsCache.push(result);
+    }
+  },
+  _onEndReached: function (event) {
+    console.log(this.state);
+    if( this.state.pagination.page_number < this.state.pagination.total_pages ) {
+      fetch(API_URL + 'search/' + encodeURIComponent(this.state.query) + '/?page_number=' + (this.state.pagination.page_number + 1) + '&coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude))
+        .then((res) => {console.log(res);return res.json()})
+        .catch((err) => console.error('Failed to retrieve additional results:' + err))
+        .then((res) => {
+          this._formatSearchResults(res.data);
+          this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(resultsCache),
+            pagination: res.pagination
+          });
+        })
+        .done();
     }
   },
   renderRow: function (rowData, sectionId, rowId) {
@@ -119,6 +148,9 @@ var FoodSearchResultView = React.createClass({
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps={false}
         showsVerticalScrollIndicator={false}
+        pageSize={3}
+        onEndReachedThreshold={400}
+        onEndReached={this._onEndReached}
       />;
     return (
       <View style={styles.container}>
@@ -141,21 +173,19 @@ var FoodCell = React.createClass({
       TouchableElement = TouchableNativeFeedback;
     }
     return (
-      <View>
+      <View style={styles.row}>
         <TouchableElement
           onPress={this.props.onPress}
           onShowUnderlay={this.props.onHighlight}
           onHideUnderlay={this.props.onUnhighlight}
         >
-          <View style={styles.row}>{}
-            <Image
-              source={{uri: this.props.food.preview_image.image}}
-              style={styles.cellImage}/>
-            <View style={styles.textContainer}>
-              <Text style={styles.title}>{this.props.food.name}</Text>
-              <Text style={styles.text}>Rating: {this.props.food.avgRating}</Text>
-              <Text style={styles.text}>Distance: {this.props.food.distance}</Text>
-            </View>
+          <Image
+            source={{uri: this.props.food.preview_image.image}}
+            style={styles.cellImage}/>
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{this.props.food.displayName}</Text>
+            <Text style={styles.text}>{this.props.food.avgRating}</Text>
+            <Text style={styles.text}>{this.props.food.distance} mi</Text>
           </View>
         </TouchableElement>
       </View>
@@ -168,6 +198,7 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    flexDirection: 'column'
   },
   searchBar: {
     marginTop: 64,
@@ -175,16 +206,15 @@ var styles = StyleSheet.create({
     color: 'blue',
   },
   row: {
-    flex:1,
-    justifyContent: 'center',
+    flex: 1,
     backgroundColor: 'black',
+    height: 225
   },
   textContainer: {
-    flex: 1,
     backgroundColor: 'transparent',
     opacity: 1,
-    top: -150,
-    marginBottom: -80,
+    position: 'relative',
+    top: -150
   },
   title: {
     fontSize: 32,
@@ -200,7 +230,8 @@ var styles = StyleSheet.create({
   },
   cellImage: {
     opacity: 0.6,
-    height: 225,
+    position: 'relative',
+    height: 225
   },
 });
 

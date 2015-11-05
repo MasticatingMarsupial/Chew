@@ -16,6 +16,15 @@ if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
 }
 
+var LocationStore = require('../stores/LocationStore');
+var LocationActions = require('../actions/LocationActions');
+
+var getPosition = function () {
+  return {
+    position: LocationStore.getPosition()
+  };
+}
+
 var HomeView = React.createClass({
   getInitialState: function () {
     return {
@@ -34,7 +43,9 @@ var HomeView = React.createClass({
       AndroidGeolocation.getCurrentLocation((position) => this.setState({position}));
     }
   },
+
   searchString: function (food) {
+    console.log(this.state);
     // Executes query to DB for possible foods by string
     if (Platform.OS === 'ios'){
       this.props.navigator.push({
@@ -43,16 +54,17 @@ var HomeView = React.createClass({
         // Need to pass search text
         passProps: {
           food: food,
-          position: this.state.position
+          searchQueued: true,
         },
       });
     } else {
+      console.log(this.state);
       this.props.navigator.push({
         title: 'Results',
         name: 'results',
         // Need to pass search text
         food: {food},
-        position: this.state.position,
+        searchQueued: true,
       });
     }
   },

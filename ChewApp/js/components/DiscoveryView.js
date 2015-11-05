@@ -19,39 +19,33 @@ var API_URL = 'http://chewmast.herokuapp.com/api/';
 var DiscoveryTabBar = require('./DiscoveryTabBar');
 var FoodDetailView = require('./FoodDetailView');
 var StarRating = require('./StarRating');
-var mockImage = {
-  image: 'http://40.media.tumblr.com/155e0538162f818cf12cd876683c3136/tumblr_inline_nmuyiqTnC51sxzdh5_500.jpg'
-};
-var mockData = [];
-for (var i = 0; i < 10; i++) {
-  mockData.push(mockImage);
-}
 
-var AndroidGeolocation = require('./AndroidGeolocation');
 var Loading = require('./Loading');
+
+var LocationStore = require('../stores/LocationStore');
+var LocationActions = require('../actions/LocationActions');
+
+var getPosition = function () {
+  return {
+    position: LocationStore.getPosition()
+  }
+}
 
 var DiscoveryView = React.createClass({
   getInitialState: function () {
     return {
       recs: {},
-      position: {}
+      position: getPosition()
     };
   },
 
   componentWillMount: function () {
-    if (Platform.OS === 'ios'){
-      this.fetchRecs();
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.setState({position: position}, this.fetchRecs);
-        },
-        (error) => console.error(error.message),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-      );
-    } else {
-      AndroidGeolocation.getCurrentLocation((position) => this.setState({position: position}, this.fetchRecs));
-    }
+    LocationStore.addChangeListener(() => {
+      this.setState(getPosition(), this.fetchRecs);
+    });
+    LocationActions.updateLocation(Platform.OS);
   },
+
   fetchRecs: function () {
     var uri = API_URL + 'foods/recommendations/';
     if (this.state.position.coords) {
@@ -99,7 +93,7 @@ var DiscoveryView = React.createClass({
         pages.push(page);
       }
     }
-    if (this.state.recs.trending === undefined) {
+    if (Object.keys(this.state.recs).length === 0) {
       return (<Loading/>);
     } else {
       return (<ScrollableTabView
