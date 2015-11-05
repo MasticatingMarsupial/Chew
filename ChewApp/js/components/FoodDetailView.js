@@ -55,7 +55,7 @@ var FoodDetailView = React.createClass({
       restLongitude: '',
       restLatitude: '',
       isReviewModalOpen: false,
-      // foodLiked: undefined,
+      imageLikeButtonState: [],
     };
   },
   componentDidMount: function () {
@@ -94,8 +94,13 @@ var FoodDetailView = React.createClass({
       .then((res) => res.json())
       .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {
+        var imageLikeButtonState = [];
+        for (var i = 0; i < responseData.length; i++) {
+          imageLikeButtonState.push('white');
+        }
         this.setState({
-          images: responseData
+          images: responseData,
+          imageLikeButtonState: imageLikeButtonState,
         });
       })
       .done();
@@ -141,7 +146,7 @@ var FoodDetailView = React.createClass({
       });
     }
   },
-  pressLikeButton: function () {
+  pressFavoriteButton: function () {
     var user = UserStore.getAccount();
     var food = this.props.food;
 
@@ -167,6 +172,8 @@ var FoodDetailView = React.createClass({
   pressHeartButton: function (index) {
     var user = UserStore.getAccount();
     var image = this.state.images[index];
+    this.toggleHeartButtonState(index);
+    // Object.keys(user).length > 0 ? UserAction.updateAccountLikes(user.user.username, user, image) : console.log('user not logged in');
 
     if (Object.keys(user).length > 0) {
       UserAction.updateAccountLikes(user.user.username, user, image);
@@ -186,6 +193,17 @@ var FoodDetailView = React.createClass({
         ]);
       }
     }
+  },
+  toggleHeartButtonState: function (index) {
+    var imageLikeButtonState = this.state.imageLikeButtonState.slice();
+    if (imageLikeButtonState[index] === 'white') {
+      imageLikeButtonState[index] = 'red';
+    } else {
+      imageLikeButtonState[index] = 'white';
+    }
+    this.setState({
+      imageLikeButtonState: imageLikeButtonState,
+    });
   },
   selectedStar: function (rating) {
     console.log('Rated ' + rating + ' stars!');
@@ -311,21 +329,24 @@ var FoodDetailView = React.createClass({
             style={styles.image}
           >
             <View style={styles.heartContainer}>
-              <Button
-                activeOpacity={0.20}
-                onPress={this.pressHeartButton.bind(this, i)}
-                style={styles.heartButton}
-              >
-                <Icon
-                  name="fontawesome|heart-o"
-                  size={40}
-                  color="red"
-                  style={styles.heart}
-                />
-              </Button>
-              <Text style={styles.heartCounts}>
-                {this.state.images[i].votes}
-              </Text>
+              <View style={styles.heartBox}>
+                <Button
+                  activeOpacity={0.20}
+                  onPress={this.pressHeartButton.bind(this, i)}
+                  style={styles.heartButton}
+                >
+                  <Icon
+                    name="ion|android-favorite"
+                    size={40}
+                    color={this.state.imageLikeButtonState[i]}
+                    ref={"heartIcon" + i}
+                    style={styles.heart}
+                  />
+                </Button>
+                <Text style={styles.heartCounts}>
+                  {this.state.images[i].votes}
+                </Text>
+              </View>
             </View>
           </Image>
         </View>
@@ -354,18 +375,22 @@ var FoodDetailView = React.createClass({
         <ScrollView
           style={styles.scrollView}
         >
-          <Carousel autoplay={false} style={styles.carousel}>
-            {images}
-          </Carousel>
+          <View style={styles.carouselContainer}>
+            <Carousel autoplay={false} style={styles.carousel}>
+              {images}
+            </Carousel>
 
-          <View style={styles.titleContainer}>
-            <Text style={styles.name}>
-              {this.props.food.name}
-            </Text>
-            <Text style={styles.restaurant}>
-              {this.props.food.restaurant.name}
-            </Text>
+
+            <View style={styles.titleContainer}>
+              <Text style={styles.name}>
+                {this.props.food.name}
+              </Text>
+              <Text style={styles.restaurant}>
+                @{this.props.food.restaurant.name}
+              </Text>
+            </View>
           </View>
+
 
           <View style={styles.scoresContainer}>
             <View style={styles.scoresElement}>
@@ -402,7 +427,7 @@ var FoodDetailView = React.createClass({
               </View>
             </TouchableElement>
             <TouchableElement
-              onPress={this.pressLikeButton}
+              onPress={this.pressFavoriteButton}
             >
               <View style={styles.button}>
                 <Text style={styles.buttonText}> I Like This </Text>
@@ -437,7 +462,7 @@ var FoodDetailView = React.createClass({
               onPress={this.onMakeReviewButtonPress}
             >
               <View style={styles.button}>
-                <Text style={styles.buttonText}> Make a Review </Text>
+                <Text style={styles.buttonText}> Review </Text>
               </View>
             </TouchableElement>
           </View>
@@ -462,19 +487,29 @@ var styles = StyleSheet.create({
     height: 300,
   },
   titleContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     flexDirection: 'column',
+    position: 'absolute',
+    width: width,
+    bottom: 0,
   },
   name: {
     fontSize: 30,
-    textAlign: 'center',
+    textAlign: 'left',
     marginTop: 10,
     marginLeft: 15,
+    color: 'white',
   },
   restaurant: {
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: 'left',
     marginTop: 5,
     marginLeft: 15,
+    marginBottom: 15,
+    color: 'white',
+  },
+  carouselContainer: {
+    alignItems: 'flex-end',
   },
   carousel: {
     flex: 1,
@@ -492,8 +527,18 @@ var styles = StyleSheet.create({
   heartContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 300,
-    marginRight: 15,
+    marginTop: 10,
+  },
+  heartBox: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingTop: 8,
+    paddingBottom: 7,
+    borderTopLeftRadius: 28,
+    borderBottomLeftRadius: 28,
   },
   heartButton: {
     height:40,
@@ -539,7 +584,7 @@ var styles = StyleSheet.create({
   },
   scoresContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   scoresElement: {
     flexDirection: 'column',
@@ -556,19 +601,22 @@ var styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    borderRadius: 5,
-    borderWidth: 1,
+    borderRadius: 17,
+    marginRight: 5,
+    // borderWidth: 1,
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 2,
     paddingBottom: 2,
-    borderStyle: 'solid',
-    borderColor: '#808080',
+    // borderStyle: 'solid',
+    backgroundColor: '#F44336',
   },
   buttonText: {
     marginTop: 5,
     marginBottom: 5,
     fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 
