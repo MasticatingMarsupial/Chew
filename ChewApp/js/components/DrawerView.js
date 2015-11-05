@@ -57,6 +57,9 @@ var DrawerView = React.createClass({
     this.setState(getUserState());
   },
   onHomeButtonPress: function () {
+    this.props.onMenuButtonPress('Home');
+  },
+  onProfileButtonPress: function () {
     this.props.onMenuButtonPress('Profile');
   },
   onFavouritesButtonPress: function () {
@@ -99,6 +102,15 @@ var DrawerView = React.createClass({
     >
       <View style={styles.textContainer}>
         <Text style={styles.listText}>Favourites</Text>
+      </View>
+    </TouchableElement>
+    <TouchableElement
+      onPress={this.onProfileButtonPress}
+      onShowUnderlay={this.props.onHighlight}
+      onHideUnderlay={this.props.onUnhighlight}
+    >
+      <View style={styles.textContainer}>
+        <Text style={styles.listText}>Profile</Text>
       </View>
     </TouchableElement>
     <TouchableElement

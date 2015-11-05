@@ -19,7 +19,7 @@ var ReviewActions = {
       body: JSON.stringify({
         'foodRating': rating,
         'text': reviewText,
-        'owner': 2,
+        'owner': userId,
         'reviewRating': 0,
         'food': foodId
       })
@@ -28,9 +28,9 @@ var ReviewActions = {
     // http://richardkho.com/making-ajax-calls-in-react-native/
     // http://stackoverflow.com/questions/25630611/should-flux-stores-or-actions-or-both-touch-external-services
 
-    console.dir(API_URL + 'reviews', object);
+    //console.dir(API_URL + 'reviews/', object);
 
-    fetch(API_URL + 'reviews', object)
+    fetch(API_URL + 'reviews/', object)
       .then((res) => {console.log('STUFF:',res); return res.json();})
       .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {

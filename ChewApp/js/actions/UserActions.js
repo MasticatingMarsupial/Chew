@@ -34,7 +34,7 @@ var UserActions = {
 
     if (item.hasOwnProperty('price')) {
       updates.food_liked.push(item);
-      endpoint = '/likes/foods/'      
+      endpoint = '/likes/foods/';
       subArray = 'food_liked';
     }
 
@@ -46,12 +46,13 @@ var UserActions = {
       .then((res) => res.json())
       .catch((err) => console.error('Update requested failed: ' + err))
       .then((responseData) => {
+        console.log(responseData);
         if (updates[subArray].length === responseData[subArray].length) {
           AppDispatcher.dispatch({
             actionType: UserConstants.USER_UPDATE,
             username: username,
             updates: updates,
-          })
+          });
         } else {
           updates[subArray].pop();
         }

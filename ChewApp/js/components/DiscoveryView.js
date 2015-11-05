@@ -89,6 +89,7 @@ var DiscoveryView = React.createClass({
     var page;
     for (var key in this.state.recs) {
       page = <DiscoveryPage
+                key={key}
                 onFoodPress={this.onFoodPress}
                 tabLabel={key.toUpperCase().replace('_', ' ')}
                 foods={this.state.recs[key]}

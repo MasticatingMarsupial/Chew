@@ -20,12 +20,12 @@ function populate (account, token) {
 function update (id, updates) {
   if (_currentAccount.id === id) {
     _currentAccount = assign({}, _currentAccount, updates);
-    fetch(API_URL + 'users/' + _currentAccount.id, {
+    fetch(API_URL + 'users/' + _currentAccount.id + '/', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(_currentAccount)
     })
-    .then((res) => res.json())
+    .then((res) =>  res.json())
     .catch((err) => console.error('Update failed: ' + err))
     .done((resData) => populate(resData));
   }

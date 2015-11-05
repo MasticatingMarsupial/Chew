@@ -22,6 +22,7 @@ var FoodDetailView = require('./js/components/FoodDetailView');
 var DrawerView = require('./js/components/DrawerView');
 var SigninView = require('./js/components/SigninView');
 var FavouritesView = require('./js/components/FavouritesView');
+var ProfileView = require('./js/components/ProfileView');
 
 //Keeps track of which page we are on
 var _navigator;
@@ -103,6 +104,24 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
           titleColor="white"
           title="Favourites" />
         <FavouritesView
+          style={styles.navigator}
+          navigator={navigationOperations}
+        />
+      </View>
+    );
+  }
+  else if (route.name === 'profile') {
+    console.log('opening the profile view');
+    return (
+      <View style={{flex: 1}}>
+        <ToolbarAndroid
+          actions={[]}
+          navIcon={require('image!android_back_white')}
+          onIconClicked={navigationOperations.pop}
+          style={styles.toolbar}
+          titleColor="white"
+          title="Profile" />
+        <ProfileView
           style={styles.navigator}
           navigator={navigationOperations}
         />
