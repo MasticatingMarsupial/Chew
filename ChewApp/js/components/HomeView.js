@@ -18,8 +18,6 @@ if (Platform.OS === 'android'){
 
 var HomeView = React.createClass({
   getInitialState: function () {
-    if( Platform.OS === 'android' ) {
-    }
     return {
       position: 'unknown',
     };
@@ -32,9 +30,8 @@ var HomeView = React.createClass({
         (error) => console.error(error.message),
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
       );
-    }
-    if( Platform.OS === 'android' ) {
-      AndroidGeolocation.getCurrentLocation((position) => this.setState({position}))
+    } else {
+      AndroidGeolocation.getCurrentLocation((position) => this.setState({position}));
     }
   },
   searchString: function (food) {

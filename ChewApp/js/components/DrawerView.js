@@ -10,12 +10,14 @@ var {
   TouchableNativeFeedback,
   AsyncStorage,
   Platform,
+  Dimensions,
 } = React;
 
 var API_URL = 'http://chewmast.herokuapp.com/api/';
 // var API_URL = 'http://localhost:8000/api/';
 var UserActions = require('../actions/UserActions');
 var UserStore = require('../stores/UserStore');
+var deviceHeight = Dimensions.get('window').height;
 
 function getUserState() {
   return {
@@ -110,8 +112,7 @@ var DrawerView = React.createClass({
     </TouchableElement>
     </View>
     :
-    <View>
-    <Text style={styles.name}>Login to access your profile</Text>
+    <View style={styles.loggedOut}>
       <TouchableElement
       onPress={this.onHomeButtonPress}
       onShowUnderlay={this.props.onHighlight}
@@ -186,12 +187,11 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     paddingLeft: 5,
   },
-  loggedOutTitle: {
-    alignSelf: 'center',
-    fontSize: 24,
-    fontWeight: '200',
-    paddingBottom: 15,
-    paddingTop: 20,
+  loggedOut: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 300,
   }
 });
 
