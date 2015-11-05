@@ -87,7 +87,7 @@ var DiscoveryView = React.createClass({
                 tabLabel={key.toUpperCase().replace('_', ' ')}
                 foods={this.state.recs[key]}
               />;
-      if (key === 'trending') {
+      if (key === 'popular') {
         pages.unshift(page);
       } else {
         pages.push(page);

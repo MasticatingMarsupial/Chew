@@ -16,32 +16,9 @@ if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
 }
 
-var LocationStore = require('../stores/LocationStore');
-var LocationActions = require('../actions/LocationActions');
-
-var getPosition = function () {
-  return {
-    position: LocationStore.getPosition()
-  };
-}
-
 var HomeView = React.createClass({
   getInitialState: function () {
-    return {
-      position: 'unknown',
-    };
-  },
-  componentDidMount: function () {
-    // Get home page stuff from DB
-    if (Platform.OS === 'ios'){
-      navigator.geolocation.getCurrentPosition(
-        (position) => this.setState({position}),
-        (error) => console.error(error.message),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-      );
-    } else {
-      AndroidGeolocation.getCurrentLocation((position) => this.setState({position}));
-    }
+    return {};
   },
 
   searchString: function (food) {
