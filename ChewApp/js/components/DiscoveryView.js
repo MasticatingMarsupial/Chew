@@ -105,7 +105,7 @@ var DiscoveryView = React.createClass({
       return (<ScrollableTabView
         locked={false}
         renderTabBar={() => <DiscoveryTabBar />}
-        edgeHitWith={50}
+        edgeHitWidth={100}
         style={styles.container}
       >
         {pages}
