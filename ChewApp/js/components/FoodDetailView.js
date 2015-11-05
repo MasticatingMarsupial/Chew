@@ -451,18 +451,18 @@ var FoodDetailView = React.createClass({
             </TouchableElement>
           </View>
           <GoogleStaticMap
-            style={{width: width, height: 200}}
+            style={{width: width, height: 300}}
             latitude={this.state.restLatitude}
             longitude={this.state.restLongitude}
             zoom={15}
-            size={{ width: width, height: 200 }}
+            size={{ width: width, height: 300 }}
           />
           <View style={styles.buttonContainer}>
             <TouchableElement
               onPress={this.onMakeReviewButtonPress}
             >
               <View style={styles.button}>
-                <Text style={styles.buttonText}> Review </Text>
+                <Text style={styles.reviewButtonText}> Review </Text>
               </View>
             </TouchableElement>
           </View>
@@ -615,6 +615,13 @@ var styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  reviewButtonText: {
+    marginTop: 5,
+    marginBottom: 5,
+    fontSize: 20,
     color: 'white',
     fontWeight: 'bold',
   },
