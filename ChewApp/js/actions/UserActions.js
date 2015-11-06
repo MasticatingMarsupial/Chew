@@ -25,19 +25,27 @@ var UserActions = {
   },
 
   updateAccountLikes: function (username, updates, item) {
-    var endpoint, subArray;
+    var endpoint, userPrefs;
     if (item.hasOwnProperty('image')) {
+      for (var image in updates.images_liked) {
+        if (updates.images_liked[image].id === item.id) {
+          updates.images_liked = [item];
+          endpoint = '/unlikes/images/';
+          userPrefs = 'images_unliked';
+          break;
+        }
+      }
       updates.images_liked.push(item);
-      endpoint = '/likes/images/';
-      subArray = 'images_liked';
+      endpoint = endpoint || '/likes/images/';
+      userPrefs = userPrefs || 'images_liked';
     }
 
     if (item.hasOwnProperty('price')) {
       updates.food_liked.push(item);
       endpoint = '/likes/foods/';
-      subArray = 'food_liked';
+      userPrefs = 'food_liked';
     }
-
+    
     fetch(API_URL + 'users/' + updates.id + endpoint, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -46,16 +54,19 @@ var UserActions = {
       .then((res) => res.json())
       .catch((err) => console.error('Update requested failed: ' + err))
       .then((responseData) => {
-        console.log(responseData);
-        if (updates[subArray].length === responseData[subArray].length) {
-          AppDispatcher.dispatch({
-            actionType: UserConstants.USER_UPDATE,
-            username: username,
-            updates: updates,
-          });
+        AppDispatcher.dispatch({
+          actionType: UserConstants.USER_UPDATE,
+          username: username,
+          updates: responseData,
+        });
+        if (userPrefs.includes('images')) {
+          updates.images_liked = responseData.images_liked;
+        } else if (userPrefs.includes('food')) {
+          console.log('food');
         } else {
-          updates[subArray].pop();
+          console.log('nothing');
         }
+        console.log(updates);
       })
       .done();
   },

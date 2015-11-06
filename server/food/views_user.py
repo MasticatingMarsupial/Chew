@@ -26,9 +26,9 @@ class UserDetail(APIView):
     serializer = AccountSerializer(account)
     return Response(serializer.data)
 
-  def put(self, request, pk, param, format=None):
+  def put(self, request, pk, param, param2, format=None):
     account = self.get_object(pk)
-    serializer = AccountSerializer(account, context=param, data=request.data)
+    serializer = AccountSerializer(account, context=(param, param2), data=request.data)
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data)

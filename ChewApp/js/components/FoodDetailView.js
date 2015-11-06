@@ -54,7 +54,7 @@ var FoodDetailView = React.createClass({
       restName: '',
       restLongitude: '',
       restLatitude: '',
-      isReviewModalOpen: false,
+      isReviewModalOpen: false, 
       imageLikeButtonState: [],
     };
   },
@@ -64,7 +64,6 @@ var FoodDetailView = React.createClass({
     this.fetchImages(this.props.food.id);
     this.fetchReviews(this.props.food.id);
     this.setLocation();
-    // this.setUserLikes();
   },
   componentWillUnmount: function () {
     ReviewStore.removeChangeListener(this._onChange);
@@ -81,22 +80,29 @@ var FoodDetailView = React.createClass({
       restLatitude: this.props.food.restaurant.address.latitude,
     });
   },
-  // setUserLikes: function () {
-  //   var user = UserStore.getAccount();
-  //   var state = user.food_liked.find((food) => food.id === this.props.food.id);
-  //   this.setState({
-  //     foodLiked: state,
-  //   });
-  // },
   fetchImages: function (query) {
     console.log('API Query:', API_URL + 'images/foods/' + query);
     fetch(API_URL + 'images/foods/' + query)
       .then((res) => res.json())
       .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {
+        var userLikes = UserStore.getAccount().images_liked;
         var imageLikeButtonState = [];
-        for (var i = 0; i < responseData.length; i++) {
-          imageLikeButtonState.push('white');
+        if (userLikes === undefined) {
+          for (var i = 0; i < responseData.length; i++) {
+            imageLikeButtonState.push('white');
+          }
+        } else {
+          for (var i = 0; i < responseData.length; i++) {
+            for (var j = 0; j < userLikes.length; j++) {
+              if (responseData[i].id === userLikes[j].id) {
+                imageLikeButtonState[i] = 'red';
+              }
+            }
+            if (imageLikeButtonState[i] === undefined) {
+              imageLikeButtonState[i] = 'white';
+            }
+          }
         }
         this.setState({
           images: responseData,
@@ -118,20 +124,22 @@ var FoodDetailView = React.createClass({
       })
       .done();
   },
-  sendTokenAuth: function () {
+  authenticateToken: function () {
     var token = UserStore.getToken(); // token
+    var user = UserStore.getAccount();
+    var authenticated = false;
 
-    fetch(API_URL + 'token-check/' + token.token)
-      .then((response) => response)
+    fetch(API_URL + 'token-check/' + token)
+      .then((res) => res.json())
       .catch((err) => console.error('Fetching query failed: ' + err))
-      .then((response) => {
-        if (response.status === 200) {
-          this.addImageToUserAndUpvote(index);
-        } else {
-         console.log('invalid token');
-       }
+      .then((responseData) => {
+        if(responseData.id === user.id) {
+          authenticated = true;
+        }
       })
       .done();
+
+    return authenticated;
   },
   goToSigninView: function () {
     if (Platform.OS === 'ios') {
@@ -173,7 +181,6 @@ var FoodDetailView = React.createClass({
     var user = UserStore.getAccount();
     var image = this.state.images[index];
     this.toggleHeartButtonState(index);
-    // Object.keys(user).length > 0 ? UserAction.updateAccountLikes(user.user.username, user, image) : console.log('user not logged in');
 
     if (Object.keys(user).length > 0) {
       UserAction.updateAccountLikes(user.user.username, user, image);
