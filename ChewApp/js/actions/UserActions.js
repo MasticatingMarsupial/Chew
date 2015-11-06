@@ -3,8 +3,8 @@
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var UserConstants = require('../constants/UserConstants');
 
-// var API_URL = 'http://chewmast.herokuapp.com/api/';
-var API_URL = 'http://localhost:8000/api/';
+var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
 
 var UserActions = {
 
