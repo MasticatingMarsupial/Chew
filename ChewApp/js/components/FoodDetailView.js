@@ -322,7 +322,7 @@ var FoodDetailView = React.createClass({
     console.log('Submitting rating:', rating);
     console.log('Submitting review:', review);
     this.dismissReviewModal();
-    ReviewAction.create(rating, review, UserStore.getAccount().id, this.props.food.id);
+    ReviewAction.create(rating, review, UserStore.getAccount().user.username, this.props.food.id);
   },
   render: function () {
     var TouchableElement = TouchableOpacity;
