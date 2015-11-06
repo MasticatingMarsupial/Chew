@@ -63,10 +63,12 @@ public class AndroidGeolocationModule extends ReactContextBaseJavaModule
     WritableMap location = Arguments.createMap();
     WritableMap coords = Arguments.createMap();
     mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-    coords.putDouble("latitude", mLastLocation.getLatitude());
-    coords.putDouble("longitude", mLastLocation.getLongitude());
-    location.putMap("coords", coords);
-    success.invoke(location);
+    if( mLastLocation != null ) {
+      coords.putDouble("latitude", mLastLocation.getLatitude());
+      coords.putDouble("longitude", mLastLocation.getLongitude());
+      location.putMap("coords", coords);
+      success.invoke(location);
+    }
   }
 
   @Override

@@ -10,7 +10,6 @@ var {
 
 var FoodSearchResultView = require('./FoodSearchResultView');
 var DiscoveryView = require('./DiscoveryView');
-var AndroidGeolocation = require('./AndroidGeolocation');
 var SearchBar = require('react-native-search-bar');
 if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
@@ -18,23 +17,11 @@ if (Platform.OS === 'android'){
 
 var HomeView = React.createClass({
   getInitialState: function () {
-    return {
-      position: 'unknown',
-    };
+    return {};
   },
-  componentDidMount: function () {
-    // Get home page stuff from DB
-    if (Platform.OS === 'ios'){
-      navigator.geolocation.getCurrentPosition(
-        (position) => this.setState({position}),
-        (error) => console.error(error.message),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-      );
-    } else {
-      AndroidGeolocation.getCurrentLocation((position) => this.setState({position}));
-    }
-  },
+
   searchString: function (food) {
+    console.log(this.state);
     // Executes query to DB for possible foods by string
     if (Platform.OS === 'ios'){
       this.props.navigator.push({
@@ -43,16 +30,17 @@ var HomeView = React.createClass({
         // Need to pass search text
         passProps: {
           food: food,
-          position: this.state.position
+          searchQueued: true,
         },
       });
     } else {
+      console.log(this.state);
       this.props.navigator.push({
         title: 'Results',
         name: 'results',
         // Need to pass search text
         food: {food},
-        position: this.state.position,
+        searchQueued: true,
       });
     }
   },
