@@ -57,6 +57,9 @@ var DrawerView = React.createClass({
     this.setState(getUserState());
   },
   onHomeButtonPress: function () {
+    this.props.onMenuButtonPress('Home');
+  },
+  onProfileButtonPress: function () {
     this.props.onMenuButtonPress('Profile');
   },
   onFavouritesButtonPress: function () {
@@ -78,7 +81,7 @@ var DrawerView = React.createClass({
     var component = this.state.account.user ?
     <View>
     <View style={styles.imageContainer}>
-      <Image source={{uri: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAKYAAAAJDJkMWJkNjIwLTljMWMtNDQ0MC04ZWZmLWQ1ZjgyMjQ5OTE0Nw.jpg'}}
+      <Image source={{uri: 'https://media2.giphy.com/media/x1u507NMakkZG/200_s.gif'}}
       style={styles.profileImage}
       />
     </View>
@@ -99,6 +102,15 @@ var DrawerView = React.createClass({
     >
       <View style={styles.textContainer}>
         <Text style={styles.listText}>Favourites</Text>
+      </View>
+    </TouchableElement>
+    <TouchableElement
+      onPress={this.onProfileButtonPress}
+      onShowUnderlay={this.props.onHighlight}
+      onHideUnderlay={this.props.onUnhighlight}
+    >
+      <View style={styles.textContainer}>
+        <Text style={styles.listText}>Profile</Text>
       </View>
     </TouchableElement>
     <TouchableElement
