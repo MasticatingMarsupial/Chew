@@ -4,6 +4,7 @@ var AppDispatcher = require('../dispatchers/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var LocationConstants = require('../constants/LocationConstants');
 var assign = require('object-assign');
+var AndroidGeolocation = require('../components/AndroidGeolocation');
 
 var CHANGE_EVENT = 'locationChange';
 
