@@ -81,7 +81,7 @@ var DrawerView = React.createClass({
     var component = this.state.account.user ?
     <View>
     <View style={styles.imageContainer}>
-      <Image source={{uri: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAKYAAAAJDJkMWJkNjIwLTljMWMtNDQ0MC04ZWZmLWQ1ZjgyMjQ5OTE0Nw.jpg'}}
+      <Image source={{uri: 'https://media2.giphy.com/media/x1u507NMakkZG/200_s.gif'}}
       style={styles.profileImage}
       />
     </View>

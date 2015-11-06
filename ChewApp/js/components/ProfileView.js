@@ -3,25 +3,22 @@
 var React = require('react-native');
 var {
   StyleSheet,
-  Platform,
   View,
   Text,
   TextInput,
   Image
 } = React;
 var Button = require('react-native-button');
-var API_URL = 'http://chewmast.herokuapp.com/api/';
-// var API_URL = 'http://localhost:8000/api/';
 var UserStore = require('../stores/UserStore');
 var UserActions = require('../actions/UserActions');
 
 var getProfileState = function () {
-  var account = UserStore.getAccount()
+  var account = UserStore.getAccount();
   return {
     id: account.id,
     profile: account.user,
-  }
-}
+  };
+};
 
 var ProfileView = React.createClass({
   getInitialState: function () {
@@ -48,11 +45,11 @@ var ProfileView = React.createClass({
 
   _handlePress: function () {
     var editable = {};
-    for( var key in this.state.editable ) {
-      editable[key] = ! this.state.editable[key];
+    for (var key in this.state.editable) {
+      editable[key] = !this.state.editable[key];
     }
-    if( this.state.editMode ) {
-      UserActions.updateProfile(this.state.id, {user: this.state.profile})
+    if (this.state.editMode) {
+      UserActions.updateProfile(this.state.id, {user: this.state.profile});
     }
     this.setState({editable: editable, editMode: !this.state.editMode});
   },
@@ -60,7 +57,7 @@ var ProfileView = React.createClass({
   render: function () {
     var accountFields = [];
     var accountField, profileButtonText;
-    for( var key in this.state.editable ) {
+    for (var key in this.state.editable) {
       this.state.profile[key] = this.state.profile[key] || '';
       accountField = (savedKey) => {
         return (
@@ -77,8 +74,7 @@ var ProfileView = React.createClass({
               profile[savedKey] = text;
               this.setState({profile: profile});
             }}
-          >
-          </TextInput>
+          />
         </View>
         );
       }(key);
@@ -114,7 +110,7 @@ var ProfileView = React.createClass({
           />
           <View>
             <Text style={styles.usernameText}>{this.state.profile.username}</Text>
-            <Button 
+            <Button
             style={styles.editProfileButton}
             onPress={this._handlePress}
             >
@@ -138,10 +134,10 @@ var styles = StyleSheet.create({
   },
   accountsContainer: {
     flex: 3,
+    paddingLeft: 10,
   },
   fieldInput: {
     fontSize: 16,
-    height: 25
   },
   fieldText: {
     fontSize: 16,
