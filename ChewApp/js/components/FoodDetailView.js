@@ -386,6 +386,13 @@ var FoodDetailView = React.createClass({
                           <Text style={styles.reviewButtonText}> + </Text>
                       </TouchableElement>;
     }
+
+    var reviewLabel = 'Review';
+
+    if (this.state.reviewsDataSource._cachedRowCount > 1) {
+      reviewLabel += 's';
+    }
+
     return (
       <View
         automaticallyAdjustContentInsets={false}
@@ -418,13 +425,18 @@ var FoodDetailView = React.createClass({
                 {this.props.food.numRating}
               </Text>
               <Text style={styles.scoresElementText}>
-                Votes
+                Faves
               </Text>
             </View>
             <View style={styles.scoresElement}>
-              <Text style={styles.scoresElementText}>
-                {this.props.food.avgRating.toString()}
-              </Text>
+              <View style={styles.averageReviewStarContainer}>
+                <StarRating maxStars={5}
+                  rating={parseFloat(this.props.food.avgRating)}
+                  disabled={true}
+                  styles={styles.reviewStarRating}
+                  starSize={15}/>
+              </View>
+
               <Text style={styles.scoresElementText}>
                 Stars
               </Text>
@@ -434,7 +446,7 @@ var FoodDetailView = React.createClass({
                 {this.state.reviewsDataSource._cachedRowCount}
               </Text>
               <Text style={styles.scoresElementText}>
-                Reviews
+                {reviewLabel}
               </Text>
             </View>
           </View>
@@ -616,6 +628,11 @@ var styles = StyleSheet.create({
   username: {
     fontSize: 20,
   },
+  averageReviewStarContainer: {
+    width: 120,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   reviewStarContainer: {
     marginTop: 5,
     marginLeft: 10,
@@ -631,10 +648,12 @@ var styles = StyleSheet.create({
   },
   scoresContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   scoresElement: {
     flexDirection: 'column',
+    justifyContent: 'center',
     paddingTop: 15,
   },
   scoresElementText: {
