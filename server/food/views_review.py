@@ -20,7 +20,7 @@ class ReviewList(APIView):
     return Response(serializer.data)
 
   def post(self, request, format=None):    
-    user = User.objects.get(pk=self.request.data['owner'])
+    user = User.objects.get(username=self.request.data['owner'])
     food = Food.objects.get(pk=self.request.data['food'])
     serializer = ReviewSerializer(data=request.data)
     if Review.objects.filter(food=food, owner=user).exists():
@@ -35,7 +35,7 @@ class ReviewList(APIView):
 
   def put(self, request, format=None):
     review = self.get_object(pk=request.data['id'])
-    user = User.objects.get(pk=self.request.data['owner'])
+    user = User.objects.get(username=self.request.data['owner'])
     serializer = ReviewSerializer(review, data=request.data)
     if serializer.is_valid():
       serializer.save(owner=user)
