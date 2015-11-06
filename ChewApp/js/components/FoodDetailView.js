@@ -47,6 +47,7 @@ function getUserState () {
 var FoodDetailView = React.createClass({
   getInitialState: function () {
     var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    console.log('RATING', this.props.food.avgRating);
     return {
       dataSource: dataSource,
       images: [],
@@ -56,6 +57,7 @@ var FoodDetailView = React.createClass({
       restLatitude: '',
       isReviewModalOpen: false, 
       imageLikeButtonState: [],
+      averageFoodRating: parseFloat(this.props.food.avgRating),
     };
   },
   componentDidMount: function () {
@@ -70,7 +72,9 @@ var FoodDetailView = React.createClass({
     UserStore.removeChangeListener(this._onChange);
   },
   _onChange: function () {
+    this.fetchFood(this.props.food.id);
     this.fetchImages(this.props.food.id);
+    this.fetchReviews(this.props.food.id);
     this.setState(getUserState());
   },
   setLocation: function(){
@@ -79,6 +83,19 @@ var FoodDetailView = React.createClass({
       restLongitude: this.props.food.restaurant.address.longitude,
       restLatitude: this.props.food.restaurant.address.latitude,
     });
+  },
+  fetchFood: function (query) {
+    console.log('API Query:', API_URL + '/foods/' + query);
+    fetch(API_URL + 'foods/' + query)
+      .then((res) => res.json())
+      .catch((err) => console.error('Fetching query failed: ' + err))
+      .then((responseData) => {
+        console.log('Fetched food', responseData.avgRating);
+        this.setState({
+          averageFoodRating: parseFloat(responseData.avgRating),
+        });
+      })
+      .done();
   },
   fetchImages: function (query) {
     console.log('API Query:', API_URL + 'images/foods/' + query);
@@ -321,7 +338,7 @@ var FoodDetailView = React.createClass({
     console.log('Submitting rating:', rating);
     console.log('Submitting review:', review);
     this.dismissReviewModal();
-    ReviewAction.create(rating, review, UserStore.getAccount().id, this.props.food.id);
+    ReviewAction.create(rating, review, UserStore.getAccount().user.username, this.props.food.id);
   },
   render: function () {
     var TouchableElement = TouchableOpacity;
@@ -385,6 +402,13 @@ var FoodDetailView = React.createClass({
                           <Text style={styles.reviewButtonText}> + </Text>
                       </TouchableElement>;
     }
+
+    var reviewLabel = 'Review';
+
+    if (this.state.reviewsDataSource._cachedRowCount > 1) {
+      reviewLabel += 's';
+    }
+
     return (
       <View
         automaticallyAdjustContentInsets={false}
@@ -417,13 +441,17 @@ var FoodDetailView = React.createClass({
                 {this.props.food.numRating}
               </Text>
               <Text style={styles.scoresElementText}>
-                Votes
+                Faves
               </Text>
             </View>
             <View style={styles.scoresElement}>
-              <Text style={styles.scoresElementText}>
-                {this.props.food.avgRating.toString()}
-              </Text>
+              <View style={styles.averageReviewStarContainer}>
+                <StarRating maxStars={5}
+                  rating={this.state.averageFoodRating}
+                  disabled={true}
+                  styles={styles.reviewStarRating}
+                  starSize={15}/>
+              </View>
               <Text style={styles.scoresElementText}>
                 Stars
               </Text>
@@ -433,7 +461,7 @@ var FoodDetailView = React.createClass({
                 {this.state.reviewsDataSource._cachedRowCount}
               </Text>
               <Text style={styles.scoresElementText}>
-                Reviews
+                {reviewLabel}
               </Text>
             </View>
           </View>
@@ -507,11 +535,13 @@ var FoodDetailView = React.createClass({
               />
             </TouchableOpacity>
           </View>
-          <ListView
-            dataSource={this.state.reviewsDataSource}
-            renderRow={this.renderRow}
-            style={styles.reviewList}
-          />
+          <View style={styles.reviewListContainer}>
+            <ListView
+              dataSource={this.state.reviewsDataSource}
+              renderRow={this.renderRow}
+              style={styles.reviewList}
+            />
+          </View>
         </ScrollView>
         {ReviewButton}
         {AndroidModal}
@@ -594,8 +624,12 @@ var styles = StyleSheet.create({
     marginLeft: 5,
     color: 'white',
   },
+  reviewListContainer: {
+    width: width,
+  },
   reviewList: {
     marginTop: 10,
+    marginBottom: 20,
   },
   reviewContainer: {
     flexDirection: 'column',
@@ -608,6 +642,11 @@ var styles = StyleSheet.create({
   },
   username: {
     fontSize: 20,
+  },
+  averageReviewStarContainer: {
+    width: 120,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   reviewStarContainer: {
     marginTop: 5,
@@ -624,10 +663,12 @@ var styles = StyleSheet.create({
   },
   scoresContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   scoresElement: {
     flexDirection: 'column',
+    justifyContent: 'center',
     paddingTop: 15,
   },
   scoresElementText: {

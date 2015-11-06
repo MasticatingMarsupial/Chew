@@ -7,7 +7,7 @@ var API_URL = 'http://chewmast.herokuapp.com/api/';
 
 var ReviewActions = {
 
-  create: function(rating, reviewText, userId, foodId) {
+  create: function(rating, reviewText, username, foodId) {
     var object = {
       method: 'POST',
       headers: {
@@ -19,7 +19,7 @@ var ReviewActions = {
       body: JSON.stringify({
         'foodRating': rating,
         'text': reviewText,
-        'owner': userId,
+        'owner': username,
         'reviewRating': 0,
         'food': foodId
       })
@@ -28,18 +28,17 @@ var ReviewActions = {
     // http://richardkho.com/making-ajax-calls-in-react-native/
     // http://stackoverflow.com/questions/25630611/should-flux-stores-or-actions-or-both-touch-external-services
 
-    //console.dir(API_URL + 'reviews/', object);
+    console.dir(API_URL + 'reviews/', object);
 
     fetch(API_URL + 'reviews/', object)
       .then((res) => {console.log('STUFF:',res); return res.json();})
       .catch((err) => console.error('Fetching query failed: ' + err))
       .then((responseData) => {
         console.log('responseData', responseData);
-        // AppDispatcher.dispatch({
-        //   actionType: ReviewConstants.REVIEW_CREATE,
-        //   rating: rating,
-        //   reviewText: reviewText
-        // });
+        AppDispatcher.dispatch({
+          actionType: ReviewConstants.REVIEW_CREATE,
+          status: responseData,
+        });
       })
       .done();
 

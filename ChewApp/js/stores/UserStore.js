@@ -3,6 +3,7 @@
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var UserConstants = require('../constants/UserConstants');
+var ReviewConstants = require('../constants/ReviewConstants');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'userChange';
@@ -92,6 +93,10 @@ AppDispatcher.register(function(action) {
         update(id, action.updates);
         UserStore.emitChange();
       }
+      break;
+
+    case ReviewConstants.REVIEW_CREATE:
+      UserStore.emitChange();
       break;
 
     default:
