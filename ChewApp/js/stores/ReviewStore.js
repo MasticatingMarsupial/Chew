@@ -38,12 +38,12 @@ AppDispatcher.register(function(action) {
   var reviewText;
   
   switch (action.actionType) {
-    case ReviewConstants.REVIEW_CREATE:
-      rating = action.rating;
-      reviewText = action.reviewText.trim();
-      create(rating, reviewText);
-      ReviewStore.emitChange();
-      break;
+    // case ReviewConstants.REVIEW_CREATE:
+    //   rating = action.rating;
+    //   reviewText = action.reviewText.trim();
+    //   create(rating, reviewText);
+    //   ReviewStore.emitChange();
+    //   break;
   }
 });
 
