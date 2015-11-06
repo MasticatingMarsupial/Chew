@@ -31,19 +31,18 @@ var UserActions = {
         if (updates.images_liked[image].id === item.id) {
           updates.images_liked = [item];
           endpoint = '/unlikes/images/';
-          userPrefs = 'images_unliked';
           break;
         }
       }
       updates.images_liked.push(item);
       endpoint = endpoint || '/likes/images/';
-      userPrefs = userPrefs || 'images_liked';
+      userPrefs = 'images';
     }
 
     if (item.hasOwnProperty('price')) {
       updates.food_liked.push(item);
       endpoint = '/likes/foods/';
-      userPrefs = 'food_liked';
+      userPrefs = 'food';
     }
     
     fetch(API_URL + 'users/' + updates.id + endpoint, {
@@ -59,14 +58,13 @@ var UserActions = {
           username: username,
           updates: responseData,
         });
-        if (userPrefs.includes('images')) {
+        if (userPrefs === 'images') {
           updates.images_liked = responseData.images_liked;
-        } else if (userPrefs.includes('food')) {
-          console.log('food');
+        } else if (userPrefs === 'food') {
+          console.log('food favorited');
         } else {
           console.log('nothing');
         }
-        console.log(updates);
       })
       .done();
   },
