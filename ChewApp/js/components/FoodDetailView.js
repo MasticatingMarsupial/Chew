@@ -490,6 +490,7 @@ var FoodDetailView = React.createClass({
               />
             </TouchableElement>
           </View>
+<<<<<<< 726f62b1f12ab520866889fcadd0eb44a4f1654e
           
           <View style={styles.buttonContainer}>
             <TouchableElement
@@ -500,6 +501,15 @@ var FoodDetailView = React.createClass({
               </View>
             </TouchableElement>
           </View>
+=======
+          <GoogleStaticMap
+            style={{width: width, height: 300}}
+            latitude={this.state.restLatitude}
+            longitude={this.state.restLongitude}
+            zoom={15}
+            size={{ width: width, height: 300 }}
+          />
+>>>>>>> Replaced review button with material design style button
           <ListView
             dataSource={this.state.reviewsDataSource}
             renderRow={this.renderRow}
