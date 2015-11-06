@@ -28,7 +28,7 @@ var ReviewActions = {
     // http://richardkho.com/making-ajax-calls-in-react-native/
     // http://stackoverflow.com/questions/25630611/should-flux-stores-or-actions-or-both-touch-external-services
 
-    console.dir(API_URL + 'reviews/', object);
+    console.log(API_URL + 'reviews/', object);
 
     fetch(API_URL + 'reviews/', object)
       .then((res) => {console.log('STUFF:',res); return res.json();})

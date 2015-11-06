@@ -158,8 +158,8 @@ var MakeReviewModalView = React.createClass({
                 starColor="#737373"
                 style={styles.starRating}
               />
-              <Button onPress={this.onSubmitReview} style={styles.buttonAndroid}>
-                <View><Text>Submit</Text></View>
+              <Button onPress={this.onSubmitReview} >
+                <View style={styles.buttonAndroid}><Text>Submit</Text></View>
               </Button>
             </View>
           </View>
@@ -297,13 +297,11 @@ var styles = StyleSheet.create({
     width: 35,
   },
   buttonAndroid: {
+    marginLeft: 150,
+    marginTop: 3,
     borderWidth: 1,
-    paddingLeft: 5,
-    paddingRight: 5,
-    paddingTop: 2,
-    paddingBottom: 2,
-    borderStyle: 'solid',
-    borderColor: '#808080',
+    padding: 3,
+    borderColor: '#808080'
   },
 });
 
