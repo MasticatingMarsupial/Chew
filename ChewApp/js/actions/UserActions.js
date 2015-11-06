@@ -44,7 +44,7 @@ var UserActions = {
       endpoint = '/likes/foods/';
       userPrefs = 'food';
     }
-    console.log(API_URL + 'users/' + updates.id + endpoint, userPrefs)
+    
     fetch(API_URL + 'users/' + updates.id + endpoint, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
