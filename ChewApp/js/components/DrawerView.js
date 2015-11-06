@@ -76,74 +76,110 @@ var DrawerView = React.createClass({
   render: function() {
     var TouchableElement = TouchableOpacity;
     if (Platform.OS === 'android') {
+      console.log(Platform.OS);
+      console.log('render android');
       TouchableElement = TouchableNativeFeedback;
-    }
-    var component = this.state.account.user ?
-    <View>
-    <View style={styles.imageContainer}>
-      <Image source={{uri: 'https://media2.giphy.com/media/x1u507NMakkZG/200_s.gif'}}
-      style={styles.profileImage}
-      />
-    </View>
-    <Text style={styles.name}>{this.state.account.user.first_name + ' ' + this.state.account.user.last_name}</Text>
-    <TouchableElement
-      onPress={this.onHomeButtonPress}
-      onShowUnderlay={this.props.onHighlight}
-      onHideUnderlay={this.props.onUnhighlight}
-    >
-      <View style={styles.textContainer}>
-        <Text style={styles.listText}>Home</Text>
+      var component = this.state.account.user ?
+      <View>
+      <View style={styles.imageContainer}>
+        <Image source={{uri: 'https://media2.giphy.com/media/x1u507NMakkZG/200_s.gif'}}
+        style={styles.profileImage}
+        />
       </View>
-    </TouchableElement>
-    <TouchableElement
-      onPress={this.onFavouritesButtonPress}
-      onShowUnderlay={this.props.onHighlight}
-      onHideUnderlay={this.props.onUnhighlight}
-    >
-      <View style={styles.textContainer}>
-        <Text style={styles.listText}>Favourites</Text>
-      </View>
-    </TouchableElement>
-    <TouchableElement
-      onPress={this.onProfileButtonPress}
-      onShowUnderlay={this.props.onHighlight}
-      onHideUnderlay={this.props.onUnhighlight}
-    >
-      <View style={styles.textContainer}>
-        <Text style={styles.listText}>Profile</Text>
-      </View>
-    </TouchableElement>
-    <TouchableElement
-      onPress={this.onSignInLogOutButtonPress}
-      onShowUnderlay={this.props.onHighlight}
-      onHideUnderlay={this.props.onUnhighlight}
-    >
-      <View style={[styles.textContainer, styles.textContainerLast]}>
-        <Text style={styles.listText}>Logout</Text>
-      </View>
-    </TouchableElement>
-    </View>
-    :
-    <View style={styles.loggedOut}>
+      <Text style={styles.name}>{this.state.account.user.first_name + ' ' + this.state.account.user.last_name}</Text>
       <TouchableElement
-      onPress={this.onHomeButtonPress}
-      onShowUnderlay={this.props.onHighlight}
-      onHideUnderlay={this.props.onUnhighlight}
-     >
-      <View style={styles.textContainer}>
-        <Text style={styles.listText}>Home</Text>
-      </View>
-     </TouchableElement>
-      <TouchableElement
-        onPress={this.onLoginButtonPress}
+        onPress={this.onHomeButtonPress}
         onShowUnderlay={this.props.onHighlight}
         onHideUnderlay={this.props.onUnhighlight}
       >
         <View style={styles.textContainer}>
-          <Text style={styles.listText}>Login</Text>
+          <Text style={styles.listText}>Home</Text>
         </View>
       </TouchableElement>
-    </View>;
+      <TouchableElement
+        onPress={this.onProfileButtonPress}
+        onShowUnderlay={this.props.onHighlight}
+        onHideUnderlay={this.props.onUnhighlight}
+      >
+        <View style={styles.textContainer}>
+          <Text style={styles.listText}>Profile</Text>
+        </View>
+      </TouchableElement>
+      <TouchableElement
+        onPress={this.onSignInLogOutButtonPress}
+        onShowUnderlay={this.props.onHighlight}
+        onHideUnderlay={this.props.onUnhighlight}
+      >
+        <View style={[styles.textContainer, styles.textContainerLast]}>
+          <Text style={styles.listText}>Logout</Text>
+        </View>
+      </TouchableElement>
+      </View>
+      :
+      <View style={styles.loggedOut}>
+        <TouchableElement
+        onPress={this.onHomeButtonPress}
+        onShowUnderlay={this.props.onHighlight}
+        onHideUnderlay={this.props.onUnhighlight}
+       >
+        <View style={styles.textContainer}>
+          <Text style={styles.listText}>Home</Text>
+        </View>
+       </TouchableElement>
+        <TouchableElement
+          onPress={this.onLoginButtonPress}
+          onShowUnderlay={this.props.onHighlight}
+          onHideUnderlay={this.props.onUnhighlight}
+        >
+          <View style={styles.textContainer}>
+            <Text style={styles.listText}>Login</Text>
+          </View>
+        </TouchableElement>
+      </View>;
+    } else {
+      console.log(Platform.OS);
+      var component = this.state.account.user ?
+      <View>
+      <View style={styles.imageContainer}>
+        <Image source={{uri: 'https://media2.giphy.com/media/x1u507NMakkZG/200_s.gif'}}
+        style={styles.profileImage}
+        />
+      </View>
+      <Text style={styles.name}>{this.state.account.user.first_name + ' ' + this.state.account.user.last_name}</Text>
+      <TouchableElement
+        onPress={this.onProfileButtonPress}
+        onShowUnderlay={this.props.onHighlight}
+        onHideUnderlay={this.props.onUnhighlight}
+      >
+        <View style={styles.textContainer}>
+          <Text style={styles.listText}>Profile</Text>
+        </View>
+      </TouchableElement>
+      <TouchableElement
+        onPress={this.onSignInLogOutButtonPress}
+        onShowUnderlay={this.props.onHighlight}
+        onHideUnderlay={this.props.onUnhighlight}
+      >
+        <View style={[styles.textContainer, styles.textContainerLast]}>
+          <Text style={styles.listText}>Logout</Text>
+        </View>
+      </TouchableElement>
+      </View>
+      :
+      <View style={styles.loggedOut}>
+        <TouchableElement
+          onPress={this.onLoginButtonPress}
+          onShowUnderlay={this.props.onHighlight}
+          onHideUnderlay={this.props.onUnhighlight}
+        >
+          <View style={styles.textContainer}>
+            <Text style={styles.listText}>Login</Text>
+          </View>
+        </TouchableElement>
+      </View>;
+
+    }
+
 
     var containerStyle = styles.container;
     if (Platform.OS === 'ios') {

@@ -112,11 +112,11 @@ var ProfileView = React.createClass({
         accountField = (savedKey) => {
           return (
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldTextAndroid}>
+            <Text style={styles.fieldText}>
               {savedKey.toUpperCase()}
             </Text>
             <TextInput
-              style={styles.fieldInput}
+              style={styles.fieldInputAndroid}
               editable={this.state.editable[savedKey]}
               value={this.state.profile[savedKey]}
               onChangeText={(text) => {
