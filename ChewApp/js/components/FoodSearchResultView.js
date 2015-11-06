@@ -36,7 +36,6 @@ var getPosition = function () {
 
 var FoodSearchResultView = React.createClass({
   getInitialState: function () {
-    console.log('get initial state');
     return {
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => r1 !== r2
@@ -178,20 +177,22 @@ var FoodCell = React.createClass({
           onShowUnderlay={this.props.onHighlight}
           onHideUnderlay={this.props.onUnhighlight}
         >
-          <Image
-            source={{uri: this.props.food.preview_image.image}}
-            style={styles.cellImage}/>
-          <View style={styles.textContainer}>
-            <Text style={styles.title}>{this.props.food.displayName}</Text>
-            <View style={styles.reviewStarContainer}>
-              <StarRating maxStars={5}
-                rating={parseFloat(this.props.food.avgRating)}
-                disabled={true}
-                starColor={'white'}
-                styles={styles.reviewStarRating}
-                starSize={14}/>
+          <View>
+            <Image
+              source={{uri: this.props.food.preview_image.image}}
+              style={styles.cellImage} />
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>{this.props.food.displayName}</Text>
+              <View style={styles.reviewStarContainer}>
+                <StarRating maxStars={5}
+                  rating={parseFloat(this.props.food.avgRating)}
+                  disabled={true}
+                  starColor={'white'}
+                  styles={styles.reviewStarRating}
+                  starSize={14}/>
+              </View>
+              <Text style={styles.text}>{this.props.food.distance} mi</Text>
             </View>
-            <Text style={styles.text}>{this.props.food.distance} mi</Text>
           </View>
         </TouchableElement>
       </View>

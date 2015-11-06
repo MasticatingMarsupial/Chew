@@ -68,6 +68,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
           style={{flex: 1}}
           navigator={navigationOperations}
           food={route.food.food}
+          searchQueued={route.searchQueued}
         />
       </View>
     );
