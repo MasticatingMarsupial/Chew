@@ -12,6 +12,7 @@ var {
   ScrollView,
   AlertIOS,
   TouchableNativeFeedback,
+  TouchableOpacity,
 } = React;
 
 var Button = require('react-native-button');
@@ -99,9 +100,9 @@ var MakeReviewModalView = React.createClass({
                     style={styles.reviewTextInput}
                   />
                 </View>
-                <Button onPress={this.onSubmitReview} style={styles.submitButton}>
-                  <View><Text>Submit</Text></View>
-                </Button>
+                <TouchableOpacity onPress={this.onSubmitReview} style={styles.submitButton}>
+                  <Text style={styles.submit}>Submit</Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.closeButtonContainer}>
                 <Button activeOpacity={0.20} onPress={this.props.onCloseReviewButtonPress} style={styles.closeButton}>
