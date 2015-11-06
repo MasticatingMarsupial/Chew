@@ -318,9 +318,9 @@ var FoodDetailView = React.createClass({
   },
   render: function () {
     var TouchableElement = TouchableOpacity;
-      if (Platform.OS === 'android') {
-        TouchableElement = TouchableNativeFeedback;
-      }
+    if (Platform.OS === 'android') {
+      TouchableElement = TouchableNativeFeedback;
+    }
     var images = this.state.images.map(function (image, i) {
       return (
         <View key={i + 1} style={styles.slide}>
@@ -454,10 +454,9 @@ var FoodDetailView = React.createClass({
                 />
                 <TouchableElement
                   onPress={this.onPostmatesButtonPress}
+                  style={styles.button}
                 >
-                  <View style={styles.button}>
-                    <Text style={styles.buttonText}> Postmates </Text>
-                  </View>
+                  <Text style={styles.buttonText}> Postmates </Text>
                 </TouchableElement>
               </View>
               <View style={styles.addressContainerSeparator} />
@@ -470,10 +469,9 @@ var FoodDetailView = React.createClass({
                 />
                 <TouchableElement
                   onPress={this.onUberButtonPress}
+                  style={styles.button}
                 >
-                  <View style={styles.button}>
-                    <Text style={styles.buttonText}> Uber </Text>
-                  </View>
+                  <Text style={styles.buttonText}> Uber </Text>
                 </TouchableElement>
               </View>
             </View>
@@ -498,10 +496,9 @@ var FoodDetailView = React.createClass({
         </ScrollView>
         <TouchableElement
           onPress={this.onMakeReviewButtonPress}
+          style={styles.reviewButton}
         >
-          <View style={styles.reviewButton}>
-            <Text style={styles.reviewButtonText}> + </Text>
-          </View>
+          <Text style={styles.reviewButtonText}> + </Text>
         </TouchableElement>
         {AndroidModal}
       </View>
@@ -636,42 +633,25 @@ var styles = StyleSheet.create({
     // paddingBottom: 2,
     // backgroundColor: '#F44336',
   },
-  reviewButton: {
-    borderRadius: 20,
-    marginRight: 5,
-    // borderWidth: 1,
-    paddingLeft: 5,
-    paddingRight: 5,
-    paddingTop: 2,
-    paddingBottom: 2,
-    // borderStyle: 'solid',
-    backgroundColor: '#F44336',
-  },
   buttonText: {
     fontSize: 14,
     color: 'black',
     // fontWeight: 'bold',
   },
- reviewButton: {
+  reviewButton: {
     position: 'absolute',
-    bottom: 10,
-    right: 10,
     width: 50,
     height: 50,
-    paddingTop: 5,
     backgroundColor: '#E53935',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingLeft: 15,
-    paddingRight: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 25,
+    bottom: 10, 
+    right: 10,
   },
   reviewButtonText: {
-    marginTop: 5,
-    marginBottom: 5,
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
-    backgroundColor: 'rgba(0, 0, 0, 0.0)',
   },
   locationContainer: {
     flex: 1,
@@ -714,7 +694,7 @@ var styles = StyleSheet.create({
   addressContainerSeparator: {
     backgroundColor: '#dcdcdc',
     borderRadius: 1,
-    width: width,
+    width: (width/2) - 22,
     height: 1,
     marginTop: 15,
     marginBottom: 15,
