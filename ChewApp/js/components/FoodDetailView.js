@@ -366,14 +366,27 @@ var FoodDetailView = React.createClass({
       onCloseReviewButtonPress={this.onCloseReviewButtonPress}
       food={this.props.food}
     />;
-    var AndroidModal;
+     var AndroidModal;
     var iosModal;
+    var ReviewButton;
     if (Platform.OS === 'android') {
       AndroidModal = modalComponent;
+      ReviewButton = <TouchableElement
+                        onPress={this.onMakeReviewButtonPress}
+                      > 
+                        <View style={styles.reviewButton}>
+                          <Text style={styles.reviewButtonText}> + </Text>
+                        </View>
+                      </TouchableElement>
     } else {
       iosModal = modalComponent;
+      ReviewButton = <TouchableElement
+                        onPress={this.onMakeReviewButtonPress}
+                        style={styles.reviewButton}
+                      > 
+                          <Text style={styles.reviewButtonText}> + </Text>
+                      </TouchableElement>
     }
-    console.log(this.props.food)
     return (
       <View
         automaticallyAdjustContentInsets={false}
@@ -428,60 +441,7 @@ var FoodDetailView = React.createClass({
           </View>
 
           <View style={styles.locationContainer}>
-            <View style={styles.addressLeftContainer}>
-              <View style={styles.leftRowContainer}>
-                <Icon
-                  name="fontawesome|map-marker"
-                  size={13}
-                  color={'#dcdcdc'}
-                  style={styles.locationIcon}
-                />
-                <View style={styles.addressContainer}>
-                  <Text style={styles.address}> {this.props.food.restaurant.address.street_address} </Text>
-                  <Text style={styles.address}> {this.props.food.restaurant.address.city}, {this.props.food.restaurant.address.state} {this.props.food.restaurant.address.zipcode}</Text>
-                </View>
-              </View>
-              <View style={styles.addressContainerSeparator} />
-              <View style={styles.leftRowContainer}>
-                <Icon
-                  name="fontawesome|location-arrow"
-                  size={13}
-                  color={'#dcdcdc'}
-                  style={styles.locationIcon}
-                />
-                <Text style={styles.distance}> {this.props.food.distance} miles away </Text>
-              </View>
-              <View style={styles.addressContainerSeparator} />
-              <View style={styles.leftRowContainer}>
-                <Icon
-                  name="fontawesome|truck"
-                  size={13}
-                  color={'#dcdcdc'}
-                  style={styles.locationIcon}
-                />
-                <TouchableElement
-                  onPress={this.onPostmatesButtonPress}
-                  style={styles.button}
-                >
-                  <Text style={styles.buttonText}> Postmates </Text>
-                </TouchableElement>
-              </View>
-              <View style={styles.addressContainerSeparator} />
-              <View style={styles.leftRowContainer}>
-                <Icon
-                  name="fontawesome|car"
-                  size={13}
-                  color={'#dcdcdc'}
-                  style={styles.locationIcon}
-                />
-                <TouchableElement
-                  onPress={this.onUberButtonPress}
-                  style={styles.button}
-                >
-                  <Text style={styles.buttonText}> Uber </Text>
-                </TouchableElement>
-              </View>
-            </View>
+            
 
             <TouchableElement
               onPress={() => this.onMapButtonPress()}
@@ -501,12 +461,7 @@ var FoodDetailView = React.createClass({
             style={styles.reviewList}
           />
         </ScrollView>
-        <TouchableElement
-          onPress={this.onMakeReviewButtonPress}
-          style={styles.reviewButton}
-        >
-          <Text style={styles.reviewButtonText}> + </Text>
-        </TouchableElement>
+        {ReviewButton}
         {AndroidModal}
       </View>
     );
