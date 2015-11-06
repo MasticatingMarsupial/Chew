@@ -34,8 +34,8 @@ if (Platform.OS === 'android'){
 
 var {width, height} = Dimensions.get('window');
 
-// var API_URL = 'http://chewmast.herokuapp.com/api/';
-var API_URL = 'http://localhost:8000/api/';
+var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
 
 function getUserState () {
   console.log('this got called');
