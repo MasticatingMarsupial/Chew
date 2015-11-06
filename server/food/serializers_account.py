@@ -8,9 +8,9 @@ from food.serializers_review import ReviewSerializer
 
 class UserSerializer(serializers.ModelSerializer):
   username = serializers.CharField()
-  first_name = serializers.CharField()
-  last_name = serializers.CharField()
-  email = serializers.CharField()
+  first_name = serializers.CharField(allow_blank = True)
+  last_name = serializers.CharField(allow_blank = True)
+  email = serializers.CharField(allow_blank = True)
 
   class Meta:
     model = User
@@ -47,9 +47,7 @@ class AccountSerializer(serializers.ModelSerializer):
         for data in updated_data:
           img = data['image']
           query = Image.objects.get(image=img)
-          if account.images_liked.filter(pk=query.id).exists():
-            continue
-          else:
+          if not account.images_liked.filter(pk=query.id).exists():
             account.images_liked.add(query)
             Image.objects.filter(image=img).update(votes=F('votes') +1)
       elif self.context[1] == 'downvote':
@@ -64,8 +62,6 @@ class AccountSerializer(serializers.ModelSerializer):
       for data in updated_data:
         food = data['name']
         query = Food.objects.get(name=food)
-        if account.food_liked.filter(pk=query.id).exists():
-          continue
-        else:
+        if not account.food_liked.filter(pk=query.id).exists():
           account.food_liked.add(query)
     return account
