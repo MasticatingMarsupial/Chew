@@ -47,6 +47,7 @@ function getUserState () {
 var FoodDetailView = React.createClass({
   getInitialState: function () {
     var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    console.log('RATING', this.props.food.avgRating);
     return {
       dataSource: dataSource,
       images: [],
@@ -56,6 +57,7 @@ var FoodDetailView = React.createClass({
       restLatitude: '',
       isReviewModalOpen: false, 
       imageLikeButtonState: [],
+      averageFoodRating: parseFloat(this.props.food.avgRating),
     };
   },
   componentDidMount: function () {
@@ -70,6 +72,7 @@ var FoodDetailView = React.createClass({
     UserStore.removeChangeListener(this._onChange);
   },
   _onChange: function () {
+    this.fetchFood(this.props.food.id);
     this.fetchImages(this.props.food.id);
     this.fetchReviews(this.props.food.id);
     this.setState(getUserState());
@@ -80,6 +83,19 @@ var FoodDetailView = React.createClass({
       restLongitude: this.props.food.restaurant.address.longitude,
       restLatitude: this.props.food.restaurant.address.latitude,
     });
+  },
+  fetchFood: function (query) {
+    console.log('API Query:', API_URL + '/foods/' + query);
+    fetch(API_URL + 'foods/' + query)
+      .then((res) => res.json())
+      .catch((err) => console.error('Fetching query failed: ' + err))
+      .then((responseData) => {
+        console.log('Fetched food', responseData.avgRating);
+        this.setState({
+          averageFoodRating: parseFloat(responseData.avgRating),
+        });
+      })
+      .done();
   },
   fetchImages: function (query) {
     console.log('API Query:', API_URL + 'images/foods/' + query);
@@ -431,7 +447,7 @@ var FoodDetailView = React.createClass({
             <View style={styles.scoresElement}>
               <View style={styles.averageReviewStarContainer}>
                 <StarRating maxStars={5}
-                  rating={parseFloat(this.props.food.avgRating)}
+                  rating={this.state.averageFoodRating}
                   disabled={true}
                   styles={styles.reviewStarRating}
                   starSize={15}/>
