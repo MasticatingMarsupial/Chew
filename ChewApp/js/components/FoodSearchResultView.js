@@ -31,8 +31,8 @@ var API_URL = 'http://chewmast.herokuapp.com/api/';
 var getPosition = function () {
   return {
     position: LocationStore.getPosition()
-  }
-}
+  };
+};
 
 var FoodSearchResultView = React.createClass({
   getInitialState: function () {
@@ -48,7 +48,7 @@ var FoodSearchResultView = React.createClass({
     LocationStore.addChangeListener(() => {
       this.setState(getPosition(), () => {
         if (this.state.searchQueued && this.props.food) {
-          this.searchString(this.props.food)
+          this.searchString(this.props.food);
           this.state.searchQueued = false;
         }
       });
@@ -63,7 +63,7 @@ var FoodSearchResultView = React.createClass({
       console.log('EMPTY SEARCH INPUTTED');
       return;
     }
-    var url =  API_URL + 'search/' + encodeURIComponent(query)
+    var url =  API_URL + 'search/' + encodeURIComponent(query);
     var coordParams = '';
     if (this.state.position.coords) {
       coordParams = '/?coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude);
@@ -101,10 +101,10 @@ var FoodSearchResultView = React.createClass({
   _formatSearchResults: function (results) {
     var result;
     var maxLen = 40;
-    for( var i = 0; i < results.length; i++ ) {
+    for (var i = 0; i < results.length; i++) {
       result = results[i];
-      if( result.name.length > maxLen ) {
-        result.displayName = result.name.slice(0, maxLen - 2) + '...'
+      if (result.name.length > maxLen) {
+        result.displayName = result.name.slice(0, maxLen - 2) + '...';
       } else {
         result.displayName = result.name;
       }
@@ -113,9 +113,9 @@ var FoodSearchResultView = React.createClass({
   },
   _onEndReached: function (event) {
     console.log(this.state);
-    if( this.state.pagination.page_number < this.state.pagination.total_pages ) {
+    if (this.state.pagination.page_number < this.state.pagination.total_pages) {
       fetch(API_URL + 'search/' + encodeURIComponent(this.state.query) + '/?page_number=' + (this.state.pagination.page_number + 1) + '&coords=' + encodeURIComponent(this.state.position.coords.latitude) + ',' + encodeURIComponent(this.state.position.coords.longitude))
-        .then((res) => {console.log(res);return res.json()})
+        .then((res) => {console.log(res); return res.json();})
         .catch((err) => console.error('Failed to retrieve additional results:' + err))
         .then((res) => {
           this._formatSearchResults(res.data);

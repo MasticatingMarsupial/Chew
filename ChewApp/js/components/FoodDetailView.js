@@ -325,9 +325,6 @@ var FoodDetailView = React.createClass({
   },
   render: function () {
     var TouchableElement = TouchableOpacity;
-    if (Platform.OS === 'android') {
-      TouchableElement = TouchableNativeFeedback;
-    }
     var images = this.state.images.map(function (image, i) {
       return (
         <View key={i + 1} style={styles.slide}>
@@ -370,22 +367,23 @@ var FoodDetailView = React.createClass({
     var iosModal;
     var ReviewButton;
     if (Platform.OS === 'android') {
+      TouchableElement = TouchableNativeFeedback;
       AndroidModal = modalComponent;
       ReviewButton = <TouchableElement
                         onPress={this.onMakeReviewButtonPress}
-                      > 
+                      >
                         <View style={styles.reviewButton}>
                           <Text style={styles.reviewButtonText}> + </Text>
                         </View>
-                      </TouchableElement>
+                      </TouchableElement>;
     } else {
       iosModal = modalComponent;
       ReviewButton = <TouchableElement
                         onPress={this.onMakeReviewButtonPress}
                         style={styles.reviewButton}
-                      > 
+                      >
                           <Text style={styles.reviewButtonText}> + </Text>
-                      </TouchableElement>
+                      </TouchableElement>;
     }
     return (
       <View
@@ -441,9 +439,63 @@ var FoodDetailView = React.createClass({
           </View>
 
           <View style={styles.locationContainer}>
-            
+            <View style={styles.addressLeftContainer}>
+              <View style={styles.leftRowContainer}>
+                <Icon
+                  name="fontawesome|map-marker"
+                  size={13}
+                  color={'#dcdcdc'}
+                  style={styles.locationIcon}
+                />
+                <View style={styles.addressContainer}>
+                  <Text style={styles.address}> {this.props.food.restaurant.address.street_address} </Text>
+                  <Text style={styles.address}> {this.props.food.restaurant.address.city}, {this.props.food.restaurant.address.state} {this.props.food.restaurant.address.zipcode}</Text>
+                </View>
+              </View>
+              <View style={styles.addressContainerSeparator} />
+              <View style={styles.leftRowContainer}>
+                <Icon
+                  name="fontawesome|location-arrow"
+                  size={13}
+                  color={'#dcdcdc'}
+                  style={styles.locationIcon}
+                />
+                <Text style={styles.distance}> {this.props.food.distance} miles away </Text>
+              </View>
+              <View style={styles.addressContainerSeparator} />
+              <View style={styles.leftRowContainer}>
+                <Icon
+                  name="fontawesome|truck"
+                  size={13}
+                  color={'#dcdcdc'}
+                  style={styles.locationIcon}
+                />
+                <Button
+                  onPress={this.onPostmatesButtonPress}
+                  style={styles.button}
+                >
+                  <Text style={styles.buttonText}> Postmates </Text>
+                </Button>
+              </View>
+              <View style={styles.addressContainerSeparator} />
+              <View style={styles.leftRowContainer}>
+                <Icon
+                  name="fontawesome|car"
+                  size={13}
+                  color={'#dcdcdc'}
+                  style={styles.locationIcon}
+                />
+                <Button
+                  onPress={this.onUberButtonPress}
+                  style={styles.button}
+                >
+                  <Text style={styles.buttonText}> Uber </Text>
+                </Button>
+              </View>
+            </View>
 
-            <TouchableElement
+
+            <TouchableOpacity
               onPress={() => this.onMapButtonPress()}
             >
               <GoogleStaticMap
@@ -451,9 +503,9 @@ var FoodDetailView = React.createClass({
                 latitude={this.state.restLatitude}
                 longitude={this.state.restLongitude}
                 zoom={14}
-                size={{ width: width-180, height: 220 }}
+                size={{ width: width - 180, height: 220 }}
               />
-            </TouchableElement>
+            </TouchableOpacity>
           </View>
           <ListView
             dataSource={this.state.reviewsDataSource}
@@ -608,7 +660,7 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 25,
-    bottom: 10, 
+    bottom: 10,
     right: 10,
   },
   reviewButtonText: {
@@ -623,7 +675,7 @@ var styles = StyleSheet.create({
     marginTop: 15,
   },
   map: {
-    flex: 0.5, 
+    flex: 0.5,
     height: 220,
   },
   addressLeftContainer: {
@@ -656,7 +708,7 @@ var styles = StyleSheet.create({
   addressContainerSeparator: {
     backgroundColor: '#dcdcdc',
     borderRadius: 1,
-    width: (width/2) - 22,
+    width: (width / 2) - 22,
     height: 1,
     marginTop: 15,
     marginBottom: 15,
