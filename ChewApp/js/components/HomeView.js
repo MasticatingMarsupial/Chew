@@ -40,7 +40,7 @@ var HomeView = React.createClass({
         name: 'results',
         // Need to pass search text
         food: {food},
-        searchQueued: true,
+        searchQueued: {true},
       });
     }
   },
