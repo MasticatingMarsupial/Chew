@@ -490,39 +490,19 @@ var FoodDetailView = React.createClass({
               />
             </TouchableElement>
           </View>
-<<<<<<< 726f62b1f12ab520866889fcadd0eb44a4f1654e
-          
-          <View style={styles.buttonContainer}>
-            <TouchableElement
-              onPress={this.onMakeReviewButtonPress}
-            >
-              <View style={styles.reviewButton}>
-                <Text style={styles.reviewButtonText}> Review </Text>
-              </View>
-            </TouchableElement>
-          </View>
-=======
-          <GoogleStaticMap
-            style={{width: width, height: 300}}
-            latitude={this.state.restLatitude}
-            longitude={this.state.restLongitude}
-            zoom={15}
-            size={{ width: width, height: 300 }}
-          />
->>>>>>> Replaced review button with material design style button
           <ListView
             dataSource={this.state.reviewsDataSource}
             renderRow={this.renderRow}
             style={styles.reviewList}
           />
         </ScrollView>
-          <TouchableElement
-            onPress={this.onMakeReviewButtonPress}
-          >
-            <View style={styles.reviewButton}>
-              <Text style={styles.reviewButtonText}> + </Text>
-            </View>
-          </TouchableElement>
+        <TouchableElement
+          onPress={this.onMakeReviewButtonPress}
+        >
+          <View style={styles.reviewButton}>
+            <Text style={styles.reviewButtonText}> + </Text>
+          </View>
+        </TouchableElement>
         {AndroidModal}
       </View>
     );
@@ -684,7 +664,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingLeft: 15,
     paddingRight: 15,
-    borderRadius: 50,
+    borderRadius: 25,
   },
   reviewButtonText: {
     marginTop: 5,
