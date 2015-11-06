@@ -25,27 +25,27 @@ var UserActions = {
   },
 
   updateAccountLikes: function (username, updates, item) {
-    var endpoint, subArray;
+    var endpoint, userPrefs;
     if (item.hasOwnProperty('image')) {
       for (var image in updates.images_liked) {
         if (updates.images_liked[image].id === item.id) {
           updates.images_liked = [item];
           endpoint = '/unlikes/images/';
-          subArray = 'images_unliked';
+          userPrefs = 'images_unliked';
           break;
         }
       }
       updates.images_liked.push(item);
       endpoint = endpoint || '/likes/images/';
-      subArray = subArray || 'images_liked';
+      userPrefs = userPrefs || 'images_liked';
     }
 
     if (item.hasOwnProperty('price')) {
       updates.food_liked.push(item);
       endpoint = '/likes/foods/';
-      subArray = 'food_liked';
+      userPrefs = 'food_liked';
     }
-    console.log(subArray, endpoint);
+    
     fetch(API_URL + 'users/' + updates.id + endpoint, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -59,9 +59,9 @@ var UserActions = {
           username: username,
           updates: responseData,
         });
-        if (subArray.includes('images')) {
+        if (userPrefs.includes('images')) {
           updates.images_liked = responseData.images_liked;
-        } else if (subArray.includes('food')) {
+        } else if (userPrefs.includes('food')) {
           console.log('food');
         } else {
           console.log('nothing');
