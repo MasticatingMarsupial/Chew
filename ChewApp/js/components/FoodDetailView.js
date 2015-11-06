@@ -366,14 +366,15 @@ var FoodDetailView = React.createClass({
     } else {
       iosModal = modalComponent;
     }
+    console.log(this.props.food)
     return (
       <View
         automaticallyAdjustContentInsets={false}
         style={styles.container}
       >
-      {iosModal}
+        {iosModal}
         <ScrollView
-          style={styles.scrollView}
+          contentContainerStyle={styles.scrollView}
         >
           <View style={styles.carouselContainer}>
             <Carousel autoplay={false} style={styles.carousel}>
@@ -418,58 +419,90 @@ var FoodDetailView = React.createClass({
               </Text>
             </View>
           </View>
-          <View style={styles.buttonContainer}>
+
+          <View style={styles.locationContainer}>
+            <View style={styles.addressLeftContainer}>
+              <View style={styles.leftRowContainer}>
+                <Icon
+                  name="fontawesome|map-marker"
+                  size={13}
+                  color={'#dcdcdc'}
+                  style={styles.locationIcon}
+                />
+                <View style={styles.addressContainer}>
+                  <Text style={styles.address}> {this.props.food.restaurant.address.street_address} </Text>
+                  <Text style={styles.address}> {this.props.food.restaurant.address.city}, {this.props.food.restaurant.address.state} {this.props.food.restaurant.address.zipcode}</Text>
+                </View>
+              </View>
+              <View style={styles.addressContainerSeparator} />
+              <View style={styles.leftRowContainer}>
+                <Icon
+                  name="fontawesome|location-arrow"
+                  size={13}
+                  color={'#dcdcdc'}
+                  style={styles.locationIcon}
+                />
+                <Text style={styles.distance}> {this.props.food.distance} miles away </Text>
+              </View>
+              <View style={styles.addressContainerSeparator} />
+              <View style={styles.leftRowContainer}>
+                <Icon
+                  name="fontawesome|truck"
+                  size={13}
+                  color={'#dcdcdc'}
+                  style={styles.locationIcon}
+                />
+                <TouchableElement
+                  onPress={this.onPostmatesButtonPress}
+                >
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}> Postmates </Text>
+                  </View>
+                </TouchableElement>
+              </View>
+              <View style={styles.addressContainerSeparator} />
+              <View style={styles.leftRowContainer}>
+                <Icon
+                  name="fontawesome|car"
+                  size={13}
+                  color={'#dcdcdc'}
+                  style={styles.locationIcon}
+                />
+                <TouchableElement
+                  onPress={this.onUberButtonPress}
+                >
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}> Uber </Text>
+                  </View>
+                </TouchableElement>
+              </View>
+            </View>
+
             <TouchableElement
               onPress={() => this.onMapButtonPress()}
             >
-              <View style={styles.button}>
-                <Text style={styles.buttonText}> Take Me There </Text>
-              </View>
-            </TouchableElement>
-            <TouchableElement
-              onPress={this.pressFavoriteButton}
-            >
-              <View style={styles.button}>
-                <Text style={styles.buttonText}> I Like This </Text>
-              </View>
+              <GoogleStaticMap
+                style={styles.map}
+                latitude={this.state.restLatitude}
+                longitude={this.state.restLongitude}
+                zoom={14}
+                size={{ width: width-180, height: 220 }}
+              />
             </TouchableElement>
           </View>
-          <View style={styles.buttonContainer}>
-            <TouchableElement
-              onPress={this.onPostmatesButtonPress}
-            >
-              <View style={styles.button}>
-                <Text style={styles.buttonText}> Order on Postmates </Text>
-              </View>
-            </TouchableElement>
-            <TouchableElement
-              onPress={this.onUberButtonPress}
-            >
-              <View style={styles.button}>
-                <Text style={styles.buttonText}> Ride with Uber </Text>
-              </View>
-            </TouchableElement>
-          </View>
-          <GoogleStaticMap
-            style={{width: width, height: 300}}
-            latitude={this.state.restLatitude}
-            longitude={this.state.restLongitude}
-            zoom={15}
-            size={{ width: width, height: 300 }}
-          />
           <ListView
             dataSource={this.state.reviewsDataSource}
             renderRow={this.renderRow}
             style={styles.reviewList}
           />
         </ScrollView>
-          <TouchableElement
-            onPress={this.onMakeReviewButtonPress}
-          >
-            <View style={styles.reviewButton}>
-              <Text style={styles.reviewButtonText}> + </Text>
-            </View>
-          </TouchableElement>
+        <TouchableElement
+          onPress={this.onMakeReviewButtonPress}
+        >
+          <View style={styles.reviewButton}>
+            <Text style={styles.reviewButtonText}> + </Text>
+          </View>
+        </TouchableElement>
         {AndroidModal}
       </View>
     );
@@ -481,8 +514,8 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  ScrollView: {
-    height: 300,
+  scrollView: {
+    alignItems: 'center',
   },
   titleContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.35)',
@@ -492,14 +525,14 @@ var styles = StyleSheet.create({
     bottom: 0,
   },
   name: {
-    fontSize: 30,
+    fontSize: 25,
     textAlign: 'left',
     marginTop: 10,
     marginLeft: 15,
     color: 'white',
   },
   restaurant: {
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'left',
     marginTop: 5,
     marginLeft: 15,
@@ -593,11 +626,18 @@ var styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 10,
   },
   button: {
-    borderRadius: 17,
+    // borderRadius: 16,
+    // marginRight: 5,
+    // paddingLeft: 5,
+    // paddingRight: 5,
+    // paddingTop: 2,
+    // paddingBottom: 2,
+    // backgroundColor: '#F44336',
+  },
+  reviewButton: {
+    borderRadius: 20,
     marginRight: 5,
     // borderWidth: 1,
     paddingLeft: 5,
@@ -608,11 +648,9 @@ var styles = StyleSheet.create({
     backgroundColor: '#F44336',
   },
   buttonText: {
-    marginTop: 5,
-    marginBottom: 5,
-    fontSize: 16,
-    color: 'white',
-    fontWeight: 'bold',
+    fontSize: 14,
+    color: 'black',
+    // fontWeight: 'bold',
   },
  reviewButton: {
     position: 'absolute',
@@ -626,7 +664,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingLeft: 15,
     paddingRight: 15,
-    borderRadius: 50,
+    borderRadius: 25,
   },
   reviewButtonText: {
     marginTop: 5,
@@ -635,6 +673,68 @@ var styles = StyleSheet.create({
     color: 'white',
     backgroundColor: 'rgba(0, 0, 0, 0.0)',
   },
+  locationContainer: {
+    flex: 1,
+    width: width,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 15,
+  },
+  map: {
+    flex: 0.5, 
+    height: 220,
+  },
+  addressLeftContainer: {
+    flex: 0.5,
+    height: 220,
+    flexDirection: 'column',
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingLeft: 15,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#dcdcdc',
+  },
+  address: {
+    textAlign: 'left',
+    fontSize: 14,
+    // fontWeight: 'bold'
+  },
+  distance: {
+    textAlign: 'left',
+    fontSize: 14,
+    // fontWeight: 'bold',
+  },
+  serviceButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  addressContainerSeparator: {
+    backgroundColor: '#dcdcdc',
+    borderRadius: 1,
+    width: width,
+    height: 1,
+    marginTop: 15,
+    marginBottom: 15,
+  },
+  mainVerticalSeparator: {
+    backgroundColor: '#dcdcdc',
+    borderRadius: 1,
+    width: 340,
+    height: 2,
+    marginTop: 15,
+    marginBottom: 15,
+  },
+  locationIcon: {
+    height: 13,
+    width: 13,
+    marginRight: 3,
+  },
+  leftRowContainer: {
+    flexDirection: 'row',
+  }
 });
 
 module.exports = FoodDetailView;
