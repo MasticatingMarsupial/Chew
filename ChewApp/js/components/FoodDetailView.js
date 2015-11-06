@@ -194,6 +194,7 @@ var FoodDetailView = React.createClass({
       }
     }
   },
+  // Refrain from toggling this too quickly
   pressHeartButton: function (index) {
     var user = UserStore.getAccount();
     var image = this.state.images[index];
@@ -220,12 +221,16 @@ var FoodDetailView = React.createClass({
   },
   toggleHeartButtonState: function (index) {
     var imageLikeButtonState = this.state.imageLikeButtonState.slice();
+    var images = this.state.images.slice();
     if (imageLikeButtonState[index] === 'white') {
       imageLikeButtonState[index] = 'red';
+      images[index].votes++;
     } else {
       imageLikeButtonState[index] = 'white';
+      images[index].votes--;
     }
     this.setState({
+      images: images,
       imageLikeButtonState: imageLikeButtonState,
     });
   },
