@@ -15,19 +15,18 @@ var {
 
 var FoodDetailView = require('./FoodDetailView');
 var SearchBar = require('react-native-search-bar');
-var AndroidGeolocation = require('./AndroidGeolocation');
 if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
 }
 var Loading = require('./Loading');
 var LocationStore = require('../stores/LocationStore');
 var LocationActions = require('../actions/LocationActions');
-
+var StarRating = require('./StarRating');
 var resultsCache = [];
 
 //TODO: Update to production URL's when ready
-// var API_URL = 'http://chewmast.herokuapp.com/api/';
-var API_URL = 'http://localhost:8000/api/';
+var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
 
 var getPosition = function () {
   return {
@@ -184,7 +183,14 @@ var FoodCell = React.createClass({
             style={styles.cellImage}/>
           <View style={styles.textContainer}>
             <Text style={styles.title}>{this.props.food.displayName}</Text>
-            <Text style={styles.text}>{this.props.food.avgRating}</Text>
+            <View style={styles.reviewStarContainer}>
+              <StarRating maxStars={5}
+                rating={parseFloat(this.props.food.avgRating)}
+                disabled={true}
+                starColor={'white'}
+                styles={styles.reviewStarRating}
+                starSize={14}/>
+            </View>
             <Text style={styles.text}>{this.props.food.distance} mi</Text>
           </View>
         </TouchableElement>
@@ -225,6 +231,7 @@ var styles = StyleSheet.create({
     opacity: 1,
   },
   text: {
+    fontSize: 18,
     textAlign: 'center',
     color: 'white',
   },
@@ -232,6 +239,12 @@ var styles = StyleSheet.create({
     opacity: 0.6,
     position: 'relative',
     height: 225
+  },
+  reviewStarContainer: {
+    marginTop: 5,
+    alignSelf: 'center',
+  },
+  reviewStarRating: {
   },
 });
 

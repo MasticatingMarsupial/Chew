@@ -10,7 +10,6 @@ var {
 
 var FoodSearchResultView = require('./FoodSearchResultView');
 var DiscoveryView = require('./DiscoveryView');
-var AndroidGeolocation = require('./AndroidGeolocation');
 var SearchBar = require('react-native-search-bar');
 if (Platform.OS === 'android'){
   SearchBar = require('./SearchBar');
