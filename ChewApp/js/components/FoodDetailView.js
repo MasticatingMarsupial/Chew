@@ -55,7 +55,7 @@ var FoodDetailView = React.createClass({
       restName: '',
       restLongitude: '',
       restLatitude: '',
-      isReviewModalOpen: false, 
+      isReviewModalOpen: false,
       imageLikeButtonState: [],
       averageFoodRating: parseFloat(this.props.food.avgRating),
     };

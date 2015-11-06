@@ -83,27 +83,6 @@ var ProfileView = React.createClass({
           </View>
           );
         }(key);
-
-        // if( this.state.editable[key] ) {
-        //   accountField = (
-        //     <View>
-        //       <Text style={styles.fieldText}>
-        //         {key.toUpperCase}
-        //       </Text>
-        //       <TextInput
-        //         style={styles.fieldInput}
-        //         value={this.state.profile[key]}
-        //       >
-        //       </TextInput>
-        //     </View>
-        //   );
-        // } else {
-        //   accountField = (
-        //     <Text style={styles.fieldText}>
-        //       {key.toUpperCase() + ': ' + this.state.profile[key]}
-        //     </Text>
-        //   );
-        // }
         accountFields.push(accountField);
       }
     } else {
@@ -128,27 +107,6 @@ var ProfileView = React.createClass({
           </View>
           );
         }(key);
-
-        // if( this.state.editable[key] ) {
-        //   accountField = (
-        //     <View>
-        //       <Text style={styles.fieldText}>
-        //         {key.toUpperCase}
-        //       </Text>
-        //       <TextInput
-        //         style={styles.fieldInput}
-        //         value={this.state.profile[key]}
-        //       >
-        //       </TextInput>
-        //     </View>
-        //   );
-        // } else {
-        //   accountField = (
-        //     <Text style={styles.fieldText}>
-        //       {key.toUpperCase() + ': ' + this.state.profile[key]}
-        //     </Text>
-        //   );
-        // }
         accountFields.push(accountField);
       }
     }
