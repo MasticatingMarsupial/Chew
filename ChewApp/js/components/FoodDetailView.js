@@ -414,6 +414,14 @@ var FoodDetailView = React.createClass({
       reviewLabel += 's';
     }
 
+    var address1 = 'N/A';
+    var address2 = '';
+
+    if (this.props.food.restaurant.address.street_address) {
+      address1 = this.props.food.restaurant.address.street_address;
+      address2 = this.props.food.restaurant.address.city + ', ' + this.props.food.restaurant.address.state;
+    }
+
     return (
       <View
         automaticallyAdjustContentInsets={false}
@@ -481,8 +489,8 @@ var FoodDetailView = React.createClass({
                   style={styles.locationIcon}
                 />
                 <View style={styles.addressContainer}>
-                  <Text style={styles.address}> {this.props.food.restaurant.address.street_address} </Text>
-                  <Text style={styles.address}> {this.props.food.restaurant.address.city}, {this.props.food.restaurant.address.state} {this.props.food.restaurant.address.zipcode}</Text>
+                  <Text style={styles.address}> {address1} </Text>
+                  <Text style={styles.address}> {address2}</Text>
                 </View>
               </View>
               <View style={styles.addressContainerSeparator} />
