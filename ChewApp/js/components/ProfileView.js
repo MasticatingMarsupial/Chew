@@ -3,6 +3,7 @@
 var React = require('react-native');
 var {
   StyleSheet,
+  Platform,
   View,
   Text,
   TextInput,
@@ -11,6 +12,9 @@ var {
 var Button = require('react-native-button');
 var UserStore = require('../stores/UserStore');
 var UserActions = require('../actions/UserActions');
+
+// var API_URL = 'http://chewmast.herokuapp.com/api/';
+var API_URL = 'http://localhost:8000/api/';
 
 var getProfileState = function () {
   var account = UserStore.getAccount();
@@ -57,50 +61,98 @@ var ProfileView = React.createClass({
   render: function () {
     var accountFields = [];
     var accountField, profileButtonText;
-    for (var key in this.state.editable) {
-      this.state.profile[key] = this.state.profile[key] || '';
-      accountField = (savedKey) => {
-        return (
-        <View style={styles.fieldContainer}>
-          <Text style={styles.fieldText}>
-            {savedKey.toUpperCase()}
-          </Text>
-          <TextInput
-            style={styles.fieldInput}
-            editable={this.state.editable[savedKey]}
-            value={this.state.profile[savedKey]}
-            onChangeText={(text) => {
-              var profile = this.state.profile;
-              profile[savedKey] = text;
-              this.setState({profile: profile});
-            }}
-          />
-        </View>
-        );
-      }(key);
+    if (Platform.OS === 'ios'){
+      for (var key in this.state.editable) {
+        this.state.profile[key] = this.state.profile[key] || '';
+        accountField = (savedKey) => {
+          return (
+          <View style={styles.fieldContainer}>
+            <Text style={styles.fieldText}>
+              {savedKey.toUpperCase()}
+            </Text>
+            <TextInput
+              style={styles.fieldInput}
+              editable={this.state.editable[savedKey]}
+              value={this.state.profile[savedKey]}
+              onChangeText={(text) => {
+                var profile = this.state.profile;
+                profile[savedKey] = text;
+                this.setState({profile: profile});
+              }}
+            />
+          </View>
+          );
+        }(key);
 
-      // if( this.state.editable[key] ) {
-      //   accountField = (
-      //     <View>
-      //       <Text style={styles.fieldText}>
-      //         {key.toUpperCase}
-      //       </Text>
-      //       <TextInput
-      //         style={styles.fieldInput}
-      //         value={this.state.profile[key]}
-      //       >
-      //       </TextInput>
-      //     </View>
-      //   );
-      // } else {
-      //   accountField = (
-      //     <Text style={styles.fieldText}>
-      //       {key.toUpperCase() + ': ' + this.state.profile[key]}
-      //     </Text>
-      //   );
-      // }
-      accountFields.push(accountField);
+        // if( this.state.editable[key] ) {
+        //   accountField = (
+        //     <View>
+        //       <Text style={styles.fieldText}>
+        //         {key.toUpperCase}
+        //       </Text>
+        //       <TextInput
+        //         style={styles.fieldInput}
+        //         value={this.state.profile[key]}
+        //       >
+        //       </TextInput>
+        //     </View>
+        //   );
+        // } else {
+        //   accountField = (
+        //     <Text style={styles.fieldText}>
+        //       {key.toUpperCase() + ': ' + this.state.profile[key]}
+        //     </Text>
+        //   );
+        // }
+        accountFields.push(accountField);
+      }
+    } else {
+      for (var key in this.state.editable) {
+        this.state.profile[key] = this.state.profile[key] || '';
+        accountField = (savedKey) => {
+          return (
+          <View style={styles.fieldContainer}>
+            <Text style={styles.fieldTextAndroid}>
+              {savedKey.toUpperCase()}
+            </Text>
+            <TextInput
+              style={styles.fieldInput}
+              editable={this.state.editable[savedKey]}
+              value={this.state.profile[savedKey]}
+              onChangeText={(text) => {
+                var profile = this.state.profile;
+                profile[savedKey] = text;
+                this.setState({profile: profile});
+              }}
+            />
+          </View>
+          );
+        }(key);
+
+        // if( this.state.editable[key] ) {
+        //   accountField = (
+        //     <View>
+        //       <Text style={styles.fieldText}>
+        //         {key.toUpperCase}
+        //       </Text>
+        //       <TextInput
+        //         style={styles.fieldInput}
+        //         value={this.state.profile[key]}
+        //       >
+        //       </TextInput>
+        //     </View>
+        //   );
+        // } else {
+        //   accountField = (
+        //     <Text style={styles.fieldText}>
+        //       {key.toUpperCase() + ': ' + this.state.profile[key]}
+        //     </Text>
+        //   );
+        // }
+        accountFields.push(accountField);
+      }
     }
+
     profileButtonText = this.state.editMode ? 'Save Profile' : 'Edit Profile';
     return (
       <View style={styles.container}>
@@ -137,6 +189,10 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
   },
   fieldInput: {
+    fontSize: 16,
+    height: 25,
+  },
+  fieldInputAndroid: {
     fontSize: 16,
   },
   fieldText: {
