@@ -325,9 +325,6 @@ var FoodDetailView = React.createClass({
   },
   render: function () {
     var TouchableElement = TouchableOpacity;
-    if (Platform.OS === 'android') {
-      TouchableElement = TouchableNativeFeedback;
-    }
     var images = this.state.images.map(function (image, i) {
       return (
         <View key={i + 1} style={styles.slide}>
@@ -366,14 +363,28 @@ var FoodDetailView = React.createClass({
       onCloseReviewButtonPress={this.onCloseReviewButtonPress}
       food={this.props.food}
     />;
-    var AndroidModal;
+     var AndroidModal;
     var iosModal;
+    var ReviewButton;
     if (Platform.OS === 'android') {
+      TouchableElement = TouchableNativeFeedback;
       AndroidModal = modalComponent;
+      ReviewButton = <TouchableElement
+                        onPress={this.onMakeReviewButtonPress}
+                      >
+                        <View style={styles.reviewButton}>
+                          <Text style={styles.reviewButtonText}> + </Text>
+                        </View>
+                      </TouchableElement>;
     } else {
       iosModal = modalComponent;
+      ReviewButton = <TouchableElement
+                        onPress={this.onMakeReviewButtonPress}
+                        style={styles.reviewButton}
+                      >
+                          <Text style={styles.reviewButtonText}> + </Text>
+                      </TouchableElement>;
     }
-    console.log(this.props.food)
     return (
       <View
         automaticallyAdjustContentInsets={false}
@@ -459,12 +470,12 @@ var FoodDetailView = React.createClass({
                   color={'#dcdcdc'}
                   style={styles.locationIcon}
                 />
-                <TouchableElement
+                <Button
                   onPress={this.onPostmatesButtonPress}
                   style={styles.button}
                 >
                   <Text style={styles.buttonText}> Postmates </Text>
-                </TouchableElement>
+                </Button>
               </View>
               <View style={styles.addressContainerSeparator} />
               <View style={styles.leftRowContainer}>
@@ -474,16 +485,17 @@ var FoodDetailView = React.createClass({
                   color={'#dcdcdc'}
                   style={styles.locationIcon}
                 />
-                <TouchableElement
+                <Button
                   onPress={this.onUberButtonPress}
                   style={styles.button}
                 >
                   <Text style={styles.buttonText}> Uber </Text>
-                </TouchableElement>
+                </Button>
               </View>
             </View>
 
-            <TouchableElement
+
+            <TouchableOpacity
               onPress={() => this.onMapButtonPress()}
             >
               <GoogleStaticMap
@@ -491,9 +503,9 @@ var FoodDetailView = React.createClass({
                 latitude={this.state.restLatitude}
                 longitude={this.state.restLongitude}
                 zoom={14}
-                size={{ width: width-180, height: 220 }}
+                size={{ width: width - 180, height: 220 }}
               />
-            </TouchableElement>
+            </TouchableOpacity>
           </View>
           <ListView
             dataSource={this.state.reviewsDataSource}
@@ -501,12 +513,7 @@ var FoodDetailView = React.createClass({
             style={styles.reviewList}
           />
         </ScrollView>
-        <TouchableElement
-          onPress={this.onMakeReviewButtonPress}
-          style={styles.reviewButton}
-        >
-          <Text style={styles.reviewButtonText}> + </Text>
-        </TouchableElement>
+        {ReviewButton}
         {AndroidModal}
       </View>
     );
@@ -653,7 +660,7 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 25,
-    bottom: 10, 
+    bottom: 10,
     right: 10,
   },
   reviewButtonText: {
@@ -668,7 +675,7 @@ var styles = StyleSheet.create({
     marginTop: 15,
   },
   map: {
-    flex: 0.5, 
+    flex: 0.5,
     height: 220,
   },
   addressLeftContainer: {
@@ -701,7 +708,7 @@ var styles = StyleSheet.create({
   addressContainerSeparator: {
     backgroundColor: '#dcdcdc',
     borderRadius: 1,
-    width: (width/2) - 22,
+    width: (width / 2) - 22,
     height: 1,
     marginTop: 15,
     marginBottom: 15,
