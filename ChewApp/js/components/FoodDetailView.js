@@ -71,6 +71,7 @@ var FoodDetailView = React.createClass({
   },
   _onChange: function () {
     this.fetchImages(this.props.food.id);
+    this.fetchReviews(this.props.food.id);
     this.setState(getUserState());
   },
   setLocation: function(){
@@ -507,11 +508,13 @@ var FoodDetailView = React.createClass({
               />
             </TouchableOpacity>
           </View>
-          <ListView
-            dataSource={this.state.reviewsDataSource}
-            renderRow={this.renderRow}
-            style={styles.reviewList}
-          />
+          <View style={styles.reviewListContainer}>
+            <ListView
+              dataSource={this.state.reviewsDataSource}
+              renderRow={this.renderRow}
+              style={styles.reviewList}
+            />
+          </View>
         </ScrollView>
         {ReviewButton}
         {AndroidModal}
@@ -594,8 +597,12 @@ var styles = StyleSheet.create({
     marginLeft: 5,
     color: 'white',
   },
+  reviewListContainer: {
+    width: width,
+  },
   reviewList: {
     marginTop: 10,
+    marginBottom: 20,
   },
   reviewContainer: {
     flexDirection: 'column',
