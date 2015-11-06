@@ -436,7 +436,6 @@ var FoodDetailView = React.createClass({
                   styles={styles.reviewStarRating}
                   starSize={15}/>
               </View>
-
               <Text style={styles.scoresElementText}>
                 Stars
               </Text>
