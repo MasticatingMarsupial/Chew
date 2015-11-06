@@ -5,6 +5,7 @@ from django.http import Http404
 from food.models import Review, User, Food
 from food.permissions import IsOwnerOrReadOnly
 from food.serializers_review import ReviewSerializer
+from decimal import Decimal
 
 class ReviewList(APIView):
   def get_object(self, pk):
@@ -27,6 +28,9 @@ class ReviewList(APIView):
     else:
       if serializer.is_valid():
         serializer.save(owner=user)
+        food.avgRating = (food.avgRating * food.numRating + Decimal(serializer.data['foodRating']))/(food.numRating + 1)
+        food.numRating += 1
+        food.save()
         return Response('Successfully created review', status.HTTP_201_CREATED)
 
   def put(self, request, format=None):
