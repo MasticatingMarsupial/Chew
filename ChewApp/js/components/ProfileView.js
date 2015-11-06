@@ -13,8 +13,8 @@ var Button = require('react-native-button');
 var UserStore = require('../stores/UserStore');
 var UserActions = require('../actions/UserActions');
 
-// var API_URL = 'http://chewmast.herokuapp.com/api/';
-var API_URL = 'http://localhost:8000/api/';
+var API_URL = 'http://chewmast.herokuapp.com/api/';
+// var API_URL = 'http://localhost:8000/api/';
 
 var getProfileState = function () {
   var account = UserStore.getAccount();
