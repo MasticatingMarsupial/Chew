@@ -136,7 +136,7 @@ var FoodDetailView = React.createClass({
   goToSigninView: function () {
     if (Platform.OS === 'ios') {
       this.props.navigator.push({
-        title: 'Signin',  
+        title: 'Signin',
         component: SigninView,
       });
     } else {
@@ -339,7 +339,7 @@ var FoodDetailView = React.createClass({
                     name="ion|android-favorite"
                     size={40}
                     color={this.state.imageLikeButtonState[i]}
-                    ref={"heartIcon" + i}
+                    ref={'heartIcon' + i}
                     style={styles.heart}
                   />
                 </Button>
@@ -457,21 +457,19 @@ var FoodDetailView = React.createClass({
             zoom={15}
             size={{ width: width, height: 300 }}
           />
-          <View style={styles.buttonContainer}>
-            <TouchableElement
-              onPress={this.onMakeReviewButtonPress}
-            >
-              <View style={styles.button}>
-                <Text style={styles.reviewButtonText}> Review </Text>
-              </View>
-            </TouchableElement>
-          </View>
           <ListView
             dataSource={this.state.reviewsDataSource}
             renderRow={this.renderRow}
             style={styles.reviewList}
           />
         </ScrollView>
+          <TouchableElement
+            onPress={this.onMakeReviewButtonPress}
+          >
+            <View style={styles.reviewButton}>
+              <Text style={styles.reviewButtonText}> + </Text>
+            </View>
+          </TouchableElement>
         {AndroidModal}
       </View>
     );
@@ -487,7 +485,7 @@ var styles = StyleSheet.create({
     height: 300,
   },
   titleContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
     flexDirection: 'column',
     position: 'absolute',
     width: width,
@@ -527,17 +525,15 @@ var styles = StyleSheet.create({
   heartContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 10,
   },
   heartBox: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingLeft: 15,
     paddingRight: 10,
-    paddingTop: 8,
     paddingBottom: 7,
-    borderTopLeftRadius: 28,
+    paddingTop: 8,
     borderBottomLeftRadius: 28,
   },
   heartButton: {
@@ -618,12 +614,26 @@ var styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+ reviewButton: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    width: 50,
+    height: 50,
+    paddingTop: 5,
+    backgroundColor: '#E53935',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 50,
+  },
   reviewButtonText: {
     marginTop: 5,
     marginBottom: 5,
     fontSize: 20,
     color: 'white',
-    fontWeight: 'bold',
+    backgroundColor: 'rgba(0, 0, 0, 0.0)',
   },
 });
 
