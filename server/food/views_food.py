@@ -79,7 +79,7 @@ class FoodRecs(APIView):
     return data
 
   def get(self, request, format=None):
-    trending = Food.objects.order_by('updated_at')[:12].all()
+    trending = Food.objects.order_by('-updated_at')[:12].all()
     trending = prepare_food(request, trending)
     trending = FoodSerializer(trending, many=True).data
     # trending = self.prepare_data(request=request, data=trending)
