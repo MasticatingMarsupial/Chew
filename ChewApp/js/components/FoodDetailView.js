@@ -350,7 +350,6 @@ var FoodDetailView = React.createClass({
       Portal.closeModal(tag);
     }
     if (Platform.OS === 'ios') {
-      this.dismissReviewModal();
       this.setState({isReviewModalOpen: false});
     }
   },
