@@ -315,7 +315,7 @@ var FoodDetailView = React.createClass({
     return (
       <View style={styles.reviewContainer}>
         <View style={styles.reviewTopContainer}>
-          <Text style={styles.username}>{rowData.owner}</Text>
+          <Text style={styles.username}>{rowData.owner.username}</Text>
           <View style={styles.reviewStarContainer}>
             <StarRating maxStars={5}
               rating={parseFloat(rowData.foodRating)}
