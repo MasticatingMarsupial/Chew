@@ -239,7 +239,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 300,
+    paddingTop: 200,
   }
 });
 
