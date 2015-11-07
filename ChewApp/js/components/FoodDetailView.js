@@ -198,10 +198,10 @@ var FoodDetailView = React.createClass({
   pressHeartButton: function (index) {
     var user = UserStore.getAccount();
     var image = this.state.images[index];
-    this.toggleHeartButtonState(index);
 
     if (Object.keys(user).length > 0) {
       UserAction.updateAccountLikes(user.user.username, user, image);
+      this.toggleHeartButtonState(index);
     } else {
       if (Platform.OS === 'android') {
         this.goToSigninView();
