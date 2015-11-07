@@ -789,6 +789,7 @@ var styles = StyleSheet.create({
     marginBottom: 15,
   },
   locationIcon: {
+    marginTop: 2,
     height: 13,
     width: 13,
     marginRight: 3,
