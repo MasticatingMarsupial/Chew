@@ -20,6 +20,8 @@ var DiscoveryTabBar = require('./DiscoveryTabBar');
 var FoodDetailView = require('./FoodDetailView');
 var StarRating = require('./StarRating');
 
+var {width, height} = Dimensions.get('window');
+
 var Loading = require('./Loading');
 
 var LocationStore = require('../stores/LocationStore');
@@ -194,12 +196,25 @@ var styles = StyleSheet.create({
   },
   textContainer: {
     alignSelf: 'center',
+    position: 'absolute',
+    top: 0,
+    justifyContent: 'center',
     backgroundColor: 'transparent',
     opacity: 1,
-    top: -150,
+    // top: -150,
+    width: (width / 2),
+    height: (width / 2),
   },
   textContainerOS: {
-    marginBottom: -80
+    // marginBottom: -80
+    position: 'absolute',
+    top: 0,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+    opacity: 1,
+    width: (width / 2),
+    height: (width / 2),
   },
   title: {
     fontSize: 16,
@@ -218,7 +233,7 @@ var styles = StyleSheet.create({
   },
   reviewStarContainer: {
     marginTop: 5,
-    marginLeft: 10,
+    // marginLeft: 10,
     alignSelf: 'center',
   },
   reviewStarRating: {
