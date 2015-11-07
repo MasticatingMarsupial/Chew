@@ -30,6 +30,8 @@ var MakeReviewModalView = require('./MakeReviewModalView');
 var StarRating = require('./StarRating');
 if (Platform.OS === 'android'){
   var WebIntent = require('react-native-webintent');
+  var Portal = require('react-native/Libraries/Portal/Portal');
+  var tag;
 }
 
 var {width, height} = Dimensions.get('window');
@@ -38,7 +40,6 @@ var API_URL = 'http://chewmast.herokuapp.com/api/';
 // var API_URL = 'http://localhost:8000/api/';
 
 function getUserState () {
-  console.log('this got called');
   return {
     account: UserStore.getAccount()
   };
@@ -59,6 +60,11 @@ var FoodDetailView = React.createClass({
       imageLikeButtonState: [],
       averageFoodRating: parseFloat(this.props.food.avgRating),
     };
+  },
+  componentWillMount: function() {
+    if( Platform.OS === 'android' ) {
+      tag = Portal.allocateTag();
+    }
   },
   componentDidMount: function () {
     ReviewStore.addChangeListener(this._onChange);
@@ -142,7 +148,7 @@ var FoodDetailView = React.createClass({
       .done();
   },
   authenticateToken: function () {
-    var token = UserStore.getToken(); // token
+    var token = UserStore.getToken();
     var user = UserStore.getAccount();
     var authenticated = false;
 
@@ -325,24 +331,32 @@ var FoodDetailView = React.createClass({
     );
   },
   onMakeReviewButtonPress: function () {
-    console.log('Make review button pressed');
     console.log('Initial modal open state', this.state.isReviewModalOpen);
-    this.setState({isReviewModalOpen: true});
-    // this.setState({isOpen: true});
-    console.log('Modal open state after press', this.state.isReviewModalOpen);
+    if (Platform.OS === 'android') {
+      Portal.showModal(tag, <MakeReviewModalView
+        visible={this.state.isReviewModalOpen}
+        isOpen={this.state.isReviewModalOpen}
+        onSubmitReview={this.submitReview}
+        onCloseReviewButtonPress={this.onCloseReviewButtonPress}
+        food={this.props.food}
+      />);
+    }
+    if (Platform.OS === 'ios') {
+      this.setState({isReviewModalOpen: true});
+    }
   },
   onCloseReviewButtonPress: function () {
-    this.dismissReviewModal();
-    // this.setState({isOpen: false});
-  },
-  dismissReviewModal: function () {
-    this.setState({isReviewModalOpen: false});
-    // this.setState({isOpen: false});
+    if (Platform.OS === 'android') {
+      Portal.closeModal(tag);
+    }
+    if (Platform.OS === 'ios') {
+      this.dismissReviewModal();
+      this.setState({isReviewModalOpen: false});
+    }
   },
   submitReview: function (rating, review) {
-    console.log('Submitting rating:', rating);
-    console.log('Submitting review:', review);
-    this.dismissReviewModal();
+    console.log('Submitting rating:' + rating + ', and review:' + review);
+    this.onCloseReviewButtonPress();
     ReviewAction.create(rating, review, UserStore.getAccount().user.username, this.props.food.id);
   },
   render: function () {
@@ -385,12 +399,10 @@ var FoodDetailView = React.createClass({
       onCloseReviewButtonPress={this.onCloseReviewButtonPress}
       food={this.props.food}
     />;
-     var AndroidModal;
     var iosModal;
     var ReviewButton;
     if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
-      AndroidModal = modalComponent;
       ReviewButton = <TouchableElement
                         onPress={this.onMakeReviewButtonPress}
                       >
@@ -558,7 +570,6 @@ var FoodDetailView = React.createClass({
         <View style={styles.endPadding}/>
         </ScrollView>
         {ReviewButton}
-        {AndroidModal}
       </View>
     );
   }

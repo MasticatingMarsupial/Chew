@@ -38,14 +38,8 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 
 var RouteMapper = function(route, navigationOperations, onComponentRef) {
   _navigator = navigationOperations;
-  // console.log(_navigator);
-  // if (_navigator.getCurrentRoutes().length > 5) {
-  //   navigator.shift();
-  // }
-  console.log('RouteMapper');
   console.log('Route is:',route);
- if (route.name === 'home') {
-    console.log('rendering the HomeView');
+  if (route.name === 'home') {
     return (
       <HomeView navigator={navigationOperations} />
     );
