@@ -19,9 +19,7 @@ var HomeView = React.createClass({
   getInitialState: function () {
     return {};
   },
-
   searchString: function (food) {
-    console.log(this.state);
     // Executes query to DB for possible foods by string
     if (Platform.OS === 'ios'){
       this.props.navigator.push({

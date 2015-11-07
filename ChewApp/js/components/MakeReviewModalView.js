@@ -18,25 +18,14 @@ var {
 var Button = require('react-native-button');
 var {Icon,} = require('react-native-icons');
 var StarRating = require('./StarRating');
-if (Platform.OS === 'android') {
-  var AndroidModal = require('react-native-modalbox');
-}
 
 var MakeReviewModalView = React.createClass({
   getInitialState: function () {
-    if (Platform.OS === 'ios') {
-      console.log('In initial state of Reviews IOS');
-      return {
-        visible: this.props.visible,
-        rating: 0,
-        reviewText: '',
-      };
-    } else {
-      return {
-        isOpen: this.props.isOpen,
-        isDisabled: false
-      };
-    }
+    return {
+      visible: this.props.visible,
+      rating: 0,
+      reviewText: '',
+    };
   },
   componentWillReceiveProps: function (nextProps) {
     this.setState({
@@ -120,13 +109,7 @@ var MakeReviewModalView = React.createClass({
       );
     } else {
       return (
-        <AndroidModal
-          isOpen={this.state.isOpen}
-          onClosed={this.closeModal}
-          style={styles.modalAndroid}
-          position={"top"}
-        >
-        <View style={styles.solidContent}>
+        <View style={styles.androidSolidContent}>
           <View>
             <Button onPress={this.props.onCloseReviewButtonPress} style={styles.androidCloseButton}>
               <Icon
@@ -164,7 +147,6 @@ var MakeReviewModalView = React.createClass({
             </View>
           </View>
         </View>
-        </AndroidModal>
       );
     }
   }
@@ -179,6 +161,12 @@ var styles = StyleSheet.create({
   solidContent: {
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  androidSolidContent: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    top: 60,
   },
   foodTitleContainer: {
     marginTop: 70,
@@ -279,17 +267,18 @@ var styles = StyleSheet.create({
   androidStarRatingContainer: {
     paddingTop: 3,
     paddingRight: 10,
+    marginBottom: 5,
     flexDirection: 'row',
   },
   androidReviewTextInputContainer: {
-    height: 168,
+    height: 180,
     borderBottomWidth: 1,
     borderTopWidth: 1,
     borderColor: '#808080',
   },
   androidReviewTextInput: {
     fontSize: 18,
-    height: 176,
+    height: 185,
     borderWidth: 0,
   },
   closeAndroid: {
