@@ -166,7 +166,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     backgroundColor: 'white',
-    top: 60,
+    top: 56,
   },
   foodTitleContainer: {
     marginTop: 70,
@@ -265,13 +265,13 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
   },
   androidStarRatingContainer: {
-    paddingTop: 3,
+    paddingTop: 5,
     paddingRight: 10,
     marginBottom: 5,
     flexDirection: 'row',
   },
   androidReviewTextInputContainer: {
-    height: 180,
+    height: 175,
     borderBottomWidth: 1,
     borderTopWidth: 1,
     borderColor: '#808080',
