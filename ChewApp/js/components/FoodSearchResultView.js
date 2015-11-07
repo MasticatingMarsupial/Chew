@@ -13,6 +13,7 @@ var {
   Platform,
 } = React;
 
+var Dimensions = require('Dimensions');
 var FoodDetailView = require('./FoodDetailView');
 var SearchBar = require('react-native-search-bar');
 if (Platform.OS === 'android'){
@@ -23,6 +24,8 @@ var LocationStore = require('../stores/LocationStore');
 var LocationActions = require('../actions/LocationActions');
 var StarRating = require('./StarRating');
 var resultsCache = [];
+
+var {width, height} = Dimensions.get('window');
 
 //TODO: Update to production URL's when ready
 var API_URL = 'http://chewmast.herokuapp.com/api/';
@@ -177,12 +180,13 @@ var FoodCell = React.createClass({
           onShowUnderlay={this.props.onHighlight}
           onHideUnderlay={this.props.onUnhighlight}
         >
-          <View>
+          <View style={styles.contentContainer}>
             <Image
               source={{uri: this.props.food.preview_image.image}}
               style={styles.cellImage} />
             <View style={styles.textContainer}>
               <Text style={styles.title}>{this.props.food.displayName}</Text>
+              <Text style={styles.restaurant}>@{this.props.food.restaurant.name}</Text>
               <View style={styles.reviewStarContainer}>
                 <StarRating maxStars={5}
                   rating={parseFloat(this.props.food.avgRating)}
@@ -217,14 +221,31 @@ var styles = StyleSheet.create({
     backgroundColor: 'black',
     height: 225
   },
+  contentContainer: {
+    // flexDirection: 'column',
+    // alignItems: 'center',
+  },
   textContainer: {
     backgroundColor: 'transparent',
     opacity: 1,
-    position: 'relative',
-    top: -150
+    position: 'absolute',
+    top: 0,
+    height: 225,
+    width: width,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
+    fontWeight: '500',
+    marginBottom: 2,
+    textAlign: 'center',
+    color: 'white',
+    opacity: 1,
+  },
+  restaurant: {
+    fontSize: 20,
     fontWeight: '500',
     marginBottom: 2,
     textAlign: 'center',
