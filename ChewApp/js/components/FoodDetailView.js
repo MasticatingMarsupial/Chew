@@ -555,6 +555,7 @@ var FoodDetailView = React.createClass({
               style={styles.reviewList}
             />
           </View>
+        <View style={styles.endPadding}/>
         </ScrollView>
         {ReviewButton}
         {AndroidModal}
@@ -718,7 +719,8 @@ var styles = StyleSheet.create({
     right: 10,
   },
   reviewButtonText: {
-    fontSize: 18,
+    marginBottom: 3,
+    fontSize: 24,
     color: 'white',
   },
   locationContainer: {
@@ -782,7 +784,10 @@ var styles = StyleSheet.create({
   },
   leftRowContainer: {
     flexDirection: 'row',
-  }
+  },
+  endPadding: {
+    paddingTop: 50,
+  },
 });
 
 module.exports = FoodDetailView;
