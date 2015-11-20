@@ -1,6 +1,6 @@
-# Project Name
+# Chew App
 
-> Pithy project description
+> A cross platform mobile application that helps you find, share, and review the best menu items around you
 
 ## Team
 
@@ -14,32 +14,31 @@
 1. [Requirements](#requirements)
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
+    1. [Running Locally iOS](#running-locally-ios)
+    1. [Running Locally Android](#running-locally-android)
 1. [Team](#team)
+1. [Roadmap](#roadmap)
 1. [Contributing](#contributing)
 
 ## Usage
 
-> Some usage instructions
+> Are you craving for a certain dish? Search for that dish on Chew and you'll get a list of dishes matching your cravings by rating! After the meal, leave a rating and review to let others know what you thought!
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Django
+- PostgreSQL
+- Xcode
 
 ## Development
 
 ### Installing Dependencies
 
-From within the root directory:
+From within the ChewApp directory:
 
 ```sh
 sudo npm install -g bower
 npm install
-bower install
 ```
 
 From within the server directory:
@@ -48,9 +47,16 @@ From within the server directory:
 pip3 install -r requirements.txt
 ```
 
+### Running Locally iOS
+
+Navigate to the `ChewApp.xcodeproj` file in the `Chew/ChewApp/ios` folder
+Open it in Xcode and run the project
+
+### Running Locally iOS
+
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+View the project roadmap [here](https://github.com/MasticatingMarsupial/Chew/issues)
 
 
 ## Contributing
