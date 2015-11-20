@@ -16,7 +16,7 @@
   - (cleanup) ...
   - (test) ...
   - (doc) ...
-1. When you've finished with your fix or feature, Rebase upstream changes into your branch. submit a [pull request][]
+1. When you've finished with your fix or feature, Rebase upstream changes into your branch. submit a [pull request][https://github.com/MasticatingMarsupial/Chew/pulls]
    directly to master. Include a description of your changes.
 1. Your pull request will be reviewed by another maintainer. The point of code
    reviews is to help keep the codebase clean and of high quality and, equally
@@ -33,7 +33,7 @@
 Use github’s interface to make a fork of the repo, then add that repo as an upstream remote:
 
 ```
-git remote add upstream https://github.com/hackreactor-labs/<NAME_OF_REPO>.git
+git remote add upstream https://github.com/MasticatingMarsupial/Chew.git
 ```
 
 ### Cut a namespaced feature branch from master
@@ -137,17 +137,6 @@ someone will look at your code again. If they like it, it will get merged,
 else, just repeat again.
 
 Thanks for contributing!
-
-### Guidelines
-
-1. Uphold the current code standard:
-    - Keep your code [DRY][].
-    - Apply the [boy scout rule][].
-    - Follow [STYLE-GUIDE.md](STYLE-GUIDE.md)
-1. Run the [tests][] before submitting a pull request.
-1. Tests are very, very important. Submit tests if your pull request contains
-   new, testable behavior.
-1. Your pull request is comprised of a single ([squashed][]) commit.
 
 ## Checklist:
 
