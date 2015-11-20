@@ -16,8 +16,8 @@
     1. [Installing Dependencies](#installing-dependencies)
     1. [Running Locally iOS](#running-locally-ios)
     1. [Running Locally Android](#running-locally-android)
+    1. [Roadmap](#roadmap)
 1. [Team](#team)
-1. [Roadmap](#roadmap)
 1. [Contributing](#contributing)
 
 ## Usage
@@ -49,15 +49,14 @@ pip3 install -r requirements.txt
 
 ### Running Locally iOS
 
-Navigate to the `ChewApp.xcodeproj` file in the `Chew/ChewApp/ios` folder
-Open it in Xcode and run the project
+1. Navigate to the `ChewApp.xcodeproj` file in the `Chew/ChewApp/ios` folder
+1. Open it in Xcode and run the project
 
-### Running Locally iOS
+### Running Locally Android
 
 ### Roadmap
 
 View the project roadmap [here](https://github.com/MasticatingMarsupial/Chew/issues)
-
 
 ## Contributing
 
