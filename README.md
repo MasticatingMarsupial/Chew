@@ -49,10 +49,16 @@ pip3 install -r requirements.txt
 
 ### Running Locally iOS
 
+1. Download Xcode from the Mac App Store
 1. Navigate to the `ChewApp.xcodeproj` file in the `Chew/ChewApp/ios` folder
 1. Open it in Xcode and run the project
 
-### Running Locally Android
+### Running in Development Mode on an Android Device
+1. Follow the setup details listed [in the react native documentation](https://facebook.github.io/react-native/docs/android-setup.html)
+1. Connect the device that you want to run the app on. Ensure that the device has USB debugging enabled
+1. Navigate to the `Chew/ChewApp` folder
+1. Run the following command `react-native run-android`
+1. If the device is reporting that it cannot connect to the server, type this command `adb reverse tcp:8081 tcp:8081` and reload JS in the application
 
 ### Roadmap
 
